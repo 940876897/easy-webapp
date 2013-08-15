@@ -1,0 +1,70 @@
+  Eclipse 3.7 发布好一段时间，m2e(clipse) 插件稳定版一直没有发布，之前一直在用3.6版本的Eclipse没有发现版本不兼容的问题，今天下载了3.7版本后发现居然不能在Install New SoftWare的时候安装不了，郁闷了好一阵，折腾了半天，终于搞出来，与君分享下。 
+
+一、插件地址 
+  1、先安装gef插件 
+   地址：http://download.eclipse.org/tools/gef/updates/interim/ 
+   选择3.7版本下载，maven插件安装的时候会依赖依赖这个插件，没有的会有错误，信息如下： 
+Java代码  
+Cannot complete the install because one or more required items could not be found.  
+Software being installed: Maven Integration for Eclipse (Required) 0.10.0.20100209-0800 (org.maven.ide.eclipse.feature.feature.group 0.10.0.20100209-0800)  
+Missing requirement: Maven Integration for Eclipse (Editors) 0.10.0.20100209-0800 (org.maven.ide.eclipse.editor 0.10.0.20100209-0800) requires 'bundle org.eclipse.zest.core 0.0.0' but it could not be found  
+Cannot satisfy dependency:  
+From: Maven Integration for Eclipse (Required) 0.10.0.20100209-0800 (org.maven.ide.eclipse.feature.feature.group 0.10.0.20100209-0800)  
+To: org.maven.ide.eclipse.editor [0.10.0.20100209-0800]  
+
+   2、安装svn插件 
+   地址：http://subclipse.tigris.org/update_1.6.x 
+
+   3、maven插件 
+    m2eclipse-core Update Site: http://m2eclipse.sonatype.org/sites/m2e 
+    m2eclipse-extras Update Site: http://m2eclipse.sonatype.org/sites/m2e-extras 
+    注意 ：必须两个插件都安装，不安装extras 插件时，点击“run as server”来运行项目时会报错：“the selected did not contain any resources that can run on server maven project” 
+   
+三、安装时出现问题： 
+    直接在线安装maven2 会出现依赖插件找不到的问题，无法安装。必须先安装gef 插件后才能安装m2eclipse-core 插件，然而安装m2eclipse-extras 插件又依赖subclipse 插件。所以，三个插件的正确的安装顺序是：gef插件 》subclipse插件 》m2eclipse插件。 
+  m2eclipse-core插件 ——依赖——＞gef插件 
+  m2eclipse-extras插件 ——依赖——＞subclipse插件 
+
+安装完成后，启动eclipse,你将还会看到如下提示： 
+
+安装m2eclipse插件后，重启Eclipse老是提示： 
+
+Java代码  
+Eclipse is running in a JRE, but a JDK is required  
+  
+Some Maven plugins may not work when importing projects or updating source folders.  
+
+
+需要修改eclipse.ini文件，新增一项配置 
+-vm配置项必须在 –vmargs配置项前，是因为执行到-vmargs配置项已经选择了一个默认的JVM了。 
+
+所以在–vmargs前面加上这一句： 
+
+Java代码  
+-vm  
+D:/Java/jdk1.6.0_29/bin/javaw.exe  
+
+
+  启动后测试一切正常。 
+  
+  
+  
+四: 配置Eclipse的Jar本地仓库类变量:
+打开Eclipse的首选项-->Java-->Build Path --> Classpath Variables
+--> 点击[New...]按钮 --> 弹出框中,Name中输入M2_REPO,Path选择Maven本地仓库文件夹(比如我本机的地址为:D:\.m2\repository) 
+--> 点击OK保存就可以了.
+
+五: Maven环境下,Eclipse开发调试很麻烦,不过,可借助FileSync插件来同步Class文件,以方便每次修改代码时,不用重新发布.
+FileSync配置方法参考如下:
+在工程上点右键--> 属性 --> File synchronization
+--> 勾中Enable FileSync builder for project
+--> 在Default target folder: 选择要同步到发布目录的默认文件夹,如Class文件夹.
+--> 然后点击Add Folder... 选择要同步的文件夹.
+--> 如果上面选择的文件夹要同步到的目录文件夹不是默认文件夹,请按照下面步骤进行个性化设置:
+----> 1:选中Eclipse编译生成的Class目录. 以及建议勾中 Allow different target folders选项.
+----> 2:展开以上选择的同步文件夹,选中Target folder:(Default)
+----> 3:点击右侧的Edit...按钮,选择要同步到的目录文件夹.
+
+最后点击OK保存就可以了.
+
+
