@@ -1,2 +1,5 @@
 /trunk/Sources/WebApp/.project
 /trunk/Sources/WebApp/.classpath
+
+/trunk/Sources/WebApp/target/classes/*.class
+/trunk/Sources/WebApp/target
