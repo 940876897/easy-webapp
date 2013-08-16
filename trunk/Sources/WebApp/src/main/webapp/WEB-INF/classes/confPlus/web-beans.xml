@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="ResourceConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- Jar包里的属性配置文件 -->
+				<value>classpath*:confPlus/m-*.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 动态网页的URLBrokers -->
+	<bean id="appServerBroker" class="net.easyUI.willingOX.common.web.url.URLBroker">
+		<property name="encoding" value="UTF-8"></property>
+		<property name="config">
+			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+				<property name="host" value="localhost"></property>
+				<property name="port" value="81"></property>
+				<property name="followContextPath" value="true"></property>
+			</bean>
+		</property>
+	</bean>
+	<!-- https的sslAppServerBroker -->
+	<bean id="sslAppServerBroker" class="net.easyUI.willingOX.common.web.url.URLBroker">
+		<property name="encoding" value="UTF-8"></property>
+		<property name="config">
+			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+				<property name="protocol" value="https"></property>
+				<property name="host" value="localhost"></property>
+				<property name="port" value="81"></property>
+				<property name="followContextPath" value="true"></property>
+			</bean>
+		</property>
+	</bean>
+	<!-- 静态资源的imageServerBroker -->
+	<bean id="imageServerBroker" class="net.easyUI.willingOX.common.web.url.StampURLBroker">
+		<property name="encoding" value="UTF-8"></property>
+		<property name="config">
+			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+				<property name="host" value="localhost"></property>
+				<property name="port" value="81"></property>
+				<property name="path" value="/"></property>
+				<property name="followContextPath" value="false"></property>
+			</bean>
+		</property>
+		<property name="stamp" value="v1"></property>
+	</bean>
+	<!-- 静态资源的cdnServerBroker -->
+	<bean id="cdnServerBroker" class="net.easyUI.willingOX.common.web.url.StampURLBroker">
+		<property name="encoding" value="UTF-8"></property>
+		<property name="config">
+			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+				<property name="host" value="localhost"></property>
+				<property name="port" value="81"></property>
+				<property name="path" value="/"></property>
+				<property name="followContextPath" value="false"></property>
+			</bean>
+		</property>
+		<property name="stamp" value="v1"></property>
+	</bean>
+	<!-- 上传文件的uploadServerBroker -->
+	<bean id="uploadServerBroker" class="net.easyUI.willingOX.common.web.url.StampURLBroker">
+		<property name="encoding" value="UTF-8"></property>
+		<property name="config">
+			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+				<property name="host" value="localhost"></property>
+				<property name="port" value="81"></property>
+				<property name="path" value="/"></property>
+				<property name="followContextPath" value="false"></property>
+			</bean>
+		</property>
+		<property name="stamp" value="v1"></property>
+	</bean>
+	<bean class="net.easyUI.willingOX.common.web.url.ServletContextInitHelper">
+		<property name="brokers">
+			<list>
+				<ref bean="appServerBroker"/>
+				<ref bean="sslAppServerBroker"/>
+				<ref bean="imageServerBroker"/>
+				<ref bean="uploadServerBroker"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="encodingFilterBean" class="org.springframework.web.filter.CharacterEncodingFilter">
+		<property name="encoding" value="UTF-8"></property>
+		<property name="forceEncoding" value="false"></property>
+	</bean>
+	
+	<!-- cookyjar 配置 -->
+	<bean id="cookieCrypto" class="net.easyUI.willingOX.common.util.crypto.impl.AESCryptoImpl">
+		<property name="key" value="t-8p-e3-5AC.q181"></property>
+		<property name="ivParameter" value="4930526051021781"></property>
+	</bean>
+
+	<bean id="cookyjarConfigure" class="net.easyUI.willingOX.common.web.cookyjar.CookyjarConfigure">
+		<!-- cookie缺省配置 -->
+		<property name="defaultConfigure">
+			<bean class="net.easyUI.willingOX.common.web.cookyjar.CookieConfigure">
+				<property name="path" value="/" />
+				<property name="lifeTime" value="0" />
+		                                  <!--0 -1永久缓存,0立即失效-->
+				<property name="domain" value=".localhost" />
+				<property name="randomChar" value="4" />
+			</bean>
+		</property>
+		<!-- 每个cookie的配置是 本身配置+缺省配置 -->
+		<property name="cookieConfigures">
+			<list>
+				<bean class="net.easyUI.willingOX.common.web.cookyjar.CookieConfigure">
+					<property name="name" value="userAgent" />
+					<property name="clientName" value="_ua_" />
+                    <property name="lifeTime" value="-1" />
+					<property name="crypto" ref="cookieCrypto" />
+					<property name="selfDependenceClass" value="net.easyUI.dto.common.UserAgent"></property>
+				</bean>
+				<!-- 验证码 -->
+                <bean class="net.easyUI.willingOX.common.web.cookyjar.CookieConfigure">
+                    <property name="name" value="imgCheckCode" />
+                    <property name="clientName" value="_icc_" />
+                    <property name="lifeTime" value="300000" />
+                </bean>
+			</list>
+		</property>
+	</bean>
+	<bean id="responseOutputBufferFilterBean" class="net.easyUI.willingOX.common.web.filter.ResponseOutputBufferFilter">
+		<property name="outCharset" value="UTF-8"></property>
+	</bean>	
+	<bean id="cookyjarFilterBean" class="net.easyUI.willingOX.common.web.cookyjar.CookyjarFilter">
+		<property name="cookyjarConfigure" ref="cookyjarConfigure"></property>
+	</bean>
+	
+	<bean id="performanceMonitorFilter" class="net.easyUI.willingOX.common.profiler.SpringPerformanceMonitorFilter">
+		<property name="threshold" value="100"></property>
+	</bean>
+	
+</beans>

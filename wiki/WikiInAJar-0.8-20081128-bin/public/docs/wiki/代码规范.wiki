@@ -1,0 +1,13 @@
+= 技术方案: =
+
+总体框架为:Spring3+SpringMvc3+Mybatis3+Velocity
+再加上公司内部开发的框架.
+
+= 项目代码结构分层: =
+
+本项目为4层结构:各层单向依赖,同层之间绝对不相互调用.
+
+# Action层,使用SpringMvc,支持Reset风格
+# Service层,其为业务流程控制层,而非传统的业务层,其代码类分化主要是以功能模块来分.
+# Manager层,业务层,主要操作Dao层,供Service调用
+# Dao层,数据持久化

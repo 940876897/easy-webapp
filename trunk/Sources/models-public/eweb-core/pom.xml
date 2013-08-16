@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>eweb-parent</artifactId>
+		<groupId>net.easyUI</groupId>
+		<version>0.0.1</version>
+		<relativePath>../../main</relativePath>
+	</parent>
+	<artifactId>eweb-core</artifactId>
+	<name>eweb-core</name>
+	<description>Web开发通用代码.UI,分页,权限等.</description>
+
+	<build>
+		<finalName>core</finalName>
+		<!-- 
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+		 -->
+	</build>
+	<!--
+	<dependencies>
+		<dependency>
+			<groupId>net.easyUI</groupId>
+			<artifactId>easyUI-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+	-->
+</project>

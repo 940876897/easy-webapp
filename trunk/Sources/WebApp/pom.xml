@@ -1,0 +1,124 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>eweb-parent</artifactId>
+		<groupId>net.easyUI</groupId>
+		<version>0.0.1</version>
+		<relativePath>../main</relativePath>
+	</parent>
+	<artifactId>eweb-WebApp</artifactId>
+	<packaging>war</packaging>
+	<name>eweb-WebApp</name>
+	<description>eweb-WebApp</description>
+	
+	<!-- 多环境打包配置 打包方式如：  mvn install -P dev  -->
+	<profiles>  
+        <profile>  
+            <id>dev</id>  
+            <properties>  
+                <env>dev</env>  
+            </properties>  
+            <activation>  
+                <activeByDefault>true</activeByDefault>  
+            </activation>  
+        </profile>  
+        <profile>  
+            <id>demo</id>  
+            <properties>  
+                <env>demo</env>  
+            </properties>  
+        </profile>  
+        <profile>  
+            <id>online</id>  
+            <properties>  
+                <env>online</env>  
+            </properties>  
+        </profile>  
+    </profiles> 
+	
+	<build>
+		<finalName>eweb-WebApp</finalName>
+		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+		
+		<!-- 多环境打包配置, 过滤替换的变量来源,不同的环境不同的配置就在这里. 打包方式如：  mvn install -P dev -->
+		 <filters>  
+            <filter>deploy/${env}-cfgs.properties</filter>  
+        </filters>  
+		
+		<!-- 
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+		 -->
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>net.easyUI</groupId>
+			<artifactId>eweb-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+	<properties>
+		<!-- domain not start with . -->
+		<!-- 
+		<app.domain>localhost</app.domain>
+		<system.devMode>true</system.devMode>
+		
+		<app.server.host>localhost</app.server.host>
+		<app.server.port>81</app.server.port>
+		
+		<image.server.host>localhost</image.server.host>
+		<image.server.port>81</image.server.port>
+		<image.server.path>/</image.server.path>
+		
+		<cdn.server.host>localhost</cdn.server.host>
+		<cdn.server.port>81</cdn.server.port>
+		<cdn.server.path>/</cdn.server.path>
+		
+		<upload.server.host>localhost</upload.server.host>
+		<upload.server.port>81</upload.server.port>
+		<upload.server.path>/</upload.server.path>
+		
+		<web.stamp>v1</web.stamp>
+		
+		<file.encoding>UTF-8</file.encoding>
+		<web.encoding>UTF-8</web.encoding>
+		
+		<cookie.aes.iv>4930526051021781</cookie.aes.iv>
+		<cookie.aes.key>t-8p-e3-5AC.q181</cookie.aes.key>
+		<cookie.clientName.imgCheckCode>_icc_</cookie.clientName.imgCheckCode>
+		<cookie.clientName.userAgent>_ua_</cookie.clientName.userAgent>
+		<cookie.lifeTime>0</cookie.lifeTime>
+		<cookie.lifeTime.imgCheckCode>300000</cookie.lifeTime.imgCheckCode>
+		<cookie.lifeTime.userAgent>-1</cookie.lifeTime.userAgent>
+		<cookie.path>/</cookie.path>
+		<cookie.randomChar>4</cookie.randomChar>
+		
+		<user.password.salt>easyui</user.password.salt>
+		<login.imgCheckCode>false</login.imgCheckCode>
+		
+		<performance.monitor.threshold>100</performance.monitor.threshold>
+		
+		<upload.fileDefaultExt></upload.fileDefaultExt>
+		<upload.root>e:/upload</upload.root>
+		<upload.root.licence.url.path>/upload</upload.root.licence.url.path>
+		
+		<logs.path>e:/logs/easyUI</logs.path>
+		<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+		<jdbc.url>jdbc:mysql://localhost:3306/net-easyui?user=root&amp;password=yc&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;transformedBitIsBoolean=true&amp;zeroDateTimeBehavior=convertToNull</jdbc.url>
+	 	-->
+	</properties>
+</project>

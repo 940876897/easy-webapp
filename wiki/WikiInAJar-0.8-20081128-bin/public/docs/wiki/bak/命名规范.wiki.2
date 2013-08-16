@@ -1,0 +1,90 @@
+= URL规范 =
+
+采用Rest风格
+# 进入页面和提交操作使用相同的URL,分别使用提交请求类型来区分,如get方式表示进入页面,post方式表示提交操作
+# URL的各段由参数组合而成,如:http://www.***.com/{base}/{功能模块}/{id}/{操作}/{返回数据类型}.htm . 
+ 其含义分别为
+** {base} 表示子目录,如Admin后台子目录 , 个人空间子目录,此为可选
+** {功能模块} 如友情链接links
+** {操作} 如 添加add, 修改edit , 删除 del, 查找find, 此为可选,如无此块,表示查看,如查看某个,搜索列表
+** {返回数据类型} 如json,xml 此为可选,如无此块,返回普遍页面
+-
+示例:
+
+搜索页面:
+* http://www.***.com/{base}/{功能模块}.htm  [get]  ==> 表示 进入此功能模块的搜索页面
+* http://www.***.com/{base}/{功能模块}.htm  [post]  ==> 表示 此功能模块的搜索提交,并返回结果列表页面
+* http://www.***.com/{base}/{功能模块}/json.htm  [post]  ==> 表示 此功能模块的搜索提交,并返回一个json数据
+* http://www.***.com/{base}/{功能模块}/xml.htm  [post]  ==> 表示 此功能模块的搜索提交,并返回一个xml数据
+或者:
+* http://www.***.com/{base}/{功能模块}/find.htm  [get]  ==> 表示 进入此功能模块的搜索页面
+* http://www.***.com/{base}/{功能模块}/find.htm  [post]  ==> 表示 此功能模块的搜索提交,并返回结果列表页面
+* http://www.***.com/{base}/{功能模块}/find/json.htm  [post]  ==> 表示 此功能模块的搜索提交,并返回一个json数据
+* http://www.***.com/{base}/{功能模块}/find/xml.htm  [post]  ==> 表示 此功能模块的搜索提交,并返回一个xml数据
+-
+查看及修改单个记录页面:
+* http://www.***.com/{base}/{功能模块}/101.htm  [get]  ==> 表示 查看ID号为101的数据
+* http://www.***.com/{base}/{功能模块}/101/edit.htm  [get]  ==> 表示 进入修改ID号为101的页面
+* http://www.***.com/{base}/{功能模块}/101/edit.htm  [post]  ==> 表示 提交保存ID号为101的数据的修改
+* http://www.***.com/{base}/{功能模块}/101/edit/json.htm  [post]  ==> 表示 提交保存ID号为101的数据的修改,并返回一个json数据
+* http://www.***.com/{base}/{功能模块}/101/edit/xml.htm  [post]  ==> 表示 提交保存ID号为101的数据的修改,并返回一个xml数据
+-
+批量修改页面:
+* http://www.***.com/{base}/{功能模块}/edit.htm  [get]  ==> 表示 进入修改页面,如有条件,请以普通URL?参数方式传入query查询对象
+* http://www.***.com/{base}/{功能模块}/edit.htm  [post]  ==> 表示 提交保存修改,如有条件,请以普通URL?参数方式传入query查询对象
+* http://www.***.com/{base}/{功能模块}/edit/json.htm  [post]  ==> 表示 提交保存数据的修改,如有条件,请以普通URL?参数方式传入query查询对象,并返回一个json数据
+* http://www.***.com/{base}/{功能模块}/edit/xml.htm  [post]  ==> 表示 提交保存数据的修改,如有条件,请以普通URL?参数方式传入query查询对象,并返回一个xml数据
+-
+添加页面:
+* http://www.***.com/{base}/{功能模块}/add.htm  [get]  ==> 表示 进入添加一个新数据的页面
+* http://www.***.com/{base}/{功能模块}/add.htm  [post]  ==> 表示 提交保存新加数据
+* http://www.***.com/{base}/{功能模块}/add/json.htm  [post]  ==> 表示 提交保存新加数据,并返回一个json数据
+* http://www.***.com/{base}/{功能模块}/add/xml.htm  [post]  ==> 表示 提交保存新加数据,并返回一个xml数据
+-
+删除页面:
+* http://www.***.com/{base}/{功能模块}/101/del.htm  [get]  ==> 表示 进入删除ID号为101的页面
+* http://www.***.com/{base}/{功能模块}/101/del.htm  [post]  ==> 表示 提交删除ID号为101的数据的删除
+* http://www.***.com/{base}/{功能模块}/101/del/json.htm  [post]  ==> 表示 提交删除ID号为101的数据的删除,并返回一个json数据
+* http://www.***.com/{base}/{功能模块}/101/del/xml.htm  [post]  ==> 表示 提交删除ID号为101的数据的删除,并返回一个xml数据
+-
+批量删除页面:
+* http://www.***.com/{base}/{功能模块}/del.htm  [get]  ==> 表示 进入删除页面,如有条件,请以普通URL?参数方式传入query查询对象
+* http://www.***.com/{base}/{功能模块}/del.htm  [post]  ==> 表示 提交删除,如有条件,请以普通URL?参数方式传入query查询对象
+* http://www.***.com/{base}/{功能模块}/del/json.htm  [post]  ==> 表示 提交删除,如有条件,请以普通URL?参数方式传入query查询对象,并返回一个json数据
+* http://www.***.com/{base}/{功能模块}/del/xml.htm  [post]  ==> 表示 提交删除,如有条件,请以普通URL?参数方式传入query查询对象,并返回一个xml数据
+-
+参数URL与表单参数的规范
+
+如果URL中有参数,又有提交的表单或者以普通?参数在URL中的参数,那URL中的参数为条件参数,表单及?URL参数为新数据参数.
+
+
+-
+= Velocity中HTML元素规范 =
+-
+= JS代码方法及变量规范 =
+-
+= Action中方法及变量规范 =
+
+# 模块名  => 列表查询页面
+# 模块名find  => 列表查询页面
+# 模块名add  => 添加页面
+# 模块名edit  => 修改页面
+# 模块名del  => 删除页面
+-
+= Service中方法及变量规范 =
+-
+= Manager中方法及变量规范 =
+
+# save
+# update
+# remove
+# queryOne => 查询唯一一条,或者多条时只返回其中第一条
+# query => 查询所有
+# pageQuery => 分页查询
+-
+= Dao中方法及变量规范 =
+-
+= MyBatis中的代码块,名称规范 =
+-
+
+

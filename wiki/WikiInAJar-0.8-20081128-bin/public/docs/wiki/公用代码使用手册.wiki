@@ -1,0 +1,8 @@
+= [[查询条件对象Query]] =
+
+pojoQuery extends BaseQuery.
+
+其中BaseQuery定义了分页数据,排序条件,通用查询条件分项.
+----
+
+= [[WordPress 数据库分析]] =

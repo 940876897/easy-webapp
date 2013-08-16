@@ -1,0 +1,8 @@
+
+通过Tomcat发布启动或调试:
+		Name: easyUI-WebApp-81  (自己随便定)
+		Base directory: ${workspace_loc:/WebApp}  (WebApp 为Web工程名,跟你的Web工程的名称保持一致)
+		Goals: tomcat:run -Dmaven.tomcat.port=81 -Dmaven.tomcat.path=/  (Tomcat启动, 以及几个参数, 端口:自己随便定, 根目录:自己随便定)
+		
+		其它几个自己根据情况自己写,如Offline , Skip Test 等.
+

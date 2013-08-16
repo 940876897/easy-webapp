@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!-- 使用方法：在VM中使用 $toolKey.静态方法名(...) , Velocity自带的方法类有：dateTool -->
+<toolbox>
+	<xhtml>true</xhtml>
+	<tool>
+		<key>UUIDTool</key>
+		<scope>application</scope>
+		<class>net.easyUI.willingOX.common.util.UUIDGenerator</class>
+	</tool>
+	<tool>
+		<key>stringUtils</key>
+		<scope>application</scope>
+		<class>org.apache.commons.lang.StringUtils</class>
+	</tool>
+	<tool>
+		<key>dateUtil</key>
+		<scope>application</scope>
+		<class>net.easyUI.willingOX.common.util.DateUtil</class>
+	</tool>
+	<tool>
+		<key>htmlUtils</key>
+		<scope>application</scope>
+		<class>net.easyUI.willingOX.common.util.HtmlUtils</class>
+	</tool>
+	<tool>
+		<key>contain</key>
+		<scope>request</scope>
+		<class>net.easyUI.willingOX.common.web.contain.Contain</class>
+	</tool>
+	<tool>
+		<key>iDemand</key>
+		<scope>request</scope>
+		<class>net.easyUI.willingOX.common.web.velocity.IDemand</class>
+	</tool>
+
+	<!-- 权限类工具 -->
+	<tool>
+		<key>userAccess</key>
+		<scope>request</scope>
+		<class>net.easyUI.access.UserAccessVMTool</class>
+	</tool>
+	<!-- 网站缓存类工具 -->
+	<tool>
+		<key>webCacheUtils</key>
+		<scope>application</scope>
+		<class>net.easyUI.Utils.WebCacheUtils</class>
+	</tool>
+	<!-- 常量类工具 -->
+	<tool>
+		<key>constantUtils</key>
+		<scope>application</scope>
+		<class>net.easyUI.Utils.ConstantDTOUtils</class>
+	</tool>
+	<!-- 其它通用类工具, 元与分转换，比率转换 -->
+	<tool>
+		<key>commonUtil</key>
+		<scope>application</scope>
+		<class>net.easyUI.Utils.CommonUtil</class>
+	</tool>
+	<!--  i18n国际化支持 #i18nMsg  从缓存中查看这个MsgKey,返回对应的国际语言,如果没有最对应的,就使用默认的.使用方法:#msgUtil.msg("key")
+-->
+	<tool>
+		<key>msgUtil</key>
+		<scope>application</scope>
+		<class>net.easyUI.Utils.DbMessageSource</class>
+	</tool>
+	<!-- 字典相关上的处理工具 比如VM文件夹组装 -->
+	<tool>
+		<key>webCfgUtil</key>
+		<scope>application</scope>
+		<class>net.easyUI.Utils.WebCfgUtil</class>
+	</tool>
+</toolbox>

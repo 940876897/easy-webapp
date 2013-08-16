@@ -1,0 +1,55 @@
+#direct(html) 将Html的源码输出,(默认下,是将Html代码进行了转码,以免恶意代码)
+
+网站使用绝对路径,并区分静态资源与动态网页,以及加密Https,可在Js(baseJS.js),VM,Java(Action)有均可使用
+    动态网页                JS[appServer]       VM[$appServer]      Action[appServerBroker]
+    加密Https     JS[sslAppServer]    VM[$sslAppServer]   Action[sslAppServerBroker]
+    静态资源                JS[imageServer]     VM[$imageServer]    Action[imageServerBroker]
+    上传文件               JS[uploadServer]     VM[$uploadServer]    Action[uploadServerBroker]
+    
+
+VM页面中表单:例如
+    #springBind("userBrokerAccount.brokerId") 绑定表单字段对象
+    ${status.expression} 字段名name
+    $!{status.value}     字段的值
+    $!{status.errorMessage}  字段出错信息
+    例如:
+    #springBind("userBrokerAccount.brokerId")
+    <input type="text" name="${status.expression}" value="$!{status.value}"/>
+    <span class="red">*</span>
+    <span class="error">$!{status.errorMessage}</span>
+    
+            
+
+SpringMVC中,Action方法体参数直接注入:(还包括Request,Response等)
+    @ModelAttribute("user") User user ->将表单项的数据组装到User类中.
+    @RequestParam(value = "imgCheckCode" [,required = false] [,defaultValue = ""]) String imgCheckCode 将URL中参数值绑定给这个变量,默认是必须传
+    @PathVariable("id") Long id 将URL中的占位符数据组装到变量中,要求方法上有注解URL:@RequestMapping(value = "/{id}/viewAjax")
+    BindingResult result 用来Spring中action方法中校验使用.
+    ModelMap model 是一个Map类型,用来向页面传递结果数据
+
+Action类的方法中,可直接注入参数取值(已扩展)的有:
+    UserAgent agent  用户登录对象
+    Cookyjar cookyjar Cookie封装对象
+    
+Action类的方法中,返回类型:
+    @ResponseBody DwzJson 方法名前的返回类型如加上@ResponseBody注解,表示系统自动将返回对象转成Json数据并输出
+    String 表示返回到VM模板(相对配置好的根目录), 如果返回的String中,是以redirect:开头,就是跳转到网页
+    
+Action类的方法体上方的注解:
+    @RequestMapping(value = "/{id}/viewAjax", method = POST) 
+    
+Action类的方法体上方的注解(扩展):
+    @PageType(EnumPageType.JSONPAGE) 标记此请求的类型,以便出错时跳转到相应的类型页面,如JSON请求与普通网页请求,以及Ajax片段代码请求
+    
+校验器的使用:(可使用默认Spring配置,也可自己写类,还可以二者一起用)
+    Action类中申明:
+        private Validator loginValidator = new UserLoginValidator();
+        方法体中使用:
+        loginValidator.validate(user, result);
+        // 错误回显
+        if (result.hasErrors()) {
+            return "login";
+        }
+    
+    
+        

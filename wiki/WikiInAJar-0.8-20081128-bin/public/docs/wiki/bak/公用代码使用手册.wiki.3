@@ -1,0 +1,69 @@
+= 查询条件对象Query =
+
+pojoQuery extends BaseQuery.
+
+其中BaseQuery定义了分页数据,排序条件,通用查询条件分项.
+----
+
+== BaseQuery中的分页条件数据 ==
+
+以下几个是直接采用jqGrid的分页条里的命名方式,(对外)
+<pre> 
+    page	  当前在第几页(页码从1开始)
+    rows	  每页显示几条数据
+    searchField	  过滤字段名,即单个查询条件的字段名
+    searchOper	  过滤条件符,请参考下文
+    searchString  过滤条件的值,即查询条件的值
+    sidx	  排序字段名
+    sord	  排序方式 asc/desc
+</pre>
+而程序会自动根据以上条件组装成如下数据,为了更方便SQL操作:
+# startRow 和 endRow . 分页:当前需要显示从第startRow条到第endRow条
+# mySqlLimit 专给mysql分页组合而成的sql分页代码,但不自带"limit"字符串
+# filterField 和 filterValue. 查询条件: Query扩展属性名 和 Query值
+# sortColumns 排序字段与排序方式组合好的字符串,但不自带 "order by"字符串
+
+----
+== 对象属性查询条件扩展 ==
+
+而子类里,对其各属性进行了查询条件扩展searchOper	,如下:
+<pre>
+ "eq"=等于    , "ne"!=不等          ==> 等于,   不等
+ "lt"<小于    , "le"<=小于等于      ==> 小于,   小于等于    (数值型)
+ "gt">大于    , "ge">=大于等于      ==> 大于,   大于等于    (数值型)
+ "in" 属于    , "ni" 不属于         ==> in,         notIn    (这类型需要在DAO里将值字符串转成List)
+ "bw" 开始于  , "bn" 不开始于       ==> leftLike,   notLeftLike     (字符型)
+ "ew" 结束于  , "en" 不结束于       ==> rightLike,  notRightLike    (字符型)
+ "cn" 包含    , "nc" 不包含         ==> like,       notLike         (字符型)
+</pre>
+扩展方式为, 原属性名 加 下划线 加以上字符,
+<pre>
+如属性ID对应的查询扩展条件属性名称为:    
+    "id_eq"=等于    , "id_ne"!=不等          ==> 等于,   不等
+    "id_lt"<小于    , "id_le"<=小于等于      ==> 小于,   小于等于
+    "id_gt">大于    , "id_ge">=大于等于      ==> 大于,   大于等于
+    "id_in" 属于    , "id_ni" 不属于         ==> in,         notIn
+    "id_bw" 开始于  , "id_bn" 不开始于       ==> leftLike,   notLeftLike
+    "id_ew" 结束于  , "id_en" 不结束于       ==> rightLike,  notRightLike
+    "id_cn" 包含    , "id_nc" 不包含         ==> like,       notLike
+</pre>
+
+最终,所有的查询条件在Set时,就被要求放入查询条件父类的保护属性=>Map对象里filterMap, 如下:
+<pre>
+	public void setLinkId_eq(java.lang.Long value) {
+		this.linkId_eq = value;
+		this.filterMap.put("linkId_eq", value);
+	}
+</pre>
+
+----
+== 未解决的问题: ==
+
+# 目前查询条件中,如果需要查询为null或者为""的记录,暂时无法查出
+
+
+----
+== 分页对象 ==
+
+
+
