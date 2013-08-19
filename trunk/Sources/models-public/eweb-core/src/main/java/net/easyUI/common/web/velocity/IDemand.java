@@ -1,12 +1,11 @@
 package net.easyUI.common.web.velocity;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.velocity.tools.view.context.ViewContext;
+import org.apache.velocity.tools.view.ViewContext;
 import org.springframework.util.ClassUtils;
 
 public class IDemand {
@@ -26,8 +25,7 @@ public class IDemand {
 		IDemand exist = (IDemand) request.getAttribute(IDemand_In_Request_tag);
 		if (exist != null) {
 			this.parent = exist;
-		}
-		else{
+		} else {
 			request.setAttribute(IDemand_In_Request_tag, this);
 		}
 	}

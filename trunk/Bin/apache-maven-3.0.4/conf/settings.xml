@@ -109,12 +109,14 @@ under the License.
    | Authentication profiles can be used whenever maven must make a connection to a remote server.
    |-->
   <servers>
+  <!--
 	<server>
       <username>deployment</username>
       <password>deployment123</password>
       <id>nexus</id>
 	</server>
-    <!-- server
+	
+     server
      | Specifies the authentication information to use when connecting to a particular server, identified by
      | a unique name within the system (referred to by the 'id' attribute below).
      | 
@@ -161,6 +163,50 @@ under the License.
       <url>http://my.repository.com/repo/path</url>
     </mirror>
      -->
+     
+     <mirror>
+      <id>UK</id>
+      <name>UK Central</name>
+      <url>http://uk.maven.org/maven2</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+    
+     <!--
+    <mirror>
+        <id>repo2</id>
+        <mirrorOf>central</mirrorOf>
+        <name>Human Readable Name for this Mirror.</name>
+        <url>http://repo2.maven.org/maven2/</url>
+    </mirror>
+    <mirror>
+        <id>net-cn</id>
+        <mirrorOf>central</mirrorOf>
+        <name>Human Readable Name for this Mirror.</name>
+        <url>http://maven.net.cn/content/groups/public/</url>
+    </mirror>
+    <mirror>
+        <id>jboss-public-repository-group</id>
+        <mirrorOf>central</mirrorOf>
+        <name>JBoss Public Repository Group</name>
+        <url>http://repository.jboss.org/nexus/content/groups/public</url>
+    </mirror>
+    <mirror>
+        <id>skynet.be</id>
+        <url>http://maven2.mirrors.skynet.be/pub/maven2</url>
+        <mirrorOf>central</mirrorOf>
+    </mirror>
+    <mirror>
+        <id>cica.es</id>
+        <url>http://ftp.cica.es/mirrors/maven2</url>
+        <mirrorOf>central</mirrorOf>
+    </mirror>
+    <mirror>
+        <id>ibiblio.org</id>
+        <name>ibiblio Mirror of http://repo1.maven.org/maven2/</name>
+        <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+        <mirrorOf>central</mirrorOf>
+    </mirror>
+    -->
   </mirrors>
   
   <!-- profiles

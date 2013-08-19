@@ -15,6 +15,43 @@
 	<repositories><!-- <repository> <id>nexus1</id> <url>http://18.0.127.1:8081/nexus/content/groups/public/</url> 
 			</repository> <repository> <id>nexus</id> <url>http://172.23.11.118:8081/nexus/content/groups/public/</url> 
 			</repository> -->
+			
+			
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>m2-release</id>
+            <name>88250 at Google Maven repository of releases</name>
+            <url>http://m2-repos.googlecode.com/svn/release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>m2-snapshot</id>
+            <name>88250 at Google Maven repository of snapshots</name>
+            <url>http://m2-repos.googlecode.com/svn/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:10</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    
 	</repositories>
 
 	<dependencies>
