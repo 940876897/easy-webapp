@@ -1,0 +1,160 @@
+#set($layout = '')
+<form id="pagerForm" action="$appServer.get('/admin/user/indexAjax.xhtml')" method="post">
+	<input type="hidden" name="pageNum" value="#if(${query.pageNum})${query.pageNum}#{else}1#end" /><!--【必须】value=1可以写死-->
+	<input type="hidden" name="numPerPage" value="#if(${query.numPerPage})${query.numPerPage}#{else}20#end" /><!--【可选】每页显示多少条-->
+	<input type="hidden" name="orderField" value="$!{query.orderField}" /><!--【可选】查询排序-->
+    <input type="hidden" name="orderDirection" value="$!{query.orderDirection}" /><!--【可选】排序方式-->
+    <!--【可选】其它查询条件，业务有关，有什么查询条件就加什么参数-->
+	
+            
+    
+    <input type="hidden" name="loginName_cn" value="$!{query.loginName_cn}"/>
+    <input type="hidden" name="nicename_cn" value="$!{query.nicename_cn}"/>
+    <input type="hidden" name="email_cn" value="$!{query.email_cn}"/>
+    <input type="hidden" name="status" value="$!{query.status}"/>
+    <input type="hidden" name="displayName_cn" value="$!{query.displayName_cn}"/>
+            
+</form> 
+
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this,'dwz_tab_user');" action="$appServer.get('/admin/user/indexAjax.xhtml')" method="post">
+        <input type="hidden" name="pageNum" value="#if(${query.pageNum})${query.pageNum}#{else}1#end" /><!--【必须】value=1可以写死-->
+        <input type="hidden" name="numPerPage" value="#if(${query.numPerPage})${query.numPerPage}#{else}20#end" /><!--【可选】每页显示多少条-->
+        <input type="hidden" name="orderField" value="$!{query.orderField}" /><!--【可选】查询排序-->
+        <input type="hidden" name="orderDirection" value="$!{query.orderDirection}" /><!--【可选】排序方式-->
+    
+    <div class="searchBar">
+        <ul class="searchContent">
+            <li>
+                <label>#dbMsg("User.status")：</label>
+                    ##枚举EnableStatusEnum:
+                	#enumSelectEl($!{enumEnableStatusList},"status","$!{query.status}","请选择","","")
+            </li>
+            <li>
+                <label>#dbMsg("User.loginName")：</label>
+                    <input type="text" name="loginName_cn" value="$!{query.loginName_cn}" size="25"/>
+            </li>
+            <li>
+                <label>#dbMsg("User.displayName")：</label>
+                    <input type="text" name="displayName_cn" value="$!{query.displayName_cn}" size="25"/>
+            </li>
+            <li>
+                <label>#dbMsg("User.nicename")：</label>
+                    <input type="text" name="nicename_cn" value="$!{query.nicename_cn}" size="25"/>
+            </li>
+            <li>
+                <label>#dbMsg("User.email")：</label>
+                    <input type="text" name="email_cn" value="$!{query.email_cn}" size="25"/>
+            </li>
+        </ul>
+        <div class="subBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">#dbMsg("queryType.query")</button></div></div></li>
+                ##<li><a class="button" href="$appServer.get('/admin/user/fullSearchForm.xhtml')" target="dialog"  width="400" height="300" rel="dlg_f_s_form" title="#dbMsg("queryType.queryAdv")"><span>#dbMsg("queryType.queryAdv")</span></a></li>
+            </ul>
+        </div>
+    </div>
+    </form>
+</div>
+
+
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <li><a href="$appServer.get('/admin/user/addAjax.xhtml')" target="navTab" class="add" title="#dbMsg('function.add')#dbMsg('User')" rel="dwz_tab_user_add"><span>#dbMsg("function.add")</span></a></li>
+            <li><a href="$appServer.get('/admin/user/editAjax/{id}.xhtml')" target="navTab" class="edit" title="#dbMsg('function.edit')#dbMsg('User')" rel="dwz_tab_user_edit" ><span>#dbMsg("function.edit")</span></a></li>
+            <li class="line">line</li>
+#*
+            <li><a href="$appServer.get('/admin/user/delJson.xhtml')" target="selectedTodo" class="delete" title="确实要#dbMsg("function.delBatch")这些#dbMsg('User')吗?"><span>#dbMsg("function.delBatch")</span></a></li>
+*#
+            <li><a href="$appServer.get('/admin/user/delJson/{id}.xhtml')" target="ajaxTodo" class="delete" title="你确定要#dbMsg("function.del")选择这条#dbMsg('User')吗?"><span>#dbMsg("function.del")</span></a></li>
+            <li class="line">line</li>
+            ## <li><a class="icon" href="javascript:void(0);"><span>按钮</span></a></li>
+        </ul>
+    </div>
+    ##class="table"  class="table" 
+    <table class="table" width="100%" layoutH="138" nowrapTD="false">
+        <thead>
+        	<tr >
+               <th width="30"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+               <th width="80" orderField="displayName" #if("$!{query.orderField}"=="displayName")class="$!{query.orderDirection}"#end >#dbMsg("User.displayName")</th>
+               ##<th width="80" orderField="id" #if("$!{query.orderField}"=="id")class="$!{query.orderDirection}"#end >#dbMsg("User.id")</th>
+               <th width="100" orderField="loginName" #if("$!{query.orderField}"=="loginName")class="$!{query.orderDirection}"#end >#dbMsg("User.loginName")</th>
+               <!--
+               <th width="100" orderField="nicename" #if("$!{query.orderField}"=="nicename")class="$!{query.orderDirection}"#end >#dbMsg("User.nicename")</th>
+               -->
+               ##<th width="120" orderField="email" #if("$!{query.orderField}"=="email")class="$!{query.orderDirection}"#end >#dbMsg("User.email")</th>
+               ##<th orderField="website" #if("$!{query.orderField}"=="website")class="$!{query.orderDirection}"#end >#dbMsg("User.website")</th>
+               <th width="140" orderField="gmtRegistered" #if("$!{query.orderField}"=="gmtRegistered")class="$!{query.orderDirection}"#end >#dbMsg("User.gmtRegistered")</th>
+               <th width="80" orderField="status" #if("$!{query.orderField}"=="status")class="$!{query.orderDirection}"#end >#dbMsg("User.status")</th>
+               <th width="100" >操作</th>
+            </tr>
+        </thead>
+        <tbody>
+	       #foreach($rs in $page.rows)
+	       <tr target="id" rel="$!rs.id"> ## target="id" rel="$!rs.id" 这两个是用在AjaxURL中的占位({target})数据(rel)来源
+                <td><input name="ids" value="$!rs.id" type="checkbox"></td>
+	            <td>
+                    #trimHtml($!rs.displayName,120)
+                </td>
+                ##<td > $!rs.id </td>
+                <td>
+                    #trimHtml($!rs.loginName,120)
+                </td>
+                <!--
+                <td>
+                    #trimHtml($!rs.nicename,120)
+                </td>
+                -->
+                #*
+                <td>
+                    #trimHtml($!rs.email,120)
+                </td>
+                *#
+                <!--
+                <td>
+                    #trimHtml($!rs.website,120)
+                </td>
+                -->
+                <td>
+                    $!dateTool.format("yyyy-MM-dd", $!rs.gmtRegistered)
+                </td>
+                <td>
+                    ##枚举EnableStatusEnum:
+                        <!-- $!rs.status -->
+                        #if("-1"=="$!rs.status")
+                        禁用
+                        #end
+                        <!-- $!rs.status -->
+                        #if("0"=="$!rs.status")
+                        待查
+                        #end
+                        <!-- $!rs.status -->
+                        #if("1"=="$!rs.status")
+                        有效
+                        #end
+                </td>
+        
+	            <td >
+                    <a href='$appServer.get("/admin/user/viewAjax/${rs.id}.xhtml?dwzId=dwz_tab_user_view_$!rs.id")' target="navTab" title="#dbMsg('function.view')#dbMsg('User')[$!rs.id]" class="btnInfo"  rel="dwz_tab_user_view_$!rs.id" >#dbMsg("function.view")</a>
+                    <a href='$appServer.get("/admin/user/editAjax/${rs.id}.xhtml?dwzId=dwz_tab_user_edit_$!rs.id")' target="navTab" title="#dbMsg('function.edit')#dbMsg('User')[$!rs.id]" class="btnEdit"  rel="dwz_tab_user_edit_$!rs.id" >#dbMsg("function.edit")</a>
+                    <a href='$appServer.get("/admin/user/delJson/${rs.id}.xhtml")' target="ajaxTodo" title="你确定要#dbMsg("function.del")这个#dbMsg('User')[$!rs.id]吗?" class="btnDel">#dbMsg("function.del")</a>
+                ## 如果有1对多,可加上查看多方列表按钮
+                #* 
+                    <a href='$appServer.get("/admin/post/indexAjax.xhtml").addQueryData("userId","${rs.id}")' target="navTab" 
+                        rel="dwz_tab_post" title="#dbMsg('function.view')#dbMsg('Post')[$!rs.id]" class="btnInfo">
+                        #dbMsg('Post')</a>
+                    <a href='$appServer.get("/admin/userMeta/indexAjax.xhtml").addQueryData("userId","${rs.id}")' target="navTab" 
+                        rel="dwz_tab_userMeta" title="#dbMsg('function.view')#dbMsg('UserMeta')[$!rs.id]" class="btnInfo">
+                        #dbMsg('UserMeta')</a>
+                *#
+                </td>
+	        </tr>
+	        #end
+        </tbody>
+    </table>
+    #dwzPageBar($page "navTab") 
+</div>
+

@@ -8,7 +8,7 @@
 	<name>eweb-parent</name>
 	<description>easyUI平台,开发基础框架,整体解决方案</description>
 	<modules>
-		<module>../models-public/eweb-core</module>
+		<module>../models-public/eweb-common</module>
 		<module>../WebApp</module>
 	</modules>
 	<url>http://www.easyui.net</url>

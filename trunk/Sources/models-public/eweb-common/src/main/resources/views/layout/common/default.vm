@@ -1,0 +1,41 @@
+<!doctype html>
+## 前台网页默认的装饰器
+<html>
+<!-- 本站全部采用HTML5的规范,如果显示有问题,这个是正常的,请升级浏览器  -->
+	<head>
+		<meta charset="utf-8"/>
+        ##<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	    <title>#trimHtml($!{title}) 易优网络工作室开发平台 </title>     
+	    <!--[if lte IE 8]>
+	    <script src="$imageServer.get('script/libs/html5.js')"></script>
+	    <![endif]--> 
+        <!--if lte IE 6]>
+		<script src="$imageServer.get('script/libs/letskillie6.zh_CN.pack.js')"></script>
+		<!--endif]-->
+		
+        ## 960gs样式文件
+        ##<link href="$imageServer.get('style/960Grid/reset.css')" rel="stylesheet" />
+        <link href="$imageServer.get('style/960Grid/grid_16_pad15.css')" rel="stylesheet" />
+        
+        ## 样式文件
+        <link href="$imageServer.get('style/front/default.css')" rel="stylesheet" />
+        
+	    <script src="$appServer.get('contain/baseJS.xhtml')" charset="UTF-8"></script>
+        
+		## jQuery
+        ##<script src="$imageServer.get('script/libs/jquery-1.4.3.min.js')"></script>
+        <script src="$imageServer.get('script/libs/jquery-1.4.4.js')"></script>
+        ##<script src="$imageServer.get('script/libs/jquery-1.5.js')"></script>
+        ##<script src="$imageServer.get('script/libs/jquery-1.5.1.js')"></script>
+        
+	</head>
+
+	<body >
+		
+	##	$contain.get('/contain/front-header.xhtml')
+
+		$screen_content
+
+	##	$contain.get('/contain/front-footer.xhtml')
+	</body>
+</html>

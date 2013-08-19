@@ -1,0 +1,27 @@
+#set($layout = '')
+
+## 页面上为Json字符串,
+## 里面含有信息包括:账号字段名(loginName),密码字段名(password),
+## 验证码字段名(imgCheckCode),如果为空白或者null表示不需要验证码, 随机数(rand)
+## 验证码图片URL(不带随机数)(imgCheckCodeUrl,imgCheckCodeUrl1,imgCheckCodeUrl2),
+## ajax Json方式登录提交地址(actionUrl),ajax方式提交,返回Json结果
+## 普通登录页面(loginPageUrl),Ajax登录片段代码URL(loginAjaxHtmlUrl),
+## 以及其它扩展内容
+## displayName员工号
+## loginName登录账号
+## loginImgCheckCode是否需要验证码
+
+{
+    "loginName":"loginName"
+    "displayName":"displayName"
+    ,"password":"password"
+    ,"loginImgCheckCode":"$!{loginImgCheckCode}"
+    ,"imgCheckCode":"imgCheckCode"
+    ,"imgCheckCodeUrl":"$!appServer.get("imgCheckCode1.xhtml")"
+    ,"imgCheckCodeUrl1":"$!appServer.get("imgCheckCode1.xhtml")"
+    ,"imgCheckCodeUrl2":"$!appServer.get("imgCheckCode2.xhtml")"
+    ,"rand":"$!{rand}"
+    ,"actionUrl":"$!appServer.get("loginJson.xhtml")"
+    ,"loginPageUrl":"$!appServer.get("")"
+    ,"loginAjaxHtmlUrl":"$!appServer.get("")"
+}

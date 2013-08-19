@@ -1,0 +1,195 @@
+#set($layout = '')
+    ## 加载默认首页
+    #set($title="后台使用帮助")
+    
+<div class="page">
+    <div class="accountInfo">
+        <div class="alertInfo">
+            <h2><a href="#" target="_blank">DWZ框架使用手册(PDF)</a></h2>
+            <a href="#" target="_blank">DWZ框架演示视频</a>
+        </div>
+        <div class="right">
+            <p><a href="#" target="_blank" style="line-height:19px">DWZ框架使用手册(CHM)</a></p>
+            <p><a href="#" target="_blank" style="line-height:19px">DWZ框架Ajax开发视频教材</a></p>
+        </div>
+        <p><span>DWZ富客户端框架</span></p>
+        <p><a href="#" target="dialog">DWZ研发组</a></p>
+    </div>
+    <div class="pageFormContent" layoutH="80">
+    	   <div class="tabs" currentIndex="0" eventType="click">
+                <div class="tabsHeader">
+                    <div class="tabsHeaderContent">
+                        <ul>
+                            <li><a href="javascript:;"><span>如何调用字典配置:</span></a></li>
+                            <li><a href="javascript:;"><span>如何将枚举组装下拉框:</span></a></li>
+                            <li><a href="javascript:;"><span>枚举在VM中的其它使用技巧:</span></a></li>
+                            <li><a href="javascript:;"><span>URL中文乱码解决:</span></a></li>
+                            <li><a href="javascript:;"><span>搜索与分页组件使用:</span></a></li>
+                            <li><a href="javascript:;"><span>日历控件的使用:</span></a></li>
+                            <li><a href="javascript:;"><span>关于金钱和比率在数据库与页面使用:</span></a></li>
+                            <li><a href="$!{appServer.get("/updatePwdAjax.xhtml")}" class="j-ajax"><span>内嵌Ajax片断页面</span></a></li>
+                        </ul> 
+                    </div>
+                </div>
+                <div class="tabsContent" >
+                    ##内容3
+                    <div>
+                        <h2>如何调用字典配置:</h2>
+                        <pre style="margin:5px;line-height:1.4em">
+                            1.   EnumWebCfgCode.java ---- 各个配置的Code枚举。系统配置、字典、code的枚举。主要是开发中使用，Code不会发生改变的，可以入到这个枚举中，以方便使用。
+                            2.   EnumWebCfgGroup.java ---- 各个配置分组枚举。
+                            3.   WebCacheUtils.java ---- 字典系统配置缓存类。系统配置在启动时就加载到了内存中，需要使用时，全部使用缓存。
+                                这个类中提供了各种方法，可以直接通过分组或Code获取字典配置，也可以快速获取字典配置中的值，并将值转成Json格式。
+                                在VM页面中，可以直接使用其tool工具，如：<span style="color:red;">$</span><span style="color:red;">webCacheUtils.webConfigValueJson("postType")</span>
+                       
+                            4.   点击显示下拉lookup数据源(Collection< WebConfig > 的JSON格式)： 
+                                注意1：outCfg参数是JSON格式，Json格式要求字段和值都要使用双引号。  
+                                注意2：postfield设置后，会自动在那个URL后组装postfield里的名称为参数名，postfield的名称的输入框里的值为参数值。
+                                注意3：lookupgroup="分组名"，用来放在输入框name里的前缀，如name="分组名.aa"
+                                &lt;input class="required" name="dd" 
+                                    type="text" <span style="color:red;">postfield="id"</span> suggestfields="aa,bb,dd" 
+                                    suggesturl="<span style="color:red;">$</span><span style="color:red;">!{appServer.get('/lookupWebCfgsJson.xhtml').addQueryData("cfgGroup","wzsz").addQueryData("outCfg",'{"id":"id","aa":"id","bb":"cfgName","cc":"cfgTitle","dd":"cfgGroup"}')}</span>"
+                                    lookupgroup="" autocomplete="false" /&gt;
+                                <span style="color:red;">注意4：如果想不要id值，那就lookupPk="不存在的控件名称"。lookupPk ="****" 不能设为空，不然，就会默认为id</span>
+                        </pre>
+                        <div class="divider"></div>
+                        效果如下：（注意，id很特殊，suggestfields中没有id和cc，但是，结果name="id"的输入框中还是被写入值了。如果想不要id值，那就lookupPk="不存在的控件名称"）
+                        <div>
+                                (<input class="required" name="dd" 
+                                    type="text" postfield="" suggestfields="bb,dd" lookupPk="默认主键名称"
+                                    suggesturl="$!{appServer.get('/lookupWebCfgsJson.xhtml').addQueryData("cfgGroup","wzsz").addQueryData("outCfg",'{"aa":"id","bb":"cfgName","cc":"cfgTitle","dd":"cfgGroup"}')}" 
+                                    lookupgroup="" autocomplete="false" />《=dd)
+                                aa<input name="aa"/>
+                                bb<input name="bb"/>
+                                cc<input name="cc"/>
+                                id<input name="id" value="eeeee"/>
+                        </div>
+                    </div>
+                    ##内容2
+                    <div>
+                        <h2>如何将枚举组装下拉框:</h2>
+                        <pre style="margin:5px;line-height:1.4em">
+                            1.   在Action中放入枚举值对象：<span style="color:red;">model.put("enumSexList", EnumSex.values());</span>
+                            2.   在VM页面中使用：<span style="color:red;">#</span><span style="color:red;">enumSelectEl($enumObjList ,"elName" ,"curValue" ,"selectAllText" ,"readOnly" ,"class")</span>
+                                    $enumObjList：枚举对象,如：$enumSexList
+                                    elName：为下拉框的Name.
+                                    curValue：为当前值,则默认选中这项,且,如果页面中有类目组件,自动关联类目可选数据.
+                                    selectAllText：选择框的第一个默认选择，比如“请选择”,如果需要这个选项,请传入要显示的文字,如果传入空白，不显示这个值选项.
+                                    readOnly：是否是只读,如果只读的话,下拉中就只显示当前值.   非空白表示只读,null或空白表示非只读
+                                    class：选择框的个性样式名，一般使用控件名。
+                        </pre>
+                    </div>
+                    ##内容3
+                    <div>
+                        <h2>枚举在VM中的其它使用技巧:</h2>
+                        <pre style="margin:5px;line-height:1.4em">
+                            1.   在Action中放入枚举值对象：<span style="color:red;">model.put("enumValueMap", Enum***.toMap());</span>
+                            2.   在VM页面中使用：<span style="color:red;">$</span><span style="color:red;">enumValueMap.get("key")</span>
+                                                    或者：<span style="color:red;">$</span><span style="color:red;">enumValueMap.key</span>
+                                            通过枚举的Code为Key，枚举的desc为Value。在页面上，就可以通过这样来显示数据中保存的枚举code的对应desc了。
+                                  比如：model.put("enumSexValueMap", EnumSex.toMap());（m==男,f==女）
+                                VM中：<span style="color:red;">$</span>enumSexValueMap.m ， 
+                                  或者：<span style="color:red;">$</span>enumSexValueMap.get("m")
+                            结果显示：男
+                        </pre>
+                        其它的更多技巧，可根据此原理，将枚举的其它方法拎出来，在页面上进行使用。
+                    </div>
+                    ##内容4
+                    <div>
+                        在Tomcat的server.xml配置Connector内增加useBodyEncodingForURI="true" （或加上URIEncoding="UTF-8"），例如
+                        &lt;Connector connectionTimeout="20000" port="81" protocol="HTTP/1.1" redirectPort="8443"  useBodyEncodingForURI="true" /&gt;
+                    </div>
+                    ##内容
+                    <div>
+                        <h2>搜索与分页组件使用:</h2>
+                        <pre style="margin:5px;line-height:1.4em">
+                            分页条已经做好了对应的宏，可以直接使用 <span>#</span>dwzPageBar($page "dialog") 或：<span>#</span>dwzPageBar($page "navTab") 
+                            
+                        在弹出窗口里，每页多少条的select 上增加属性： 
+                        onchange="dialogPageBreak({numPerPage:this.value})" 
+                        （navTab页面上使用 navTabPageBreak({numPerPage:this.value})） 就可以在选择后自动刷新搜索结果。
+                        
+                        参数有：{pageNum:"n", numPerPage:"n", orderField:"xxx"}。
+                        
+                        分页条里，如果是navTab里，使用 增加属性： targetType="navTab"， 
+                        如果是弹出窗口，使用：targetType="dialog".
+                        
+                        点击搜索功能，要求在搜索Form上，  
+                        添加属性：  弹出窗口方式onsubmit="return dialogSearch(this)" 
+                        （navTab页面上使用：onsubmit="return navTabSearch(this)" 
+                        或者：navTabSearch(this,'dwz_tab_materiaType'); 第二个参数为指定navTab的ID）。
+                        
+                         在指定DIV中显示搜索结果：onsubmit="return divSearch(this,el_ID)"
+                        在搜索页面上都有两个Form，搜索两个Form里的条件框必须是一致的，不一致的话，结果会不一致。id="pagerForm"                        
+                        </pre>
+                    </div>
+                    ##内容
+                    <div> 
+                        <h2>日历控件的使用:</h2>
+                        <pre style="margin:5px;line-height:1.4em">
+                            默认可选择的年只有前后10年。在Input上增加属性可进行修改。： yearstart="-100" yearend="20"
+                        format="yyyy-MM-dd HH:mm:ss" ,   class=" date "  readonly="readonly".  
+                        可在后面添加一个选择按钮：&lt;a class="inputDateButton" href="javascript:void(0)"&gt;#dbMsg("function.select")&lt;/a&gt;
+                        
+                        在VM页面中，可以使用<span>$</span>!dateTool.format('yyyy-MM-dd HH:mm:ss', <span>$</span>!{value})来将日期格式化。
+                        </pre>
+                    </div>
+                    ##内容
+                    <div> 
+                        <h2>关于金钱和比率在数据库与页面使用:</h2>
+                        <pre style="margin:5px;line-height:1.4em">
+                            金钱在数据库里都是以分为单位保存的，Java上对象金钱字段也是分，在使用时，
+                            统一扩展对应元的Get和Set方法，与页面交互全部使用Yun扩展。
+                            例如：
+                                菜品售价1字段，扩展以下两个方法：
+                                public void setSellingPrice1Yuan(Double value) {
+                                    this.sellingPrice1 = CommonUtil.yuan2Fen(value);
+                                }                                
+                                public Double getSellingPrice1Yuan() {
+                                    return CommonUtil.fen2Yuan(sellingPrice1);
+                                }
+                            在页面上使用时，都使用sellingPrice1Yuan。以上Set和Get方法会自动转存和读取原始字段。
+                            
+                            比率字段与金额相似处理，数据库中保存的是乘以10000的数值，也就是说，
+                            如果数据库里保存的是10000，实际上就是1，对应的百分比就是100% 。
+                            比率字段扩展出两组方法，分别对应实际小数（Real）和实际百分比（Percent）。
+                            例如：Promotion.java中discountRate字段：
+                                /** 百分比 */
+                                public void setDiscountRatePercent(Float valuePercent) {
+                                    this.discountRate = CommonUtil.percent2DbRate(valuePercent);
+                                }
+                                /** 百分比 */
+                                public Float getDiscountRatePercent() {
+                                    return CommonUtil.dbRate2Percent(this.discountRate);
+                                }
+                                /** 实际值 */
+                                public void setDiscountRateReal(Float valueReal) {
+                                    this.discountRate = CommonUtil.real2DbRate(valueReal);
+                                }
+                                /** 实际值 */
+                                public Float getDiscountRateReal() {
+                                    return CommonUtil.dbRate2Real(this.discountRate);
+                                }
+                            在页面上使用时，需要百分比的就用百分比（如：discountRatePercent）
+                            需要实际值时，就用实际值：（如：discountRateReal）
+                                
+                        </pre>
+                    </div>
+                    ##内容
+                    <div></div>
+                </div>
+                <div class="tabsFooter"  >
+                    <div class="tabsFooterContent"></div>
+                </div>
+            </div>
+
+    
+        <div class="divider"></div>
+        
+        
+        <h2>有偿服务请联系:</h2>
+        <p style="color:red;">janrn@163.com</p>
+    </div>
+
+</div>
+

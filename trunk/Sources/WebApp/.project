@@ -3,7 +3,7 @@
   <name>eweb-WebApp</name>
   <comment>eweb-WebApp. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
-    <project>eweb-core</project>
+    <project>eweb-common</project>
   </projects>
   <buildSpec>
     <buildCommand>

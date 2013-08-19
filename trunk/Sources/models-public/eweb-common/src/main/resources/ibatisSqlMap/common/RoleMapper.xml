@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="net.easyUI.mapper.common.RoleMapper">
+
+	<resultMap id="RM_Role" type="net.easyUI.domain.common.Role">
+        <result property="id" column="id"/>
+        <result property="roleKey" column="role_key"/>
+        <result property="roleName" column="role_name"/>
+	</resultMap>
+	
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        <![CDATA[
+            id,
+            role_key,
+            role_name
+        ]]>
+    </sql>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <resultMap id="RM_Role_FullFK" extends="RM_Role" type="net.easyUI.domain.common.Role">
+        <result property="memo" column="memo"/>
+        <!-- 此处需要依赖主表两个字段.暂时不知道如何传递,先去掉此属性,请手动在Service里查询组装结果.
+        <collection  property="roleMetas" column="id"  select="net.easyUI.mapper.common.RoleMetaMapper.listQueryByRoleId"/>
+    	-->
+    </resultMap>
+    
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns_full">
+        <![CDATA[
+            id,
+            role_key,
+            role_name,
+            memo
+        ]]>
+    </sql>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="getByKeyFullFK" resultMap="RM_Role_FullFK">
+        SELECT <include refid="columns_full" />
+        <![CDATA[
+            FROM role 
+            WHERE id = #{id}  
+        ]]>
+    </select>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="listQueryMapFullFK" resultMap="RM_Role_FullFK">
+        SELECT <include refid="columns_full" />
+        FROM role 
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+    
+
+    <select id="getByKey" resultMap="RM_Role">
+        SELECT <include refid="columns_full" />
+        <![CDATA[
+            FROM role 
+            WHERE id = #{id}  
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkRoleKey" resultMap="RM_Role" parameterType="String">
+        SELECT <include refid="columns_full"/>
+        <![CDATA[
+            FROM role 
+            where role_key = #{roleKey}
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkRoleKeyFullFK" resultMap="RM_Role_FullFK" parameterType="String">
+        SELECT <include refid="columns_full"/>
+        <![CDATA[
+            FROM role 
+            where role_key = #{roleKey}
+        ]]>
+    </select>
+    
+    
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO role (
+            role_key ,
+            role_name ,
+            memo 
+        ) VALUES (
+            #{roleKey} ,
+            #{roleName} ,
+            #{memo} 
+        )
+    ]]>
+	</insert>
+    
+	<update id="update" >
+    <![CDATA[
+        UPDATE role SET
+            role_key = #{roleKey} ,
+            role_name = #{roleName} ,
+            memo = #{memo} 
+        WHERE 
+            id = #{id} 
+    ]]>
+	</update>
+
+<!-- add by busfly 2010-09-25 动态修改，只修改传入的内容  -->
+    <update id="updateByQueryMap" >
+        UPDATE role
+        <set>
+            <if test="@Ognl@isNotEmpty(entity.roleKey)">
+                role_key = #{entity.roleKey},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.roleName)">
+                role_name = #{entity.roleName},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.memo)">
+                memo = #{entity.memo},
+            </if>
+        </set>          
+        <include refid="findPage_where"/>    
+    </update>
+    
+    <select id="countQueryMap" resultType="long">
+        SELECT count(*) FROM role 
+        <include refid="findPage_where"/>    
+    </select>
+    
+    <!--
+        分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+        因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="listQueryMap" resultMap="RM_Role">
+        SELECT <include refid="columns" />
+        FROM role  
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+
+    <delete id="deleteBykey">
+        DELETE FROM role 
+        <![CDATA[
+            WHERE id = #{id}  
+        ]]>
+    </delete>
+    
+    <select id="deleteByUkRoleKey">
+        DELETE FROM role 
+        <![CDATA[
+            where role_key = #{roleKey}
+        ]]>
+    </select>
+    
+    
+    <delete id="delete">
+        DELETE FROM role 
+        <![CDATA[
+            WHERE id = #{id}  
+        ]]>
+    </delete>
+    
+    <!-- add by busfly 2010-09-25 -->
+    <delete id="deleteByQueryMap">
+        DELETE FROM role 
+        <include refid="findPage_where"/>    
+    </delete>
+    
+    <sql id="order_by">
+        <if test="@Ognl@isNotEmpty(filterQuery.orderByList)">
+            ORDER BY 
+                 <foreach collection="filterQuery.orderByList" item="item" index="index" >  
+                     <choose> 
+                        <when test="item.sidx=='id'"> id ${item.sord} ,</when>
+                        <when test="item.sidx=='roleKey'"> role_key ${item.sord} ,</when>
+                        <when test="item.sidx=='roleName'"> role_name ${item.sord} ,</when>
+                        <when test="item.sidx=='memo'"> memo ${item.sord} ,</when>
+                  <!--    <otherwise> 
+                            null
+                        </otherwise> 
+                   -->   
+                    </choose> 
+                 </foreach> 
+                 id desc 
+        </if>
+    </sql>
+    
+    <sql id="findPage_where">
+        <where>                     
+            
+            <!-- 扩展条件enabled -->
+            <if test="@Ognl@isNotEmpty(filterQuery.enabled)">
+                and exists(select wcfg.* from web_config wcfg where wcfg.cfg_group='roleMeta' and wcfg.cfg_name=CONCAT(role.role_key, '_enabled') and wcfg.cfg_value=#{filterQuery.enabled} )
+            </if>
+           <!-- 扩展条件enabled -->
+            <if test="@Ognl@isNotEmpty(filterQuery.enabled_ne)">
+                and not exists(select wcfg.* from web_config wcfg where wcfg.cfg_group='roleMeta' and wcfg.cfg_name=CONCAT(role.role_key, '_enabled') and wcfg.cfg_value=#{filterQuery.enabled_ne} )
+            </if>
+            
+            
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.id)">
+                and id = #{filterQuery.id}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.id_in)">
+               and id in
+               <foreach collection="filterQuery.id_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+            <!-- not IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.id_ni)">
+               and id not in
+               <foreach collection="filterQuery.id_ni" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.roleKey)">
+                and role_key = #{filterQuery.roleKey}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.roleKey_in)">
+               and role_key in
+               <foreach collection="filterQuery.roleKey_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.roleKey_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.roleKey_bw)">
+               and role_key like CONCAT(#{filterQuery.roleKey_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.roleKey_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.roleKey_cn)">
+               and role_key like CONCAT('%',#{filterQuery.roleKey_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.roleName)">
+                and role_name = #{filterQuery.roleName}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.roleName_in)">
+               and role_name in
+               <foreach collection="filterQuery.roleName_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.roleName_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.roleName_bw)">
+               and role_name like CONCAT(#{filterQuery.roleName_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.roleName_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.roleName_cn)">
+               and role_name like CONCAT('%',#{filterQuery.roleName_cn},'%')  
+            </if>       
+            
+        </where>
+    </sql>
+        
+	
+</mapper>
+

@@ -82,7 +82,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.easyUI</groupId>
-			<artifactId>eweb-core</artifactId>
+			<artifactId>eweb-common</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>

@@ -1,0 +1,114 @@
+#set($layout = '')
+
+<!doctype html>
+<html>
+<!-- 本站全部采用HTML5的规范,如果显示有问题,这个是正常的,请升级浏览器  -->
+    <head>
+        <meta charset="utf-8"/>
+        ##<meta http-equiv="X-UA-Compatible" content="IE=7" />
+        
+        <title>登录 老黄牛 后台系统平台 </title>
+      
+        ## dwz登录样式
+        <link href="$imageServer.get('script/libs/dwz/themes/css/login.css')" rel="stylesheet" />
+        <!--[if IE]>
+        <link href="$imageServer.get('script/libs/dwz/themes/css/ieHack.css')" rel="stylesheet" />
+        <![endif]-->
+        
+        <!--[if lte IE 8]>
+        <script src="$imageServer.get('script/libs/html5.js')"></script>
+        <![endif]--> 
+        <!--if lte IE 6]>
+        <script src="$imageServer.get('script/libs/letskillie6.zh_CN.pack.js')"></script>
+        <!--endif]-->
+        ## 基础JS
+        <script src="$appServer.get('contain/baseJS.xhtml')" charset="UTF-8"></script>
+        
+    </head>
+    <body>
+	    <div id="login">
+	        <div id="login_header">
+	            <h1 class="login_logo">
+	                <a href="#"><img src="$imageServer.get('script/libs/dwz/themes/default/images/login_logo.gif')" /></a>
+	            </h1>
+	            <div class="login_headerContent">
+	                <div class="navList">
+	                    <ul>
+	                        <li><a href="#">设为首页</a></li>
+	                        <li><a href="#">反馈</a></li>
+	                        <li><a href="#">帮助</a></li>
+	                    </ul>
+	                </div>
+	                <h2 class="login_title"><img src="$imageServer.get('script/libs/dwz/themes/default/images/login_title.png')" /></h2>
+	            </div>
+	        </div>
+	        <div id="login_content">
+	            <div class="loginForm">
+	                <form action="$appServer.get('login.xhtml')" method="post">
+	                	
+	                <input name="returnurl" value="$!{returnurl}" type="hidden" />
+	                #if($msg)
+			                <div style="font-weight: bold;color: red;text-align: center;font-size: 16px;">$msg</div>
+	                #end
+	                
+			            <p>
+			                <label>账号：</label>
+			                <input name="loginName" value="$!{user.loginName}" type="text" class="required login_input" />
+	                    </p>
+	                    <p>
+			                <label>密码：</label>
+			                <input name="password" type="password" class="required login_input" />
+	                    </p>
+                #if("$!{loginImgCheckCode}"=="true")
+	                    <p>
+			                <label>验证码：</label>
+			                <input name="imgCheckCode" type="text" class="required code"/>
+			                <span>
+				                  <img id="imgCheckCode"  width="75" height="24" 
+                                     style="cursor:pointer"  onClick="this.src='$appServer/imgCheckCode1.xhtml?t='+Math.random();"
+				                      alt="请输入此图片上的内容,看不清楚?点击换一张!"
+				                      title="请输入此图片上的内容,看不清楚?点击换一张!"
+				                      src="$imageServer.get('style/images/imgCheckCode.jpg')" />
+			                #*
+			                  <img id="imgCheckCode"  width="75" height="24" 
+                                 style="cursor:pointer"  onClick="this.src='$appServer/imgCheckCode1.xhtml?t='+Math.random();"
+			                      alt="请输入此图片上的数学运算结果,看不清楚?点击换一张!"
+			                      title="请输入此图片上的数学运算结果,看不清楚?点击换一张!"
+			                      src="$imageServer.get('style/images/imgCheckCode.jpg')" />
+			                *#
+			                </span>
+	                    </p>
+                    #end
+			            <p style="text-align:center;">
+			                <a>申请账户</a>
+			                <a>找回密码</a>
+			            </p>
+	            
+	                    <div class="login_bar">
+	                        <input class="sub" type="submit" value=" " />
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="login_banner"><img src="$imageServer.get('script/libs/dwz/themes/default/images/login_banner.jpg')" /></div>
+	            <div class="login_main">
+	                <ul class="helpList">
+	                    <li><a href="#">下载驱动程序</a></li>
+	                    <li><a href="#">如何安装密钥驱动程序？</a></li>
+	                    <li><a href="#">忘记密码怎么办？</a></li>
+	                    <li><a href="#">为什么登录失败？</a></li>
+	                </ul>
+	                <div class="login_inner">
+	                    <p>您可以使用 网易网盘 ，随时存，随地取</p>
+	                    <p>您还可以使用 闪电邮 在桌面随时提醒邮件到达，快速收发邮件。</p>
+	                    <p>在 百宝箱 里您可以查星座，订机票，看小说，学做菜…</p>
+	                </div>
+	            </div>
+	        </div>
+	        <div id="login_footer">
+	            Copyright &copy; 2011 www.busfly.net Inc. All Rights Reserved.
+	        </div>
+	    </div>
+
+    </body>
+
+</html>

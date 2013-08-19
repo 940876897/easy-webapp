@@ -1,0 +1,114 @@
+#set($layout = '')
+<form id="pagerForm" action="$appServer.get('/admin/webConfig/indexAjax.xhtml').addQueryData("dwzId",$!{dwzId})" method="post">
+	<input type="hidden" name="pageNum" value="#if(${query.pageNum})${query.pageNum}#{else}1#end" /><!--【必须】value=1可以写死-->
+	<input type="hidden" name="numPerPage" value="#if(${query.numPerPage})${query.numPerPage}#{else}20#end" /><!--【可选】每页显示多少条-->
+	<input type="hidden" name="orderField" value="$!{query.orderField}" /><!--【可选】查询排序-->
+    <input type="hidden" name="orderDirection" value="$!{query.orderDirection}" /><!--【可选】排序方式-->
+    <!--【可选】其它查询条件，业务有关，有什么查询条件就加什么参数-->
+	
+            
+    <input type="hidden" name="cfgName_cn" value="$!{query.cfgName_cn}"/>
+    <input type="hidden" name="cfgTitle_cn" value="$!{query.cfgTitle_cn}"/>
+    <input type="hidden" name="cfgGroup" value="$!{query.cfgGroup}"/>
+            
+</form> 
+
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this,'dwz_tab_webConfig');" action="$appServer.get('/admin/webConfig/indexAjax.xhtml').addQueryData("dwzId",$!{dwzId})" method="post">
+        <input type="hidden" name="pageNum" value="#if(${query.pageNum})${query.pageNum}#{else}1#end" /><!--【必须】value=1可以写死-->
+        <input type="hidden" name="numPerPage" value="#if(${query.numPerPage})${query.numPerPage}#{else}20#end" /><!--【可选】每页显示多少条-->
+        <input type="hidden" name="orderField" value="$!{query.orderField}" /><!--【可选】查询排序-->
+        <input type="hidden" name="orderDirection" value="$!{query.orderDirection}" /><!--【可选】排序方式-->
+    
+    <div class="searchBar">
+        <ul class="searchContent">
+            <li>
+                <label>#dbMsg("WebConfig.cfgName")：</label>
+                    <input type="text" name="cfgName_cn" value="$!{query.cfgName}" size="25"/>
+            </li>
+            <li>
+                <label>#dbMsg("WebConfig.cfgTitle")：</label>
+                    <input type="text" name="cfgTitle_cn" value="$!{query.cfgTitle}" size="25"/>
+            </li>
+            <li>
+                <label>#dbMsg("WebConfig.cfgGroup")：</label>
+                    #enumSelectEl($EnumWebCfgGroupList ,"cfgGroup" ,"$!{query.cfgGroup}" ,"请选择" ,"" ,"")
+                    ##<input type="text" name="cfgGroup" value="$!{query.cfgGroup}" size="25"/>
+            </li>
+        </ul>
+        <div class="subBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">#dbMsg("queryType.query")</button></div></div></li>
+            </ul>
+        </div>
+    </div>
+    </form>
+</div>
+
+
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <li><a class="add" href="$appServer.get('/admin/webConfig/addAjax.xhtml').addQueryData("cfgGroup",${cfgGroup}).addQueryData("dwzId",$!{dwzId})" target="navTab" title="#dbMsg('function.add')#dbMsg('WebConfig')" rel="dwz_tab_webConfig_add"><span>#dbMsg("function.add")</span></a></li>
+            <li><a href="$appServer.get('/admin/webConfig/editAjax/{id}.xhtml').addQueryData("cfgGroup",${cfgGroup}).addQueryData("dwzId",$!{dwzId})" target="navTab" class="edit" title="#dbMsg('function.edit')#dbMsg('WebConfig')" rel="dwz_tab_webConfig_edit" ><span>#dbMsg("function.edit")</span></a></li>
+            <li class="line">line</li>
+#*
+            <li><a href="$appServer.get('/admin/webConfig/delJson.xhtml').addQueryData("dwzId",$!{dwzId})" target="selectedTodo" class="delete" title="确实要#dbMsg("function.delBatch")这些#dbMsg('WebConfig')吗?"><span>#dbMsg("function.delBatch")</span></a></li>
+*#
+            <li><a href="$appServer.get('/admin/webConfig/delJson/{id}.xhtml').addQueryData("dwzId",$!{dwzId})" target="ajaxTodo" class="delete" title="你确定要#dbMsg("function.del")选择这条#dbMsg('WebConfig')吗?"><span>#dbMsg("function.del")</span></a></li>
+            ## <li class="line">line</li>
+            ## <li><a class="icon" href="javascript:void(0);"><span>按钮</span></a></li>
+        </ul>
+    </div>
+    <table class="table" width="100%" layoutH="138" nowrapTD="false">
+        <thead>
+        	<tr >
+               <th width="30"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+               
+               <th width="80" orderField="cfgGroup" #if("$!{query.orderField}"=="cfgGroup")class="$!{query.orderDirection}"#end >#dbMsg("WebConfig.cfgGroup")</th>
+               <th width="80" orderField="cfgName" #if("$!{query.orderField}"=="cfgName")class="$!{query.orderDirection}"#end >#dbMsg("WebConfig.cfgName")</th>
+               <th width="120" orderField="cfgTitle" #if("$!{query.orderField}"=="cfgTitle")class="$!{query.orderDirection}"#end >#dbMsg("WebConfig.cfgTitle")</th>
+               <th  orderField="cfgValue" #if("$!{query.orderField}"=="cfgValue")class="$!{query.orderDirection}"#end >#dbMsg("WebConfig.cfgValue")</th>
+               <th width="80" orderField="cacheType" #if("$!{query.orderField}"=="cacheType")class="$!{query.orderDirection}"#end >#dbMsg("WebConfig.cacheType")</th>
+               <th width="80" orderField="rank" #if("$!{query.orderField}"=="rank")class="$!{query.orderDirection}"#end >#dbMsg("WebConfig.rank")</th>
+               
+               <th width="60" >操作</th>
+            </tr>
+        </thead>
+        <tbody>
+	       #foreach($rs in $page.rows)
+	       <tr target="id" rel="$!rs.id"> ## target="id" rel="$!rs.id" 这两个是用在AjaxURL中的占位({target})数据(rel)来源
+                <td><input name="ids" value="$!rs.id" type="checkbox"></td>
+	            
+                <td>  
+                    $!{EnumWebCfgGroupMap.get("$!rs.cfgGroup")}
+                </td>
+                <td>
+                    #trimHtml($!rs.cfgName,120)
+                </td>
+                <td>
+                    #trimHtml($!rs.cfgTitle,20)
+                </td>
+                <td>
+                    #trimHtml($!rs.cfgValue,60)
+                </td>
+                <td>
+                    $EnumWebCfgCacheTypeMap.get("$!rs.cacheType")
+                </td>
+                <td>
+                    $!rs.rank
+                </td>
+        
+	            <td ><a href='$appServer.get("/admin/webConfig/delJson/${rs.id}.xhtml").addQueryData("dwzId",$!{query.dwzId})' target="ajaxTodo" title="你确定要#dbMsg("function.del")这个#dbMsg('WebConfig')[$!rs.id]吗?" class="btnDel">#dbMsg("function.del")</a>
+	                               <a href='$appServer.get("/admin/webConfig/editAjax/${rs.id}.xhtml").addQueryData("cfgGroup",${cfgGroup}).addQueryData("dwzId",$!{query.dwzId})' target="navTab" title="#dbMsg('function.edit')#dbMsg('WebConfig')[$!rs.id]" class="btnEdit"  rel="dwz_tab_webConfig_edit_$!rs.id" >#dbMsg("function.edit")</a>
+                ## 如果有1对多,可加上查看多方列表按钮
+                </td>
+	        </tr>
+	        #end
+        </tbody>
+    </table>
+    #dwzPageBar($page "navTab") 
+</div>
+

@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="net.easyUI.mapper.common.UserMapper">
+
+	<resultMap id="RM_User" type="net.easyUI.domain.common.User">
+        <result property="id" column="ID"/>
+        <result property="loginName" column="login_name"/>
+        <result property="password" column="password"/>
+        <result property="nicename" column="nicename"/>
+        <result property="email" column="email"/>
+        <result property="website" column="website"/>
+        <result property="gmtRegistered" column="gmt_registered"/>
+        <result property="status" column="status"/>
+        <result property="displayName" column="display_name"/>
+	</resultMap>
+	
+    <!-- 带一对多,和多对一的完整数据 -->
+    <resultMap id="RM_User_FullFK" extends="RM_User" type="net.easyUI.domain.common.User">
+    </resultMap>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="getByKeyFullFK" resultMap="RM_User_FullFK">
+        SELECT <include refid="columns" />
+        <![CDATA[
+            FROM user 
+            WHERE ID = #{id}  
+        ]]>
+    </select>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="listQueryMapFullFK" resultMap="RM_User_FullFK">
+        SELECT <include refid="columns" />
+        FROM user 
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+    
+    
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        <![CDATA[
+            ID,
+            login_name,
+            password,
+            nicename,
+            email,
+            website,
+            gmt_registered,
+            status,
+            display_name
+        ]]>
+    </sql>
+
+
+    <select id="getByKey" resultMap="RM_User">
+        SELECT <include refid="columns" />
+        <![CDATA[
+            FROM user 
+            WHERE ID = #{id}  
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkLoginName" resultMap="RM_User" parameterType="String">
+        SELECT <include refid="columns"/>
+        <![CDATA[
+            FROM user 
+            where login_name = #{loginName}
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkLoginNameFullFK" resultMap="RM_User_FullFK" parameterType="String">
+        SELECT <include refid="columns"/>
+        <![CDATA[
+            FROM user 
+            where login_name = #{loginName}
+        ]]>
+    </select>
+    
+    
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO user (
+            login_name ,
+            password ,
+            nicename ,
+            email ,
+            website ,
+            gmt_registered ,
+            status ,
+            display_name 
+        ) VALUES (
+            #{loginName} ,
+            #{password} ,
+            #{nicename} ,
+            #{email} ,
+            #{website} ,
+            now(),
+            #{status} ,
+            #{displayName} 
+        )
+    ]]>
+	</insert>
+	
+    <!-- 
+            display_name = #{displayName} ,
+            nicename = #{nicename} ,
+     -->
+	<update id="update" >
+    <![CDATA[
+        UPDATE user SET
+            login_name = #{loginName} ,
+            password = #{password} ,
+            email = #{email} ,
+            website = #{website} ,
+            status = #{status} 
+        WHERE 
+            ID = #{id} 
+    ]]>
+	</update>
+
+<!-- add by busfly 2010-09-25 动态修改，只修改传入的内容
+            <if test="@Ognl@isNotEmpty(entity.nicename)">
+                nicename = #{entity.nicename},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.displayName)">
+                display_name = #{entity.displayName},
+            </if>
+  -->
+    <update id="updateByQueryMap" >
+        UPDATE user
+        <set>
+            <if test="@Ognl@isNotEmpty(entity.loginName)">
+                login_name = #{entity.loginName},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.password)">
+                password = #{entity.password},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.email)">
+                email = #{entity.email},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.website)">
+                website = #{entity.website},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.status)">
+                status = #{entity.status},
+            </if>
+        </set>          
+        <include refid="findPage_where"/>    
+    </update>
+    
+    <select id="countQueryMap" resultType="long">
+        SELECT count(*) FROM user 
+        <include refid="findPage_where"/>    
+    </select>
+    
+    <!--
+        分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+        因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="listQueryMap" resultMap="RM_User">
+        SELECT <include refid="columns" />
+        FROM user  
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+
+    <delete id="deleteBykey">
+        DELETE FROM user 
+        <![CDATA[
+            WHERE ID = #{id}  
+        ]]>
+    </delete>
+    
+    <select id="deleteByUkLoginName">
+        DELETE FROM user 
+        <![CDATA[
+            where login_name = #{loginName}
+        ]]>
+    </select>
+    
+    
+    <delete id="delete">
+        DELETE FROM user 
+        <![CDATA[
+            WHERE ID = #{id}  
+        ]]>
+    </delete>
+    
+    <!-- add by busfly 2010-09-25 -->
+    <delete id="deleteByQueryMap">
+        DELETE FROM user 
+        <include refid="findPage_where"/>    
+    </delete>
+    
+    <sql id="order_by">
+        <if test="@Ognl@isNotEmpty(filterQuery.orderByList)">
+            ORDER BY 
+                 <foreach collection="filterQuery.orderByList" item="item" index="index" >  
+                     <choose> 
+                        <when test="item.sidx=='id'"> ID ${item.sord} ,</when>
+                        <when test="item.sidx=='loginName'"> login_name ${item.sord} ,</when>
+                        <when test="item.sidx=='password'"> password ${item.sord} ,</when>
+                        <when test="item.sidx=='nicename'"> nicename ${item.sord} ,</when>
+                        <when test="item.sidx=='email'"> email ${item.sord} ,</when>
+                        <when test="item.sidx=='website'"> website ${item.sord} ,</when>
+                        <when test="item.sidx=='gmtRegistered'"> gmt_registered ${item.sord} ,</when>
+                        <when test="item.sidx=='status'"> status ${item.sord} ,</when>
+                        <when test="item.sidx=='displayName'"> display_name ${item.sord} ,</when>
+                  <!--    <otherwise> 
+                            null
+                        </otherwise> 
+                   -->   
+                    </choose> 
+                 </foreach> 
+                 ID desc 
+        </if>
+    </sql>
+    
+    <sql id="findPage_where">
+        <where>                     
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.id)">
+                and ID = #{filterQuery.id}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.id_in)">
+               and ID in
+               <foreach collection="filterQuery.id_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.loginName)">
+                and login_name = #{filterQuery.loginName}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.loginName_in)">
+               and login_name in
+               <foreach collection="filterQuery.loginName_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.loginName_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.loginName_bw)">
+               and login_name like CONCAT(#{filterQuery.loginName_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.loginName_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.loginName_cn)">
+               and login_name like CONCAT('%',#{filterQuery.loginName_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.password)">
+                and password = #{filterQuery.password}
+            </if>
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.nicename)">
+                and nicename = #{filterQuery.nicename}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.nicename_in)">
+               and nicename in
+               <foreach collection="filterQuery.nicename_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.nicename_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.nicename_bw)">
+               and nicename like CONCAT(#{filterQuery.nicename_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.nicename_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.nicename_cn)">
+               and nicename like CONCAT('%',#{filterQuery.nicename_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.email)">
+                and email = #{filterQuery.email}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.email_in)">
+               and email in
+               <foreach collection="filterQuery.email_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.email_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.email_bw)">
+               and email like CONCAT(#{filterQuery.email_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.email_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.email_cn)">
+               and email like CONCAT('%',#{filterQuery.email_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.website)">
+                and website = #{filterQuery.website}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.website_in)">
+               and website in
+               <foreach collection="filterQuery.website_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.website_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.website_bw)">
+               and website like CONCAT(#{filterQuery.website_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.website_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.website_cn)">
+               and website like CONCAT('%',#{filterQuery.website_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.gmtRegistered)">
+                and gmt_registered = #{filterQuery.gmtRegistered}
+            </if>
+            <!-- 不等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.gmtRegistered_ne)">
+                and gmt_registered != #{filterQuery.gmtRegistered_ne}
+            </if>
+            <!-- 小于 
+            -->
+            <if test="@Ognl@isNotEmpty(filterQuery.gmtRegistered_lt)">
+                and gmt_registered &lt; #{filterQuery.gmtRegistered_lt}
+            </if>
+            <!-- 小于等于
+             -->
+            <if test="@Ognl@isNotEmpty(filterQuery.gmtRegistered_le)">
+                and gmt_registered &lt;= #{filterQuery.gmtRegistered_le}
+            </if>
+            <!-- 大于
+             -->
+            <if test="@Ognl@isNotEmpty(filterQuery.gmtRegistered_gt)">
+                and gmt_registered &gt; #{filterQuery.gmtRegistered_gt}
+            </if>
+            <!-- 大于等于
+             -->
+            <if test="@Ognl@isNotEmpty(filterQuery.gmtRegistered_ge)">
+                and gmt_registered &gt;= #{filterQuery.gmtRegistered_ge}
+            </if>
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.status)">
+                and status = #{filterQuery.status}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.status_in)">
+               and status in
+               <foreach collection="filterQuery.status_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+            <!-- not in 子句
+             -->    
+           <if test="@Ognl@isNotEmpty(filterQuery.status_ni)">
+               and status not in
+               <foreach collection="filterQuery.status_ni" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>    
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.displayName)">
+                and display_name = #{filterQuery.displayName}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.displayName_in)">
+               and display_name in
+               <foreach collection="filterQuery.displayName_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.displayName_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.displayName_bw)">
+               and display_name like CONCAT(#{filterQuery.displayName_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.displayName_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.displayName_cn)">
+               and display_name like CONCAT('%',#{filterQuery.displayName_cn},'%')  
+            </if>       
+            
+        </where>
+    </sql>
+        
+	
+</mapper>
+

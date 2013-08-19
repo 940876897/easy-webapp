@@ -1,0 +1,57 @@
+#set($layout = '')
+	                <div class="accordion" fillSpace="sidebar">
+	                    
+	                    <div class="accordionHeader">
+	                        <h2><span>Folder</span>系统设置</h2>
+	                    </div>
+	                    <div class="accordionContent">
+	                        <ul class="tree treeFolder">
+                             <li><a>权限管理</a>
+                                    <ul>
+                                        #if($userAccess.hasUrl("/admin/role/indexAjax.xhtml"))
+                                        <li><a href="$appServer.get('/admin/role/indexAjax.xhtml').addQueryData("dwzId","dwz_tab_role")" target="navTab" rel="dwz_tab_role">角色</a></li>
+                                        #end
+                                        #if($userAccess.hasUrl("/admin/user/indexAjax.xhtml"))
+                                        <li><a href="$appServer.get('/admin/user/indexAjax.xhtml').addQueryData("dwzId","dwz_tab_user")" target="navTab" rel="dwz_tab_user">操作员</a></li>
+                                        #end
+                                        #if($userAccess.hasUrl("/admin/permission/indexAjax.xhtml"))
+                                        <li><a href="$appServer.get('/admin/permission/indexAjax.xhtml').addQueryData("dwzId","dwz_tab_permission")" target="navTab" rel="dwz_tab_permission">权限设置</a></li>
+                                        #end
+                                    </ul>
+                             </li>
+                             
+	                         <li><a>缓存与字典配置管理</a>
+	                         	<ul>
+	                         		#if($userAccess.hasUrl("/admin/webConfig/indexAjax.xhtml"))
+	                         			<li><a href="$appServer.get('/admin/webConfig/indexAjax.xhtml').addQueryData("dwzId","dwz_tab_webConfig")" target="navTab" rel="dwz_tab_webConfig">字典设置</a></li>
+	                         		#end
+	                         		#if($userAccess.hasUrl("/cacheManager/indexAjax.xhtml"))
+	                         			<li><a href="$appServer.get('/cacheManager/indexAjax.xhtml').addQueryData("dwzId","dwz_tab_cacheManager")" target="navTab" rel="dwz_tab_cacheManager">缓存管理</a></li>
+	                         		#end
+	                         	</ul>
+	                         </li>
+	                        </ul>
+	                    </div>
+	                    
+	                    <div class="accordionHeader">
+	                        <h2><span>Folder</span>业务系统</h2>
+	                    </div>
+	                    <div class="accordionContent">
+	                        <ul class="tree treeFolder">
+                             <li><a>文档管理</a>
+                                <ul>
+	                            	#if($userAccess.hasUrl("/admin/post/indexAjax.xhtml"))
+										<li><a href="$appServer.get('/admin/post/indexAjax.xhtml').addQueryData("dwzId","dwz_tab_post")" target="navTab" rel="dwz_tab_post">#dbMsg("Post")</a></li>
+									#end
+                                </ul>
+                             </li>
+                             
+	                         <li><a>评论管理</a>
+	                         	<ul>
+	                         		
+	                         	</ul>
+	                         </li>
+
+	                        </ul>
+	                    </div>
+	                </div>

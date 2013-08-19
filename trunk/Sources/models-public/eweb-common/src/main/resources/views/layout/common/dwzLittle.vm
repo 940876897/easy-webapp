@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<!-- 本站全部采用HTML5的规范,如果显示有问题,这个是正常的,请升级浏览器  -->
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=7" />
+        
+        <!--[if lte IE 8]>
+        <script src="$imageServer.get('script/libs/html5.js')"></script>
+        <![endif]--> 
+        <!--if lte IE 6]>
+        <script src="$imageServer.get('script/libs/letskillie6.zh_CN.pack.js')"></script>
+        <!--endif]-->
+        
+		<title>#if($title)${title} -#end 老黄牛 后台系统平台 </title>
+	  
+        ## dwz样式
+		<link href="$imageServer/script/libs/dwz/themes/default/style.css" rel="stylesheet" />
+		<link href="$imageServer.get('script/libs/dwz/themes/css/core.css')" rel="stylesheet" />
+        <link href="$imageServer.get('script/libs/dwz/themes/css/print.css')" rel="stylesheet" media="print"/>
+		<link href="$imageServer.get('script/libs/uploadify/css/uploadify.css')" rel="stylesheet" />
+        <!--[if IE]>
+        <link href="$imageServer.get('script/libs/dwz/themes/css/ieHack.css')" rel="stylesheet" />
+        <![endif]-->
+        <link href="$imageServer.get('style/admin/default.css')" rel="stylesheet" />
+        
+		
+
+		<!-- 加速JS加载速度 -->
+		<script src="$imageServer.get('script/libs/speedup.js')"></script>
+		<script src="$imageServer.get('script/libs/jquery-1.7.1.js')"></script>
+		<script src="$imageServer.get('script/libs/jquery.cookie.js')"></script>
+		<script src="$imageServer.get('script/libs/jquery.validate.js')"></script>
+		<script src="$imageServer.get('script/libs/jquery.bgiframe.js')"></script>
+		
+		<script src="$imageServer.get('script/libs/xheditor/xheditor-1.1.12-zh-cn.min.js')"></script>
+		## <script src="$imageServer.get('script/libs/kingEditor/kindeditor-min.js')"></script>
+		<script src="$imageServer.get('script/libs/uploadify/scripts/swfobject.js')"></script>
+		<script src="$imageServer.get('script/libs/uploadify/scripts/jquery.uploadify.v2.1.0.js')"></script>
+        
+        ## DWZ
+        <script src="$imageServer.get('script/libs/dwz/dwz.min.js')"></script>
+        <script src="$imageServer.get('script/libs/dwz/dwz.regional.zh.js')"></script>
+
+        ## 基础JS
+        <script src="$appServer.get('contain/baseJS.xhtml')" charset="UTF-8"></script>
+		
+        ## JS代码文件        
+	    <script src="$imageServer.get('script/admin/busfly.extend.dwz.js')"></script>
+	    <script src="$imageServer.get('script/admin/busfly.extend.javascript.js')"></script>
+	    <script src="$imageServer.get('script/admin/busfly.extend.validator.js')"></script>
+        <script src="$imageServer.get('script/admin/dwz.busfly.js')"></script>
+	    <script src="$imageServer.get('script/admin/admin.js')"></script>
+	    
+	</head>
+	
+	
+	<body>
+	        $screen_content
+	
+	</body>
+
+</html>

@@ -1,0 +1,38 @@
+#set($layout = '')
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <li><a class="add" href='$appServer.get("/admin/user/userRoleAddJson/${user.id}.xhtml?dwzId=$!{dwzId}&targetType=$!{targetType}")' 
+                target="selectedTodo" rel="roleKey_in" targetType="$!{targetType}" 
+                title="#dbMsg('function.add')#springMessage('Role')">
+                <span>#dbMsg("function.addBatch")</span>
+                </a>
+            </li>
+            ## <li><a class="icon" href="javascript:void(0);"><span>按钮</span></a></li>
+        </ul>
+    </div>
+    <table class="table" width="100%" layoutH="56" >
+        <thead>
+            <tr >
+               <th width="40"><input type="checkbox" group="roleKey_in" class="checkboxCtrl"></th>
+               <th width="120"  >#dbMsg("Role.roleKey")</th>
+               <th >#dbMsg("Role.roleName")</th>
+            </tr>
+        </thead>
+        <tbody>
+           #foreach($rs in $roles)
+           <tr target="roleKey_in" rel="$!rs.roleKey"> ## target="id" rel="$!rs.id" 这两个是用在AjaxURL中的占位({target})数据(rel)来源
+                <td><input name="roleKey_in" value="$!rs.roleKey" type="checkbox"></td>
+                <td>
+                    #trimHtml($!rs.roleKey,120)
+                </td>
+                <td>
+                    #trimHtml($!rs.roleName,120)
+                </td>
+            </tr>
+            #end
+        </tbody>
+    </table>
+</div>
+

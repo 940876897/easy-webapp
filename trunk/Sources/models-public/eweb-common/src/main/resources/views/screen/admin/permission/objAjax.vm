@@ -1,0 +1,84 @@
+#set($layout = '')
+    
+    ## 对象的添加add,修改edit,查看view表单页面(operType)
+<div class="pageContent">
+    <form method="post" 
+#if("$!{operType}"=="edit"||"$!{operType}"=="add")
+        action="$appServer.get('/admin/permission/save/json.xhtml')" 
+        onsubmit="return validateCallback(this, navTabAjaxDone);"
+#else
+        action="" onsubmit="return false;"
+#end
+        class="pageForm required-validate">
+        
+        <div class="pageFormContent" layoutH="56">
+             #springBind("permission.id")
+             <input type="hidden" name="${status.expression}" value="$!{status.value}" />
+            
+
+            #springBind("permission.permissionKey")
+            <dl> 
+                <dt>#dbMsg("Permission.permissionKey")：</dt> 
+                <dd> 
+                    <input type="text" name="${status.expression}" value="$!{status.value}" class="required  " maxlength="16" size="30" title="supper以及以supper开头的Key,是超级权限,   login以及以login开头的Key,是登录要求的权限,   guest以及以guest开头的Key,是表示这些URL游客就可以访问的"/>
+                    <a class="btnInfo" href="javascript:;" title="填写说明提示" onclick="alertMsg.info('supper以及以supper开头的Key,是超级权限,<br>login以及以login开头的Key,是登录要求的权限,<br>guest以及以guest开头的Key,是表示这些URL游客就可以访问的')"><span>提示</span></a>
+                </dd> 
+            </dl> 
+                
+    
+            #springBind("permission.permissionName")
+            <dl> 
+                <dt>#dbMsg("Permission.permissionName")：</dt> 
+                <dd> 
+                    <input type="text" name="${status.expression}" value="$!{status.value}" class=" " maxlength="64" size="30"/>
+                </dd> 
+            </dl> 
+                
+    
+            #springBind("permission.uri")
+            <dl> 
+                <dt>#dbMsg("Permission.uri")：</dt> 
+                <dd> 
+                    <input type="text" name="${status.expression}" value="$!{status.value}" class=" " maxlength="128" size="30"/>
+                </dd> 
+            </dl> 
+                        ## 下面开始修改更多属性集：  
+            <dl> 
+                <dt>#dbMsg("PermissionMeta.metaKey.enabled")：</dt> 
+                <dd> 
+                #springBind("permission.permissionMetas[0].cfgName")
+                    <input type="hidden" name="${status.expression}" value="$!{constantUtils.permissionMeta_Key_ENABLED}"/>
+                #springBind("permission.permissionMetas[0].cfgValue")
+                #set ($tmpEnabled = $!{permission.metaMap.get("$!{constantUtils.permissionMeta_Key_ENABLED}")})
+                    <label class="autoWidth" ><input type="radio" name="${status.expression}" #if("$!{tmpEnabled}"!="0") checked #end value="1"/>启用</label>
+                    <label class="autoWidth" ><input type="radio" name="${status.expression}" #if("$!{tmpEnabled}"=="0") checked #end value="0"/>禁用</label>
+                </dd> 
+            </dl> 
+    
+            #springBind("permission.memo")
+            <dl class="nowrap"> 
+                <dt>#dbMsg("Permission.memo")：</dt> 
+                <dd> 
+                    <textarea name="${status.expression}"class="fullWidth " maxlength="65535" rows="12">$!{status.value}</textarea>
+                </dd> 
+            </dl> 
+        
+
+            
+            
+        </div>
+        
+        <div class="formBar">
+            <ul>
+            #if("$!{operType}"=="edit"||"$!{operType}"=="add")
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">#dbMsg("function.save")</button></div></div></li>
+            #end
+                <li>
+                    <div class="button"><div class="buttonContent"><button type="button" class="close">#dbMsg("function.close")</button></div></div>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>
+
+

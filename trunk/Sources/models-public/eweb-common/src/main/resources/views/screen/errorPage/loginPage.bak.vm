@@ -1,0 +1,131 @@
+#set($layout = '')
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        ##<meta http-equiv="X-UA-Compatible" content="IE=7" />
+        
+        <title>登录 骏通餐饮管理 后台系统平台 </title>
+      
+        ## dwz登录样式
+        <link href="$imageServer.get('script/libs/dwz/themes/css/login.css')" rel="stylesheet" />
+        <!--[if IE]>
+        <link href="$imageServer.get('script/libs/dwz/themes/css/ieHack.css')" rel="stylesheet" />
+        <![endif]-->
+        
+        <!--[if lte IE 8]>
+        <script src="$imageServer.get('script/libs/html5.js')"></script>
+        <![endif]--> 
+        <!--if lte IE 6]>
+        <script src="$imageServer.get('script/libs/letskillie6.zh_CN.pack.js')"></script>
+        <!--endif]-->
+        ## 基础JS
+        <script src="$appServer.get('contain/baseJS.xhtml')" charset="UTF-8"></script>
+            
+        <style >
+            .loginForm .login_input {width: 120px;}
+        </style>
+    
+    </head>
+    <body style="background:#ccc url();">
+	    <div id="login">
+	        <div id="login_header">
+	            <h1 class="login_logo">
+	                <!--
+	                <a href="#"><img src="$imageServer.get('script/libs/dwz/themes/default/images/login_logo.gif')" /></a>
+	                -->
+	            </h1>
+                <!--
+	            <div class="login_headerContent">
+	                <div class="navList">
+	                    <ul>
+	                        <li><a href="#">设为首页</a></li>
+	                        <li><a href="#">反馈</a></li>
+	                        <li><a href="#">帮助</a></li>
+	                    </ul>
+	                </div>
+	                <h2 class="login_title"><img src="$imageServer.get('script/libs/dwz/themes/default/images/login_title.png')" /></h2>
+	            </div>
+                -->
+	        </div>
+	        <div id="login_content">
+	            <div class="loginForm" style="width:280px;right:1px;padding-right:0;">
+	                <form action="$appServer.get('login.xhtml')" method="post">
+	                	
+	                <input name="returnurl" value="$!{returnurl}" type="hidden" />
+	                #if($msg)
+			                <div style="font-weight: bold;color: red;text-align: center;font-size: 35px;margin-top:50px;">$msg</div>
+	                #end
+	               
+			            <p style="font-size:32px;text-align:left;color:#00F;margin-bottom:28px;">
+			                <B>骏通餐饮管理软件</B>
+	                    </p>
+			            <p>
+			                <label style="font-size:18px;color:#00F;width:100px;"><B>　员工号：</B></label>
+			                <input name="displayName" value="$!{user.displayName}" type="text" class=" login_input" />
+	                    </p>
+	                    <p>
+			                <label style="font-size:18px;color:#00F;width:100px;"><B>　密　码：</B></label>
+			                <input name="password" type="password" class="required login_input" />
+	                    </p>
+            
+                #if("$!{loginImgCheckCode}"=="true")
+	                    <p>
+			                <label>验证码：</label>
+			                <input name="imgCheckCode" type="text" class="required code"/>
+			                <span>
+				                  <img id="imgCheckCode"  width="75" height="24" 
+                                     style="cursor:pointer"  onClick="this.src='$appServer/imgCheckCode1.xhtml?t='+Math.random();"
+				                      alt="请输入此图片上的内容,看不清楚?点击换一张!"
+				                      title="请输入此图片上的内容,看不清楚?点击换一张!"
+				                      src="$imageServer.get('style/images/imgCheckCode.jpg')" />
+			                #*
+			                  <img id="imgCheckCode"  width="75" height="24" 
+                                 style="cursor:pointer"  onClick="this.src='$appServer/imgCheckCode1.xhtml?t='+Math.random();"
+			                      alt="请输入此图片上的数学运算结果,看不清楚?点击换一张!"
+			                      title="请输入此图片上的数学运算结果,看不清楚?点击换一张!"
+			                      src="$imageServer.get('style/images/imgCheckCode.jpg')" />
+			                *#
+			                </span>
+	                    </p>
+                    #end
+                    <!--
+			            <p style="margin-left:100px;">
+			                <a>申请账户</a>
+			                <a>找回密码</a>
+			            </p>
+	                -->
+	                    <div class="login_bar" style="margin-left:40px;margin-top:26px;">
+	                        <input class="sub" type="submit" value=" " />
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="login_banner"><img src="$imageServer.get('script/libs/dwz/themes/default/images/login_banner.jpg')" /></div>
+	            <!--
+	            <div class="login_main">
+	                <ul class="helpList">
+                        <li><a href="#">登录账号与员工号填写一个即可</a></li>
+	                    <li><a href="#">下载驱动程序</a></li>
+	                    <li><a href="#">如何安装密钥驱动程序？</a></li>
+	                    <li><a href="#">忘记密码怎么办？</a></li>
+	                    <li><a href="#">为什么登录失败？</a></li>
+	                </ul>
+	                <div class="login_inner">
+	                    <p>三上日本料理 特别的味道</p>
+	                    <p>您可以品尝到地道的三文鱼 刺身</p>
+	                    <p>您还可以在饕餮之余 在这里放松心情…</p>
+	                </div>
+	            </div>
+	            -->
+	        </div>
+	        <div id="login_footer" style="border:0; margin-top:50px;">
+	        	<div style="color:#000; font-size:24px; font-weight:bold; margin:8px 0;">杭州骏通科技有限公司提供</div>
+	            <div style="color:#000; font-size:20px; margin:8px 0;">支持电话: (0571)88993147</div>
+	            <div style="color:#000; font-size:20px; margin:8px 0;"><a href="http://www.hzjuntong.com/">http://www.hzjuntong.com</a></div>
+	        </div>
+	    </div>
+
+    </body>
+
+</html>

@@ -1,0 +1,9 @@
+#set($layout = '')
+
+{
+       "statusCode":"$!{msgJson.statusCode}", 
+       "message":"$!{msgJson.message}", 
+       "navTabId":"$!{msgJson.navTabId}", 
+       "callbackType":"$!{msgJson.callbackType}",
+       "forwardUrl":"$!{msgJson.forwardUrl}"
+ }

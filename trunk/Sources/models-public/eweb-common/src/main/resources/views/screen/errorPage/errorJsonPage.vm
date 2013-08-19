@@ -1,0 +1,9 @@
+#set($layout = '')
+
+{
+       "statusCode":"300", 
+       "message":"您的操作发生错误,请检查修改后重新提交.", 
+       "navTabId":"$!{msgJson.navTabId}", 
+       "callbackType":"$!{msgJson.callbackType}",
+       "forwardUrl":"$!{msgJson.forwardUrl}"
+ }

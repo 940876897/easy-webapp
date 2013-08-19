@@ -1,0 +1,68 @@
+#set($layout = '')
+
+window.onload =function() {
+    checkDomain();
+}
+
+var sys = {};
+var appServer = {
+	toString:function(){
+        return '$!appServer/';
+    },
+    get:function(urlStr){
+        return '$!appServer/' + urlStr + ".xhtml";/*网页后缀*/
+    }
+};
+
+var sslAppServer = {
+	toString:function(){
+        return '$!sslAppServer/';
+    },
+    get:function(urlStr){
+        return '$!sslAppServer/' + urlStr + ".xhtml";/*网页后缀*/
+    }
+};
+
+var imageServer = {
+    toString:function(){
+        return '$!imageServer/';
+    },
+    get:function(urlStr){
+        return '$!imageServer/' + urlStr;
+    }
+}; 
+
+var uploadServer = {
+    toString:function(){
+        return '$!uploadServer/';
+    },
+    get:function(urlStr){
+        return '$!uploadServer/' + urlStr;
+    }
+}; 
+/**
+ *使用方法:String.format("变量{0},占位{1}", str1,str2)
+ */
+String.format = function(src){
+    if (arguments.length == 0) return null;
+    var args = Array.prototype.slice.call(arguments, 1);
+    return src.replace(/\{(\d+)\}/g, function(m, i){
+        return args[i];
+    });
+};
+ 
+/**
+ *如果不是系统中配置的域名,就跳转过去
+ */
+function checkDomain(){
+    var _urlTmp = window.location.href;
+     
+    if (_urlTmp.indexOf("$appServer")==-1)
+    {
+        alert("本站必须使用域名$!{appServer}来访问,网页将自动跳转到首页.");
+     
+        window.location=appServer.get("index");
+    }
+}
+ 
+ 

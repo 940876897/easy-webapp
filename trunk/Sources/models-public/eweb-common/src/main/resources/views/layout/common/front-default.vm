@@ -1,0 +1,51 @@
+<!doctype html>
+## 前台网页默认的装饰器
+<html>
+<!-- 本站全部采用HTML5的规范,如果显示有问题,这个是正常的,请升级浏览器  -->
+	<head>
+		<meta charset="utf-8"/>
+        ##<meta http-equiv="X-UA-Compatible" content="IE=7" />
+        ##<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+        <meta http-equiv="Content-Language" content="zh-CN" />
+		<meta name="generator" content="easyUI.net 1.0 dev" />	
+	    <title>#trimHtml($!{title}) 易优网络工作室开发平台 </title>     
+	    <!--[if lte IE 8]>
+	    <script src="$imageServer.get('script/libs/html5.js')"></script>
+	    <![endif]--> 
+        <!--if lte IE 6]>
+		<script src="$imageServer.get('script/libs/letskillie6.zh_CN.pack.js')"></script>
+		<!--endif]-->
+		## jQuery
+        <script src="$imageServer.get('script/libs/jquery-1.7.1.js')"></script>
+        
+	    <script src="$appServer.get('contain/baseJS.xhtml')" charset="UTF-8"></script>
+		
+        <script src="$imageServer.get('script/front/common.js')"></script>
+        
+        ## 960gs样式文件
+        ##<link href="$imageServer.get('style/960Grid/reset.css')" rel="stylesheet" />
+        ##<link href="$imageServer.get('style/960Grid/grid_16_pad15.css')" rel="stylesheet" />
+        
+        ## 样式文件
+        <link href="$imageServer.get('front-theme/metro/style.css')" rel="stylesheet" />
+	    <script src="$appServer.get('front-theme/metro/top.js')" charset="UTF-8"></script>
+        
+	</head>
+
+	<body class="$!{bodyClass}" >
+		$contain.get("/front/contain/header.xhtml").put('query',$!query)
+
+		<div id="content">
+		  <div id="main">
+		    $screen_content
+		  </div>
+		  
+		  <div id="sidebar">
+		  	$contain.get('/front/contain/sideBar.xhtml').put('query',$!query)
+		  </div>
+		  <div class="clear"></div>
+		</div>
+
+		$contain.get('/front/contain/footer.xhtml').put('query',$!query)
+	</body>
+</html>
