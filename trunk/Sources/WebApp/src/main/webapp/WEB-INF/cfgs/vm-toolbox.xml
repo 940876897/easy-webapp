@@ -5,7 +5,7 @@
 	<tool>
 		<key>UUIDTool</key>
 		<scope>application</scope>
-		<class>net.easyUI.willingOX.common.util.UUIDGenerator</class>
+		<class>net.easyUI.common.util.UUIDGenerator</class>
 	</tool>
 	<tool>
 		<key>stringUtils</key>
@@ -15,22 +15,22 @@
 	<tool>
 		<key>dateUtil</key>
 		<scope>application</scope>
-		<class>net.easyUI.willingOX.common.util.DateUtil</class>
+		<class>net.easyUI.common.util.DateUtil</class>
 	</tool>
 	<tool>
 		<key>htmlUtils</key>
 		<scope>application</scope>
-		<class>net.easyUI.willingOX.common.util.HtmlUtils</class>
+		<class>net.easyUI.common.util.HtmlUtils</class>
 	</tool>
 	<tool>
 		<key>contain</key>
 		<scope>request</scope>
-		<class>net.easyUI.willingOX.common.web.contain.Contain</class>
+		<class>net.easyUI.common.web.contain.Contain</class>
 	</tool>
 	<tool>
 		<key>iDemand</key>
 		<scope>request</scope>
-		<class>net.easyUI.willingOX.common.web.velocity.IDemand</class>
+		<class>net.easyUI.common.web.velocity.IDemand</class>
 	</tool>
 
 	<!-- 权限类工具 -->

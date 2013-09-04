@@ -12,8 +12,8 @@
 	-->
 	
 	<plugins>
-		<plugin interceptor="net.easyUI.willingOX.common.dao.ibatis3.plugin.OffsetLimitInterceptor">
-			<property name="dialectClass" value="net.easyUI.willingOX.common.dao.ibatis3.dialect.MySQLDialect"/>
+		<plugin interceptor="net.easyUI.common.dao.ibatis3.plugin.OffsetLimitInterceptor">
+			<property name="dialectClass" value="net.easyUI.common.dao.ibatis3.dialect.MySQLDialect"/>
 		</plugin>
 	</plugins>
 

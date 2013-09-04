@@ -12,7 +12,7 @@
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1/activation-1.1.jar" sourcepath="M2_REPO/javax/activation/activation/1.1/activation-1.1-sources.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="src" path="/eweb-common"/>
+  <classpathentry kind="var" path="M2_REPO/net/easyUI/eweb-common/0.0.1/eweb-common-0.0.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/c3p0/c3p0/0.9.1.2/c3p0-0.9.1.2.jar" sourcepath="M2_REPO/c3p0/c3p0/0.9.1.2/c3p0-0.9.1.2-sources.jar">
     <attributes>
       <attribute value="jar:file:/D:/.m2/repository/c3p0/c3p0/0.9.1.2/c3p0-0.9.1.2-javadoc.jar!/" name="javadoc_location"/>

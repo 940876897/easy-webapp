@@ -12,10 +12,10 @@
 	</bean>
 	
 	<!-- 动态网页的URLBrokers -->
-	<bean id="appServerBroker" class="net.easyUI.willingOX.common.web.url.URLBroker">
+	<bean id="appServerBroker" class="net.easyUI.common.web.url.URLBroker">
 		<property name="encoding" value="${web.encoding}"></property>
 		<property name="config">
-			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+			<bean class="net.easyUI.common.web.url.URLConfig">
 				<property name="host" value="${app.server.host}"></property>
 				<property name="port" value="${app.server.port}"></property>
 				<property name="followContextPath" value="true"></property>
@@ -23,10 +23,10 @@
 		</property>
 	</bean>
 	<!-- https的sslAppServerBroker -->
-	<bean id="sslAppServerBroker" class="net.easyUI.willingOX.common.web.url.URLBroker">
+	<bean id="sslAppServerBroker" class="net.easyUI.common.web.url.URLBroker">
 		<property name="encoding" value="${web.encoding}"></property>
 		<property name="config">
-			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+			<bean class="net.easyUI.common.web.url.URLConfig">
 				<property name="protocol" value="https"></property>
 				<property name="host" value="${app.server.host}"></property>
 				<property name="port" value="${app.server.port}"></property>
@@ -35,10 +35,10 @@
 		</property>
 	</bean>
 	<!-- 静态资源的imageServerBroker -->
-	<bean id="imageServerBroker" class="net.easyUI.willingOX.common.web.url.StampURLBroker">
+	<bean id="imageServerBroker" class="net.easyUI.common.web.url.StampURLBroker">
 		<property name="encoding" value="${web.encoding}"></property>
 		<property name="config">
-			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+			<bean class="net.easyUI.common.web.url.URLConfig">
 				<property name="host" value="${image.server.host}"></property>
 				<property name="port" value="${image.server.port}"></property>
 				<property name="path" value="${image.server.path}"></property>
@@ -48,10 +48,10 @@
 		<property name="stamp" value="${web.stamp}"></property>
 	</bean>
 	<!-- 静态资源的cdnServerBroker -->
-	<bean id="cdnServerBroker" class="net.easyUI.willingOX.common.web.url.StampURLBroker">
+	<bean id="cdnServerBroker" class="net.easyUI.common.web.url.StampURLBroker">
 		<property name="encoding" value="${web.encoding}"></property>
 		<property name="config">
-			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+			<bean class="net.easyUI.common.web.url.URLConfig">
 				<property name="host" value="${cdn.server.host}"></property>
 				<property name="port" value="${cdn.server.port}"></property>
 				<property name="path" value="${cdn.server.path}"></property>
@@ -61,10 +61,10 @@
 		<property name="stamp" value="${web.stamp}"></property>
 	</bean>
 	<!-- 上传文件的uploadServerBroker -->
-	<bean id="uploadServerBroker" class="net.easyUI.willingOX.common.web.url.StampURLBroker">
+	<bean id="uploadServerBroker" class="net.easyUI.common.web.url.StampURLBroker">
 		<property name="encoding" value="${web.encoding}"></property>
 		<property name="config">
-			<bean class="net.easyUI.willingOX.common.web.url.URLConfig">
+			<bean class="net.easyUI.common.web.url.URLConfig">
 				<property name="host" value="${upload.server.host}"></property>
 				<property name="port" value="${upload.server.port}"></property>
 				<property name="path" value="${upload.server.path}"></property>
@@ -73,7 +73,7 @@
 		</property>
 		<property name="stamp" value="${web.stamp}"></property>
 	</bean>
-	<bean class="net.easyUI.willingOX.common.web.url.ServletContextInitHelper">
+	<bean class="net.easyUI.common.web.url.ServletContextInitHelper">
 		<property name="brokers">
 			<list>
 				<ref bean="appServerBroker"/>
@@ -90,15 +90,15 @@
 	</bean>
 	
 	<!-- cookyjar 配置 -->
-	<bean id="cookieCrypto" class="net.easyUI.willingOX.common.util.crypto.impl.AESCryptoImpl">
+	<bean id="cookieCrypto" class="net.easyUI.common.util.crypto.impl.AESCryptoImpl">
 		<property name="key" value="${cookie.aes.key}"></property>
 		<property name="ivParameter" value="${cookie.aes.iv}"></property>
 	</bean>
 
-	<bean id="cookyjarConfigure" class="net.easyUI.willingOX.common.web.cookyjar.CookyjarConfigure">
+	<bean id="cookyjarConfigure" class="net.easyUI.common.web.cookyjar.CookyjarConfigure">
 		<!-- cookie缺省配置 -->
 		<property name="defaultConfigure">
-			<bean class="net.easyUI.willingOX.common.web.cookyjar.CookieConfigure">
+			<bean class="net.easyUI.common.web.cookyjar.CookieConfigure">
 				<property name="path" value="${cookie.path}" />
 				<property name="lifeTime" value="${cookie.lifeTime}" />
 		                                  <!--${cookie.lifeTime} -1永久缓存,0立即失效-->
@@ -109,7 +109,7 @@
 		<!-- 每个cookie的配置是 本身配置+缺省配置 -->
 		<property name="cookieConfigures">
 			<list>
-				<bean class="net.easyUI.willingOX.common.web.cookyjar.CookieConfigure">
+				<bean class="net.easyUI.common.web.cookyjar.CookieConfigure">
 					<property name="name" value="userAgent" />
 					<property name="clientName" value="${cookie.clientName.userAgent}" />
                     <property name="lifeTime" value="${cookie.lifeTime.userAgent}" />
@@ -117,7 +117,7 @@
 					<property name="selfDependenceClass" value="net.easyUI.dto.common.UserAgent"></property>
 				</bean>
 				<!-- 验证码 -->
-                <bean class="net.easyUI.willingOX.common.web.cookyjar.CookieConfigure">
+                <bean class="net.easyUI.common.web.cookyjar.CookieConfigure">
                     <property name="name" value="imgCheckCode" />
                     <property name="clientName" value="${cookie.clientName.imgCheckCode}" />
                     <property name="lifeTime" value="${cookie.lifeTime.imgCheckCode}" />
@@ -125,14 +125,14 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="responseOutputBufferFilterBean" class="net.easyUI.willingOX.common.web.filter.ResponseOutputBufferFilter">
+	<bean id="responseOutputBufferFilterBean" class="net.easyUI.common.web.filter.ResponseOutputBufferFilter">
 		<property name="outCharset" value="${web.encoding}"></property>
 	</bean>	
-	<bean id="cookyjarFilterBean" class="net.easyUI.willingOX.common.web.cookyjar.CookyjarFilter">
+	<bean id="cookyjarFilterBean" class="net.easyUI.common.web.cookyjar.CookyjarFilter">
 		<property name="cookyjarConfigure" ref="cookyjarConfigure"></property>
 	</bean>
 	
-	<bean id="performanceMonitorFilter" class="net.easyUI.willingOX.common.profiler.SpringPerformanceMonitorFilter">
+	<bean id="performanceMonitorFilter" class="net.easyUI.common.profiler.SpringPerformanceMonitorFilter">
 		<property name="threshold" value="${performance.monitor.threshold}"></property>
 	</bean>
 	

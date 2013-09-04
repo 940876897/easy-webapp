@@ -39,7 +39,7 @@
 
 	<filter>
 		<filter-name>noSession</filter-name>
-        <filter-class>net.easyUI.willingOX.common.web.filter.NoSessionFilter</filter-class>
+        <filter-class>net.easyUI.common.web.filter.NoSessionFilter</filter-class>
 	</filter>
 
 	<filter>

@@ -12,12 +12,12 @@
         
 		
 	<!-- component-scan自动搜索@Component , @Controller , @Service , @Repository等标注的类 
-		,多个之间用逗号分隔. <context:component-scan base-package="net.easyUI.willingOX.dao" 
+		,多个之间用逗号分隔. <context:component-scan base-package="net.easyUI.dao" 
 		/> -->
 	<context:component-scan base-package="net.easyUI" />
 
 	<!-- applicationContextUtil 是为了使普通Java对象中获取Spring中的Beans方便,此对象拥有getBean()方法,可直接用于获取对应ID的Bean -->
-	<bean id="applicationContextUtil" class="net.easyUI.willingOX.common.util.ApplicationContextUtil">
+	<bean id="applicationContextUtil" class="net.easyUI.common.util.ApplicationContextUtil">
 	</bean>
 
 
@@ -32,7 +32,7 @@
 
 	<!-- view -->
 	<bean id="velocityViewCache"
-		class="net.easyUI.willingOX.common.util.cache.local.SimpleHashMapCompactCache"></bean>
+		class="net.easyUI.common.util.cache.local.SimpleHashMapCompactCache"></bean>
 
 	<bean id="defaultVelocityEngine"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
@@ -41,14 +41,14 @@
 		<property name="velocityProperties">
 			<props>
 				<prop key="resource.loader">euResourceLoader</prop>
-				<prop key="euResourceLoader.resource.loader.class">net.easyUI.willingOX.common.web.velocity.runtime.resource.loader.EuResourceLoader</prop>
+				<prop key="euResourceLoader.resource.loader.class">net.easyUI.common.web.velocity.runtime.resource.loader.EuResourceLoader</prop>
 
 				<prop key="input.encoding">${file.encoding}</prop>
 				<prop key="output.encoding">${web.encoding}</prop>
 				<prop key="default.contentType">${web.contentType}</prop>
 
 				<!-- cache directive 相关配置 -->
-				<prop key="userdirective">net.easyUI.willingOX.common.web.velocity.directive.CacheDirective
+				<prop key="userdirective">net.easyUI.common.web.velocity.directive.CacheDirective
 				</prop>
 				<!-- direcitive.cache.provider 配置cache的提供者 -->
 				<prop key="direcitive.cache.provider">velocityViewCache</prop>
@@ -59,7 +59,7 @@
 	</bean>
 
 	<bean id="viewResolver"
-		class="net.easyUI.willingOX.common.web.velocity.resolver.FixedVelocityLayoutViewResolver">
+		class="net.easyUI.common.web.velocity.resolver.FixedVelocityLayoutViewResolver">
 		<property name="velocityEngine" ref="defaultVelocityEngine"></property>
 		<property name="order" value="1" />
 		<property name="suffix" value=".vm" />
@@ -83,7 +83,7 @@
 
 	<!-- interceptors -->
 	<bean id="brokersInterceptor"
-		class="net.easyUI.willingOX.common.web.url.URLBrokerLauncherInterceptor">
+		class="net.easyUI.common.web.url.URLBrokerLauncherInterceptor">
 		<property name="brokers">
 			<map>
 				<entry key="appServer" value-ref="appServerBroker"></entry>
@@ -100,7 +100,7 @@
 	<bean
 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 	<bean
-		class="net.easyUI.willingOX.common.web.adapter.ExtendableAnnotationMethodHandlerAdapter">
+		class="net.easyUI.common.web.adapter.ExtendableAnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<bean

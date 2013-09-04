@@ -29,7 +29,7 @@
 		class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver">
 	</bean> 
 	<bean
-		class="net.easyUI.willingOX.common.util.digest.impl.MD5MessageDigestImpl">
+		class="net.easyUI.common.util.digest.impl.MD5MessageDigestImpl">
 		<property name="salt" value="${user.password.salt}" />
 	</bean>
 
