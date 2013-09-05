@@ -145,8 +145,7 @@
 		to be served both from the web app root and from any JAR on the classpath 
 		that contains a /META-INF/public-web-resources/ directory, with resources 
 		in the web app root taking precedence. -->
-	<mvc:resources mapping="/statics/**" location="/statics/,classpath:/statics/"
-		order="1" />
+	<mvc:resources mapping="/statics/**" location="/statics/,classpath:/statics/"	order="1" />
 	<mvc:resources mapping="/favicon**" location="/" order="1" />
 	<!-- <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"> 
 		<property name="order" value="100" /> <property name="urlMap"> <map> </map> 

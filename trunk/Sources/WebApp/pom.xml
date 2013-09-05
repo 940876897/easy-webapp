@@ -7,7 +7,9 @@
 		<version>0.0.1</version>
 		<relativePath>../main</relativePath>
 	</parent>
+	<groupId>net.easyUI</groupId>
 	<artifactId>eweb-WebApp</artifactId>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>eweb-WebApp</name>
 	<description>eweb-WebApp</description>
@@ -55,16 +57,49 @@
 					<locales>en,es,zh_CN,ja</locales>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<buildOutputDirectory>target/classes</buildOutputDirectory>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<additionalConfig>
+						<file>
+							<name>.settings/org.eclipse.core.resources.prefs</name>
+							<content>
+               					<![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=UTF-8${line.separator}]]>
+							</content>
+						</file>
+						<file>
+							<name>.settings/de.loskutov.FileSync.prefs</name>
+							<content>
+               					<![CDATA[WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND${line.separator}defaultDestination=@target/${project.artifactId}/WEB-INF/classes${line.separator}defaultVariables=${line.separator}eclipse.preferences.version=1${line.separator}includeTeamPrivateFiles=false${line.separator}map|0=src/main/webapp|@target/${project.artifactId}|,|,|,${line.separator}map|1=target/classes|,|,|confPlus/webApp/m-log4j.properties;confPlus/webApp/m-mail.properties;confPlus/webApp/m-server.properties;statics/;views/|,${line.separator}map|2=target/classes/statics|@target/${project.artifactId}/statics|,|,|,${line.separator}map|3=target/classes/views|@target/${project.artifactId}/WEB-INF/views|,|,|,${line.separator}useCurrentDateForDestinationFiles=false${line.separator}]]>
+							</content>
+						</file>
+					</additionalConfig>
+				</configuration>
+			</plugin>
+			
 		</plugins>
 
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
-				<!-- <includes> <include>**/*.xml</include> </includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes> -->
+				<!-- <includes> <include>**/*.xml</include> </includes> <excludes> <exclude>**/*.java</exclude> 
+					</excludes> -->
 			</resource>
 		</resources>
 		<testResources>
@@ -92,8 +127,27 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0-alpha-1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.0-rc5</version>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
+
 	<properties>
+		<spring.version>3.2.4.RELEASE</spring.version>
 		<!-- domain not start with . -->
 		<!-- <app.domain>localhost</app.domain> <system.devMode>true</system.devMode> 
 			<app.server.host>localhost</app.server.host> <app.server.port>81</app.server.port> 

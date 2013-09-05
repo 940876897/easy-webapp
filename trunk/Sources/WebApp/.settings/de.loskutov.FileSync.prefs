@@ -1,0 +1,10 @@
+WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
+defaultDestination=@target/eweb-WebApp/WEB-INF/classes
+defaultVariables=
+eclipse.preferences.version=1
+includeTeamPrivateFiles=false
+map|0=src/main/webapp|@target/eweb-WebApp|,|,|,
+map|1=target/classes|,|,|confPlus/webApp/m-log4j.properties;confPlus/webApp/m-mail.properties;confPlus/webApp/m-server.properties;statics/;views/|,
+map|2=target/classes/statics|@target/eweb-WebApp/statics|,|,|,
+map|3=target/classes/views|@target/eweb-WebApp/WEB-INF/views|,|,|,
+useCurrentDateForDestinationFiles=false
