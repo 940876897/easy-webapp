@@ -1,0 +1,12 @@
+#set($layout = '')
+
+<div id="footer">
+  <div class="copyright">
+    <p>Powered By <a href="http://www.rainbowsoft.org/" title="RainbowSoft Studio Z-Blog" target="_blank">Z-Blog 2.0 Beta Build 120825</a></p>
+    <p>Copyright busfly. Some Rights Reserved.</p>
+  </div>
+  <div id="goTopBtn">
+    <a onclick="pageScroll()"><span>返回顶部</span></a>
+  </div>
+  <div class="clear"></div>
+</div>

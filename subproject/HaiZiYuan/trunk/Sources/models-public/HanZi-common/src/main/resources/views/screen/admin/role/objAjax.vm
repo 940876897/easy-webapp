@@ -1,0 +1,132 @@
+#set($layout = '')
+    
+    ## 对象的添加add,修改edit,查看view表单页面(operType)
+<div class="pageContent">
+    <form method="post" 
+#if("$!{operType}"=="edit"||"$!{operType}"=="add")
+        action="$appServer.get('/admin/role/save/json.htm')" 
+        onsubmit="return validateCallback(this, navTabAjaxDone);"
+#else
+        action="" onsubmit="return false;"
+#end
+        class="pageForm required-validate">
+        
+        <div class="pageFormContent" layoutH="56">
+             #springBind("role.id")
+             <input type="hidden" name="${status.expression}" value="$!{status.value}" />
+            
+    
+            #springBind("role.roleKey")
+            <dl> 
+                <dt>#dbMsg("Role.roleKey")：</dt> 
+                <dd> 
+                    <input type="text"  name="${status.expression}" value="$!{status.value}" class="required" maxlength="16" size="30"/>
+                </dd> 
+            </dl> 
+                
+    
+            #springBind("role.roleName")
+            <dl> 
+                <dt>#dbMsg("Role.roleName")：</dt> 
+                <dd> 
+                    <input type="text"  name="${status.expression}" value="$!{status.value}" class=" " maxlength="64" size="30"/>
+                </dd> 
+            </dl> 
+                                    ## 下面开始修改更多属性集：  
+            <dl> 
+                <dt>#dbMsg("RoleMeta.metaKey.enabled")：</dt> 
+                <dd> 
+                #springBind("role.roleMetas[0].cfgName")
+                    <input type="hidden" name="${status.expression}" value="$!{constantUtils.roleMeta_Key_ENABLED}"/>
+                #springBind("role.roleMetas[0].cfgValue")
+                #set ($tmpEnabled = $!{role.metaMap.get("$!{constantUtils.roleMeta_Key_ENABLED}")})
+                    <label class="autoWidth" ><input type="radio" name="${status.expression}" #if("$!{tmpEnabled}"!="0") checked #end value="1"/>启用</label>
+                    <label class="autoWidth" ><input type="radio" name="${status.expression}" #if("$!{tmpEnabled}"=="0") checked #end value="0"/>禁用</label>
+                </dd> 
+            </dl> 
+            
+    
+            #springBind("role.memo")
+            <dl class="nowrap"> 
+                <dt>#dbMsg("Role.memo")：</dt> 
+                <dd> 
+                    <textarea name="${status.expression}" class="fullWidth"  maxlength="65535"  rows="8">$!{status.value}</textarea>
+                </dd> 
+            </dl> 
+            
+            
+            ## 如果是修改和查看，则显示这个角色下的权限列表，以修改修改链接。dialog mask="true"
+    #if("$!{operType}"!="add")
+            <dl class="nowrap"> 
+                <dt>#dbMsg("Permission")列表：
+                #if("$!{operType}"=="edit")
+                    <a href='$appServer.get("/admin/role/rolePermissionAddAjax/${role.id}.htm?dwzId=$!{dwzId}&targetType=dialog")'
+                        target="dialog" 
+                    	##	target="navTab" 
+                    	title="#dbMsg('function.add')[$!{role.roleName}]#dbMsg('Permission')"
+                        class="btnAdd"  rel="dwz_tab_rolePermission_add_$!{role.id}" style="float:right;">
+                        #dbMsg("function.add")
+                    </a>
+                #end
+                </dt> 
+                <dd> 
+                        <div class="panel collapse fullWidth" minH="170" defH="220">
+                            <h1>此角色拥有的权限列表：
+                            </h1>
+                            <div>
+                               <table class="table" width="100%" nowrapTD="false">
+                                    <thead>
+                                        <tr >
+                                           <th width="120" >#dbMsg("Permission.permissionKey")</th>
+                                           <th width="160" >#dbMsg("Permission.permissionName")</th>
+                                           <th >#dbMsg("Permission.uri")</th>
+                                           <th width="40">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       #foreach($rs in $role.permissions)
+                                       <tr >  
+                <td>
+                                                #trimHtml($!rs.permissionKey,120)
+                                            </td>
+                <td>
+                                                #trimHtml($!rs.permissionName,120)
+                                            </td>
+                <td>
+                                                #trimHtml($!rs.uri,256)
+                                            </td>
+                                            
+                                            <td >
+                                                #if("$!{operType}"=="edit")
+                                                #set($tmpUrl=$appServer.get("/admin/role/rolePermissionDelJson/${role.id}/${rs.permissionKey}.htm?dwzId=$!{dwzId}"))
+                                                 <a href="${tmpUrl}" target="ajaxTodo" title="你确定要#dbMsg("function.del")这个#dbMsg('Permission')[$!rs.permissionName]吗?" class="btnDel">#dbMsg("function.del")</a>
+                                                #end
+                                            </td>
+                                       
+                                        </tr>
+                                        #end
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                </dd> 
+            </dl> 
+    #end
+        </div>
+        
+        
+        
+        <div class="formBar">
+            <ul>
+            #if("$!{operType}"=="edit"||"$!{operType}"=="add")
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">#dbMsg("function.save")</button></div></div></li>
+            #end
+                <li>
+                    <div class="button"><div class="buttonContent"><button type="button" class="close">#dbMsg("function.close")</button></div></div>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>
+
+

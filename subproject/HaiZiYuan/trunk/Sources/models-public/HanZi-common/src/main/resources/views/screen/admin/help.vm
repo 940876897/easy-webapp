@@ -1,0 +1,85 @@
+#set($layout = '')
+    ## 加载默认首页
+    #set($title="后台使用帮助")
+    
+                            <div class="accountInfo">
+                            <div class="alertInfo">
+                                <h2><a href="#" target="_blank">使用手册</a></h2>
+                                <a href="#" target="_blank">学习</a>
+                            </div>
+                            <div class="right">
+                                <p><a href="#" target="_blank" style="line-height:19px">使用手册</a></p>
+                                <p><a href="#" target="_blank" style="line-height:19px">学习</a></p>
+                            </div>
+                            <p><span>功能</span></p>
+                            <p>功能说明:<a href="#" target="_blank">**********</a></p>
+                        </div>
+                        
+    <div class="pageFormContent" layoutH="80">
+    	
+        <h2>如何设置用户的角色:</h2>
+        <pre style="margin:5px;line-height:1.4em">
+        [菜单]-->[用户属性]-->[添加/修改]
+                -->选择[用户ID],在[元信息KEY]中输入[<span style="color:red;">roleKey</span>],
+                                在[元信息值]中输入角色Key.如:[<span style="color:red;">supper</span>]或者[<span style="color:red;">user</span>]
+                
+        补充: 角色Key请在[角色]列表中查询,另外,在输入角色Key时,请将编辑器切换到源码状态.
+                角色Key中, 系统默认2个角色,建议功能如下,(系统仍然可以修改,但是建议保持以下设置)
+                            <span style="color:red;">supper</span>角色表示超级管理员,可以做所有功能,
+                            <span style="color:red;">user</span>角色表示普通用户权限,仅能登录,修改个人资料,操作无权限设置的功能.
+        </pre>
+        <div class="divider"></div>
+        
+        
+        
+        
+        
+        <h2>如何启用/禁用角色:</h2>
+        <pre style="margin:5px;line-height:1.4em">
+        [菜单]-->[角色属性]-->[添加/修改]
+                -->选择[角色ID],在[元信息KEY]中输入[<span style="color:red;">enabled</span>],
+                                在[元信息值]中输入<span style="color:red;">0</span>表示禁用,输入其它值,或者删除这条记录,表示启用.
+        
+        补充: 在输入元信息值时,请将编辑器切换到源码状态.
+        </pre>
+        <div class="divider"></div>
+        
+        
+        
+        
+        <h2>如何设置角色的权限:</h2>
+        <pre style="margin:5px;line-height:1.4em">
+        [菜单]-->[角色属性]-->[添加/修改]
+                -->选择[角色ID],在[元信息KEY]中输入[<span style="color:red;">permissionKey</span>],
+                                在[元信息值]中输入权限Key,如[<span style="color:red;">supper</span>]或者[<span style="color:red;">login</span>].
+                
+        补充: 权限Key请在[权限]列表中查询,另外,在输入权限Key时,请将编辑器切换到源码状态.
+                权限Key中, 系统默认2个权限,建议功能如下,(系统仍然可以修改,但是建议保持以下设置)
+                            <span style="color:red;">supper</span>权限表示超级权限,可以做所有功能,supper角色只要给这个权限就可以了.
+                            <span style="color:red;">login</span>权限表示最基本的权限,仅能操作无权限设置的功能.user角色建议只给这个权限
+        </pre>
+        <div class="divider"></div>
+        
+        
+        
+        
+        
+        <h2>如何启用/禁用权限:</h2>
+        <pre style="margin:5px;line-height:1.4em">
+        [菜单]-->[权限属性]-->[添加/修改]
+                -->选择[权限ID],在[元信息KEY]中输入[<span style="color:red;">enabled</span>],
+                                在[元信息值]中输入<span style="color:red;">0</span>表示禁用,输入其它值,或者删除这条记录,表示启用.
+        
+        补充: 在输入元信息值时,请将编辑器切换到源码状态.
+              在权限列表管理中,请不要随意修改系统内定的两个权限设置:
+                <span style="color:red;">supper</span>权限表示超级权限.URI为:[<span style="color:red;">></span>]
+                <span style="color:red;">login</span>权限表示最基本的权限.URI为:[<span style="color:red;">/admin/</span>]
+        </pre>
+        <div class="divider"></div>
+        
+        
+        <h2>有偿服务请联系:</h2>
+        <p style="color:red;">*****@163.com</p>
+    </div>
+
+

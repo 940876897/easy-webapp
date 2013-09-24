@@ -1,0 +1,8 @@
+WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
+defaultDestination=@target/HanZi-WebApp/WEB-INF/classes
+defaultVariables=
+eclipse.preferences.version=1
+includeTeamPrivateFiles=false
+map|0=src/main/webapp|@target/HanZi-WebApp|,|WEB-INF/classes/|,
+map|1=target/classes|,|,|cfgs/jdbc.properties;cfgs/log4j.properties;cfgs/server.properties|,
+useCurrentDateForDestinationFiles=false

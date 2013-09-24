@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="net.easyUI.mapper.common.WebConfigMapper">
+
+	<resultMap id="RM_WebConfig" type="net.easyUI.domain.common.WebConfig">
+        <result property="id" column="id"/>
+        <result property="cfgName" column="cfg_name"/>
+        <result property="cfgTitle" column="cfg_title"/>
+        <result property="cfgValue" column="cfg_value"/>
+        <result property="rank" column="rank"/>
+        <result property="cfgGroup" column="cfg_group"/>
+        <result property="cacheType" column="cache_type"/>
+        <result property="memo" column="memo"/>
+        <result property="meta32" column="meta32"/>
+        <result property="meta64" column="meta64"/>
+        <result property="meta128" column="meta128"/>
+        <result property="dataUnit" column="data_unit"/>
+        <result property="dataStatus" column="data_status"/>
+        <result property="inputType" column="input_type"/>
+        <result property="permission" column="permission"/>
+        <result property="operator" column="operator"/>
+	</resultMap>
+	
+    <!-- 带一对多,和多对一的完整数据 -->
+    <resultMap id="RM_WebConfig_FullFK" extends="RM_WebConfig" type="net.easyUI.domain.common.WebConfig">
+    </resultMap>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="getByKeyFullFK" resultMap="RM_WebConfig_FullFK">
+        SELECT <include refid="columns" />
+        <![CDATA[
+            FROM web_config 
+            WHERE id = #{id}  
+        ]]>
+    </select>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="listQueryMapFullFK" resultMap="RM_WebConfig_FullFK">
+        SELECT <include refid="columns" />
+        FROM web_config 
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+    
+    
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        <![CDATA[
+            id,
+            cfg_name,
+            cfg_title,
+            cfg_value,
+            rank,
+            cfg_group,
+            memo,
+            cache_type,
+            meta32,
+            meta64,
+            meta128,
+            data_unit,
+            data_status,
+            input_type,
+            permission,
+            operator,
+            gmt_modify,
+            gmt_create
+        ]]>
+    </sql>
+
+
+    <select id="getByKey" resultMap="RM_WebConfig">
+        SELECT <include refid="columns" />
+        <![CDATA[
+            FROM web_config 
+            WHERE id = #{id}  
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkCfgName" resultMap="RM_WebConfig" parameterType="java.lang.String">
+        SELECT <include refid="columns"/>
+        <![CDATA[
+            FROM web_config 
+            where cfg_name = #{cfgName}
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkCfgNameFullFK" resultMap="RM_WebConfig_FullFK" parameterType="java.lang.String">
+        SELECT <include refid="columns"/>
+        <![CDATA[
+            FROM web_config 
+            where cfg_name = #{cfgName}
+        ]]>
+    </select>
+    
+    
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO web_config (
+            cfg_name ,
+            cfg_title ,
+            cfg_value ,
+            rank ,
+            cfg_group ,
+            memo ,
+            cache_type,
+            meta32,
+            meta64,
+            meta128,
+            data_unit,
+            data_status,
+            input_type,
+            permission,
+            operator,
+            gmt_modify,
+            gmt_create
+        ) VALUES (
+            #{cfgName} ,
+            #{cfgTitle} ,
+            #{cfgValue} ,
+            #{rank} ,
+            #{cfgGroup} ,
+            #{memo} ,
+            #{cacheType},
+            #{meta32},
+            #{meta64},
+            #{meta128},
+            #{dataUnit},
+            #{dataStatus},
+            #{inputType},
+            #{permission},
+            #{operator},
+            now(),
+            now()
+        )
+    ]]>
+	</insert>
+    
+	<update id="update" >
+    <![CDATA[
+        UPDATE web_config SET
+            cfg_name = #{cfgName} ,
+            cfg_title = #{cfgTitle} ,
+            cfg_value = #{cfgValue} ,
+            rank = #{rank} ,
+            cfg_group = #{cfgGroup} ,
+            memo = #{memo} ,
+            cache_type = #{cacheType},
+            meta32 = #{meta32},
+            meta64 = #{meta64},
+            meta128 = #{meta128},
+            data_unit = #{dataUnit},
+            data_status = #{dataStatus},
+            input_type = #{inputType},
+            permission = #{permission},
+            operator = #{operator},
+            gmt_modify = NOW()
+        WHERE 
+            id = #{id} 
+    ]]>
+	</update>
+
+<!-- add by busfly 2010-09-25 动态修改，只修改传入的内容  -->
+    <update id="updateByQueryMap" >
+        UPDATE web_config
+        <set>
+            gmt_modify = NOW(),
+            <if test="@Ognl@isNotEmpty(entity.cfgName)">
+                cfg_name = #{entity.cfgName},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.cfgTitle)">
+                cfg_title = #{entity.cfgTitle},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.cfgValue)">
+                cfg_value = #{entity.cfgValue},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.rank)">
+                rank = #{entity.rank},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.cfgGroup)">
+                cfg_group = #{entity.cfgGroup},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.memo)">
+                memo = #{entity.memo},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.cacheType)">
+	            cache_type = #{entity.cacheType},
+            </if>            
+            <if test="@Ognl@isNotEmpty(entity.meta32)">
+                meta32 = #{entity.meta32},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.meta64)">
+                meta64 = #{entity.meta64},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.meta128)">
+                meta128 = #{entity.meta128},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.dataUnit)">
+                data_unit = #{entity.dataUnit},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.dataStatus)">
+                data_status = #{entity.dataStatus},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.inputType)">
+                input_type = #{entity.inputType},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.permission)">
+                permission = #{entity.permission},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.operator)">
+                operator = #{entity.operator},
+            </if>
+        </set>          
+        <include refid="findPage_where"/>    
+    </update>
+    
+    <select id="countQueryMap" resultType="long">
+        SELECT count(*) FROM web_config 
+        <include refid="findPage_where"/>    
+    </select>
+    
+    <!--
+        分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+        因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="listQueryMap" resultMap="RM_WebConfig">
+        SELECT <include refid="columns" />
+        FROM web_config  
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+
+    <delete id="deleteBykey">
+        DELETE FROM web_config 
+        <![CDATA[
+            WHERE id = #{id}  
+        ]]>
+    </delete>
+    
+    <select id="deleteByUkCfgName">
+        DELETE FROM web_config 
+        <![CDATA[
+            where cfg_name = #{cfgName}
+        ]]>
+    </select>
+    
+    
+    <delete id="delete">
+        DELETE FROM web_config 
+        <![CDATA[
+            WHERE id = #{id}  
+        ]]>
+    </delete>
+    
+    <!-- add by busfly 2010-09-25 -->
+    <delete id="deleteByQueryMap">
+        DELETE FROM web_config 
+        <include refid="findPage_where"/>    
+    </delete>
+    
+    <sql id="order_by">
+        <if test="@Ognl@isNotEmpty(filterQuery.orderByList)">
+            ORDER BY 
+                 <foreach collection="filterQuery.orderByList" item="item" index="index" >  
+                     <choose> 
+                        <when test="item.sidx=='id'"> id ${item.sord} ,</when>
+                        <when test="item.sidx=='cfgName'"> cfg_name ${item.sord} ,</when>
+                        <when test="item.sidx=='cfgTitle'"> cfg_title ${item.sord} ,</when>
+                        <when test="item.sidx=='rank'"> rank ${item.sord} ,</when>
+                        <when test="item.sidx=='cfgGroup'"> cfg_group ${item.sord} ,</when>
+                        <when test="item.sidx=='cacheType'"> cache_type ${item.sord} ,</when>
+                        <when test="item.sidx=='meta32'"> meta32 ${item.sord} ,</when>
+                        <when test="item.sidx=='meta64'"> meta64 ${item.sord} ,</when>
+                        <when test="item.sidx=='meta128'"> meta128 ${item.sord} ,</when>
+                        <when test="item.sidx=='dataUnit'"> data_unit ${item.sord} ,</when>
+                        <when test="item.sidx=='dataStatus'"> data_status ${item.sord} ,</when>
+                        <when test="item.sidx=='inputType'"> input_type ${item.sord} ,</when>
+                        <when test="item.sidx=='permission'"> permission ${item.sord} ,</when>
+                        <when test="item.sidx=='operator'"> operator ${item.sord} ,</when>
+<!-- 
+                         <otherwise> 
+                            cfg_group desc,
+                        </otherwise> 
+ -->
+                    </choose> 
+                 </foreach> 
+                 cfg_group desc, rank asc , id desc 
+        </if>
+    </sql>
+    
+    <sql id="findPage_where">
+        <where>                     
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.cacheType)">
+                and cache_type = #{filterQuery.cacheType}
+            </if>
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.id)">
+                and id = #{filterQuery.id}
+            </if>
+            <!-- IN 子句
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.id_in)">
+               and id in
+               <foreach collection="filterQuery.id_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>  
+            
+            
+           
+            <!-- 等于 -->
+           <if test="@Ognl@isNotEmpty(filterQuery.cfgName_in)">
+               and cfg_name in
+               <foreach collection="filterQuery.cfgName_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>  
+            <if test="@Ognl@isNotEmpty(filterQuery.cfgName)">
+                and cfg_name = #{filterQuery.cfgName}
+            </if>
+           <if test="@Ognl@isNotEmpty(filterQuery.cfgName_cn)">
+               and cfg_name like CONCAT('%',#{filterQuery.cfgName_cn},'%')  
+            </if>       
+           <if test="@Ognl@isNotEmpty(filterQuery.cfgName_ew)">
+               and cfg_name like CONCAT('%',#{filterQuery.cfgName_ew})  
+            </if>       
+           <if test="@Ognl@isNotEmpty(filterQuery.cfgName_bw)">
+               and cfg_name like CONCAT(#{filterQuery.cfgName_bw},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.cfgTitle)">
+                and cfg_title = #{filterQuery.cfgTitle}
+            </if>
+            <!--   oracle: like '%' || filterQuery.cfgTitle_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.cfgTitle_cn)">
+               and cfg_title like CONCAT('%',#{filterQuery.cfgTitle_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.cfgValue)">
+                and cfg_value = #{filterQuery.cfgValue}
+            </if>
+            <!--   oracle: like '%' || filterQuery.cfgValue_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.cfgValue_cn)">
+               and cfg_value like CONCAT('%',#{filterQuery.cfgValue_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.cfgGroup)">
+                and cfg_group = #{filterQuery.cfgGroup}
+            </if>
+            
+            <if test="@Ognl@isNotEmpty(filterQuery.meta32)">
+               and meta32 = #{filterQuery.meta32}
+            </if>
+            <if test="@Ognl@isNotEmpty(filterQuery.meta64)">
+               and meta64 = #{filterQuery.meta64}
+            </if>
+            <if test="@Ognl@isNotEmpty(filterQuery.meta128)">
+               and meta128 = #{filterQuery.meta128}
+            </if>
+            <if test="@Ognl@isNotEmpty(filterQuery.dataUnit)">
+               and data_unit = #{filterQuery.dataUnit}
+            </if>
+            <if test="@Ognl@isNotEmpty(filterQuery.dataStatus)">
+               and data_status = #{filterQuery.dataStatus}
+            </if>
+            <if test="@Ognl@isNotEmpty(filterQuery.inputType)">
+               and input_type = #{filterQuery.inputType}
+            </if>
+            <if test="@Ognl@isNotEmpty(filterQuery.permission)">
+               and permission = #{filterQuery.permission}
+            </if>
+            <if test="@Ognl@isNotEmpty(filterQuery.operator)">
+               and operator = #{filterQuery.operator}
+            </if>
+        </where>
+    </sql>
+        
+	
+</mapper>
+

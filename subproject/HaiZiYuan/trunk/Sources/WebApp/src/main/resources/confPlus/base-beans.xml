@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+	<context:property-placeholder location="classpath*:cfgs/jdbc.properties"
+		ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath*:cfgs/server.properties"
+		ignore-unresolvable="true" />
+
+	<!-- Spring就会根据客户端浏览器的Locale设定决定返回界面所采用的语言种类。可通过AcceptHeaderLocaleResolver.resolveLocale方法获得当前语言设定 -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver">
+	</bean> 
+	<bean
+		class="net.easyUI.common.util.digest.impl.MD5MessageDigestImpl">
+		<property name="salt" value="${user.password.salt}" />
+	</bean>
+
+
+
+	<!-- C3P0连接池配置 连接属性改到 server.properties 中配置了。 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" 
+		> <property name="driverClass"><value>${jdbc.driverClass}</value></property> 
+		<property name="jdbcUrl"><value>${jdbc.jdbcUrl}</value></property> <property 
+		name="user"><value>${jdbc.user}</value></property> <property name="password"><value>${jdbc.password}</value></property> 
+		<property name="initialPoolSize"><value>${jdbc.initialPoolSize}</value></property> 
+		<property name="minPoolSize"><value>${jdbc.minPoolSize}</value></property> 
+		<property name="maxPoolSize"><value>${jdbc.maxPoolSize}</value></property> 
+		<property name="idleConnectionTestPeriod"><value>${jdbc.idleConnectionTestPeriod}</value></property> 
+		</bean> -->
+	<!-- idleConnectionTestPeriod=1800隔多少秒检查所有连接池中的空闲连接，默认为0表示不检查； -->
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Transaction manager for a single JDBC DataSource 注解方式事务 @Transactional -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Transaction manager for a single JDBC DataSource 手动方式事务 -->
+	<bean id="transactionTemplate"
+		class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:/ibatisSqlMap/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath*:/ibatisSqlMap/**/*Mapper.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<!-- 自动扫描相同classpath下同名的xml配置文件。应注意不同package，mapper类不能同名。会出现什么结果？ -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 如果有多个package，以;分割 -->
+		<property name="basePackage" value="net.easyUI.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+
+
+
+</beans>

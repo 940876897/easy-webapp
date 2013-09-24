@@ -1,0 +1,80 @@
+#set($layout = '')
+
+        
+        #if($iDemand.haveJs('html5'))
+        <!--[if lte IE 8]>
+        <script src="$imageServer.get('statics/common/jsLibs/html5.js')"></script>
+        <![endif]--> 
+        #end
+        #if($iDemand.haveJs('letskillie6'))
+        <!--if lte IE 6]>
+        <script src="$imageServer.get('statics/common/jsLibs/letskillie6.zh_CN.pack.js')"></script>
+        <!--endif]-->
+        #end
+        
+        
+        #if($iDemand.haveJs('jquery'))
+		<!-- 加速JS加载速度 -->
+			<script src="$imageServer.get('statics/common/jsLibs/speedup.js')"></script>
+			<script src="$imageServer.get('statics/common/jsLibs/jquery-1.7.2.min.js')"></script>
+			<script src="$imageServer.get('statics/common/jsLibs/jquery.cookie.js')"></script>
+			<script src="$imageServer.get('statics/common/jsLibs/jquery.validate.js')"></script>
+			<script src="$imageServer.get('statics/common/jsLibs/jquery.bgiframe.js')"></script>
+		#end
+	  
+	 	#if($iDemand.haveCss('dwz'))
+	        ## dwz样式
+			<link href="$imageServer/statics/common/jsLibs/dwz/themes/default/style.css" rel="stylesheet" />
+			<link href="$imageServer.get('statics/common/jsLibs/dwz/themes/css/core.css')" rel="stylesheet" />
+	        <link href="$imageServer.get('statics/common/jsLibs/dwz/themes/css/print.css')" rel="stylesheet" media="print"/>
+	        <!--[if IE]>
+	        <link href="$imageServer.get('statics/common/jsLibs/dwz/themes/css/ieHack.css')" rel="stylesheet" />
+	        <![endif]-->
+        #end
+        
+	 	#if($iDemand.haveCss('uploadify'))
+		<link href="$imageServer.get('statics/common/jsLibs/uploadify/css/uploadify.css')" rel="stylesheet" />
+        #end
+	 	#if($iDemand.haveCss('adminCss'))
+        	<link href="$imageServer.get('statics/common/style/admin/default.css')" rel="stylesheet" />
+        #end
+        
+		
+
+
+		
+        #if($iDemand.haveJs('xheditor'))
+			<script src="$imageServer.get('statics/common/jsLibs/xheditor/xheditor-1.1.12-zh-cn.min.js')"></script>
+		#end
+        #if($iDemand.haveJs('kingEditor'))
+			<script src="$imageServer.get('statics/common/jsLibs/kingEditor/kindeditor-min.js')"></script>
+		#end
+        #if($iDemand.haveJs('uploadify'))
+			<script src="$imageServer.get('statics/common/jsLibs/uploadify/scripts/swfobject.js')"></script>
+			<script src="$imageServer.get('statics/common/jsLibs/uploadify/scripts/jquery.uploadify.v2.1.0.js')"></script>
+        #end
+        #if($iDemand.haveJs('dwz'))
+	        ## DWZ
+	        <script src="$imageServer.get('statics/common/jsLibs/dwz/dwz.min.js')"></script>
+	        <script src="$imageServer.get('statics/common/jsLibs/dwz/dwz.regional.zh.js')"></script>
+		#end
+		
+        #if($iDemand.haveJs('baseJs'))
+        ## 基础JS
+       	 	<script src="$appServer.get('/contain/baseJS.xhtml')" charset="UTF-8"></script>
+        ## JS代码文件        
+	    	<script src="$imageServer.get('statics/common/javaScript/admin/busfly.extend.javascript.js')"></script>
+		#end
+        #if($iDemand.haveJs('validator'))
+	    	<script src="$imageServer.get('statics/common/javaScript/admin/busfly.extend.validator.js')"></script>
+	    #end
+	    #if($iDemand.haveJs('dwz'))
+		    ## DWZ 修改
+		    <script src="$imageServer.get('statics/common/javaScript/admin/busfly.extend.dwz.js')"></script>
+		    <script src="$imageServer.get('statics/common/javaScript/admin/busfly.extend.dwz.database.js')"></script>
+	        <script src="$imageServer.get('statics/common/javaScript/admin/dwz.busfly.js')"></script>
+		#end
+		
+	    #if($iDemand.haveJs('adminJs'))
+	    	<script src="$imageServer.get('statics/common/javaScript/admin/admin.js')"></script>
+		#end

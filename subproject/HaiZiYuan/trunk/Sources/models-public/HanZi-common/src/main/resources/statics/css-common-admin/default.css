@@ -1,0 +1,52 @@
+.more_filter_button {
+	color: red;
+}
+
+.more_filter {
+	display: none;
+}
+
+label.autoWidth,.autoWidth {
+	width: auto;
+}
+
+.pageFormContent .textInput {
+	width: 180px;
+}
+
+.pageFormContent .nowrap .textInput {
+	width: 100%;
+}
+/*
+textarea.fullWidth, textarea.textInput, .fullWidth.textInput, .pageFormContent .fullWidth.textInput
+	{
+	width: 100%;
+}
+*/
+.searchBar ul.searchContent {
+	overflow: visible;
+}
+
+.searchContent .textInput {
+	float: left;
+}
+
+.tfoot td {
+	font-weight: bolder;
+	font-size: 14px;
+}
+
+.xiaoji td {
+	font-weight: bolder;
+	font-size: 12px;
+}
+
+.ace_editor,.ace_editor span,.ace_editor  div {
+	font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas',
+		'source-code-pro', monospace;
+}
+
+/*树组件中,如果Text长了,之前会不显示,以下处理就可以了.*/
+.tree li a,.tree li span {
+	overflow: hidden;
+}

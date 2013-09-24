@@ -1,0 +1,44 @@
+    #set($layout = '/views/layout/common/dwzAdminDefault.vm')
+    ## 加载默认首页
+    #set($title="后台首页")
+    
+
+                        <div class="accountInfo">
+                            <div class="alertInfo">
+                                <h2><a href="#" target="_blank">使用手册</a></h2>
+                                <a href="#" target="_blank">学习</a>
+                            </div>
+                            <div class="right">
+                                <p><a href="#" target="_blank" style="line-height:19px">使用手册</a></p>
+                                <p><a href="#" target="_blank" style="line-height:19px">学习</a></p>
+                            </div>
+                            <p><span>功能</span></p>
+                            <p>功能说明:<a href="#" target="_blank">**********</a></p>
+                        </div>
+                        
+                        <div class="pageFormContent" layoutH="80" >
+                            <div class="divider"></div>
+                            <h2>常用操作:</h2>
+                            <div class="unit"><a href="#" target="_blank">常用操作1</a></div>
+                            <div class="unit"><a href="#" target="_blank">常用操作2</a></div>
+                            <div class="unit"><a href="#" target="_blank">常用操作3</a></div>
+                            <div class="unit"><a href="#" target="_blank">常用操作4</a></div>
+                            <div class="unit"><a href="#" target="_blank">常用操作5</a></div>
+    
+                            <div class="divider"></div>
+                            <h2>常见问题及解决:</h2>
+                            <pre style="margin:5px;line-height:1.4em">
+                                Error loading XML document: dwz.frag.xml
+                                直接用IE打开index.html弹出一个对话框：Error loading XML document: dwz.frag.xml
+                                原因：没有加载成功dwz.frag.xml。IE ajax laod本地文件有限制, 是ie安全级别的问题, 不是框架的问题。
+                                解决方法：用firefox打开或部署到apache下。
+                            </pre>
+    
+                            <div class="divider"></div>
+                            <h2>有偿服务请联系:</h2>
+                            <pre style="margin:5px;line-height:1.4em;">
+                                定制化开发，公司培训，技术支持
+                                合作电话：******
+                                邮箱：******
+                            </pre>
+                        </div>

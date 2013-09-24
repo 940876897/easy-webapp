@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="net.easyUI.mapper.common.PermissionMapper">
+
+	<resultMap id="RM_Permission" type="net.easyUI.domain.common.Permission">
+        <result property="id" column="id"/>
+        <result property="permissionKey" column="permission_key"/>
+        <result property="permissionName" column="permission_name"/>
+        <result property="uri" column="uri"/>
+	</resultMap>
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        <![CDATA[
+            id,
+            permission_key,
+            permission_name,
+            uri
+        ]]>
+    </sql>
+    
+    <!-- 带一对多,和多对一的完整数据 collection association-->
+    <resultMap id="RM_Permission_FullFK" extends="RM_Permission" type="net.easyUI.domain.common.Permission">
+        <result property="memo" column="memo"/>
+        <!-- 此处需要依赖主表两个字段.暂时不知道如何传递,先去掉此属性,请手动在Service里查询组装结果.
+        <collection  property="permissionMetas" column="id"  select="net.easyUI.mapper.common.PermissionMetaMapper.listQueryByPermissionId"/>
+         -->
+    </resultMap>
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns_full">
+        <![CDATA[
+            id,
+            permission_key,
+            permission_name,
+            uri,
+            memo
+        ]]>
+    </sql>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="getByKeyFullFK" resultMap="RM_Permission_FullFK">
+        SELECT <include refid="columns_full" />
+        <![CDATA[
+            FROM permission 
+            WHERE id = #{id}  
+        ]]>
+    </select>
+    
+    <!-- 带一对多,和多对一的完整数据 -->
+    <select id="listQueryMapFullFK" resultMap="RM_Permission_FullFK">
+        SELECT <include refid="columns_full" />
+        FROM permission 
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+    
+
+
+    <select id="getByKey" resultMap="RM_Permission">
+        SELECT <include refid="columns_full" />
+        <![CDATA[
+            FROM permission 
+            WHERE id = #{id}  
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkPermissionKey" resultMap="RM_Permission" parameterType="String">
+        SELECT <include refid="columns_full"/>
+        <![CDATA[
+            FROM permission 
+            where permission_key = #{permissionKey}
+        ]]>
+    </select>
+    
+    
+    <select id="getByUkPermissionKeyFullFK" resultMap="RM_Permission_FullFK" parameterType="String">
+        SELECT <include refid="columns_full"/>
+        <![CDATA[
+            FROM permission 
+            where permission_key = #{permissionKey}
+        ]]>
+    </select>
+    
+    
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO permission (
+            permission_key ,
+            permission_name ,
+            uri ,
+            memo 
+        ) VALUES (
+            #{permissionKey} ,
+            #{permissionName} ,
+            #{uri} ,
+            #{memo} 
+        )
+    ]]>
+	</insert>
+    
+	<update id="update" >
+    <![CDATA[
+        UPDATE permission SET
+            permission_key = #{permissionKey} ,
+            permission_name = #{permissionName} ,
+            uri = #{uri} ,
+            memo = #{memo} 
+        WHERE 
+            id = #{id} 
+    ]]>
+	</update>
+
+<!-- add by busfly 2010-09-25 动态修改，只修改传入的内容  -->
+    <update id="updateByQueryMap" >
+        UPDATE permission
+        <set>
+            <if test="@Ognl@isNotEmpty(entity.permissionKey)">
+                permission_key = #{entity.permissionKey},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.permissionName)">
+                permission_name = #{entity.permissionName},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.uri)">
+                uri = #{entity.uri},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.memo)">
+                memo = #{entity.memo},
+            </if>
+        </set>          
+        <include refid="findPage_where"/>    
+    </update>
+    
+    <select id="countQueryMap" resultType="long">
+        SELECT count(*) FROM permission 
+        <include refid="findPage_where"/>    
+    </select>
+    
+    <!--
+        分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+        因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="listQueryMap" resultMap="RM_Permission">
+        SELECT <include refid="columns" />
+        FROM permission  
+        <include refid="findPage_where"/>
+        <include refid="order_by"/>
+    </select>      
+
+    <delete id="deleteBykey">
+        DELETE FROM permission 
+        <![CDATA[
+            WHERE id = #{id}  
+        ]]>
+    </delete>
+    
+    <select id="deleteByUkPermissionKey">
+        DELETE FROM permission 
+        <![CDATA[
+            where permission_key = #{permissionKey}
+        ]]>
+    </select>
+    
+    
+    <delete id="delete">
+        DELETE FROM permission 
+        <![CDATA[
+            WHERE id = #{id}  
+        ]]>
+    </delete>
+    
+    <!-- add by busfly 2010-09-25 -->
+    <delete id="deleteByQueryMap">
+        DELETE FROM permission 
+        <include refid="findPage_where"/>    
+    </delete>
+    
+    <sql id="order_by">
+        <if test="@Ognl@isNotEmpty(filterQuery.orderByList)">
+            ORDER BY 
+                 <foreach collection="filterQuery.orderByList" item="item" index="index" >  
+                     <choose> 
+                        <when test="item.sidx=='id'"> id ${item.sord} ,</when>
+                        <when test="item.sidx=='permissionKey'"> permission_key ${item.sord} ,</when>
+                        <when test="item.sidx=='permissionName'"> permission_name ${item.sord} ,</when>
+                        <when test="item.sidx=='uri'"> uri ${item.sord} ,</when>
+                        <when test="item.sidx=='memo'"> memo ${item.sord} ,</when>
+                  <!--    <otherwise> 
+                            null
+                        </otherwise> 
+                   -->   
+                    </choose> 
+                 </foreach> 
+                 id desc 
+        </if>
+    </sql>
+    
+    <sql id="findPage_where">
+        <where>                     
+           
+           <!-- 扩展条件enabled -->
+            <if test="@Ognl@isNotEmpty(filterQuery.enabled)">
+                and exists(select wcfg.* from web_config wcfg where wcfg.cfg_group='permissionMeta' and wcfg.cfg_name=CONCAT(permission.permission_key, '_enabled') and wcfg.cfg_value=#{filterQuery.enabled} )
+            </if>
+           <!-- 扩展条件enabled -->
+            <if test="@Ognl@isNotEmpty(filterQuery.enabled_ne)">
+                and not exists(select wcfg.* from web_config wcfg where wcfg.cfg_group='permissionMeta' and wcfg.cfg_name=CONCAT(permission.permission_key, '_enabled') and wcfg.cfg_value=#{filterQuery.enabled_ne} )
+            </if>
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.id)">
+                and id = #{filterQuery.id}
+            </if>
+            <!-- IN 子句-->
+           <if test="@Ognl@isNotEmpty(filterQuery.id_in)">
+               and id in
+               <foreach collection="filterQuery.id_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+            <!--NOT IN 子句-->
+           <if test="@Ognl@isNotEmpty(filterQuery.id_ni)">
+               and id not in
+               <foreach collection="filterQuery.id_ni" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.permissionKey)">
+                and permission_key = #{filterQuery.permissionKey}
+            </if>
+            <!-- IN 子句-->
+           <if test="@Ognl@isNotEmpty(filterQuery.permissionKey_in)">
+               and permission_key in
+               <foreach collection="filterQuery.permissionKey_in" item="item" index="index" open="(" separator="," close=")"> #{item} </foreach>  
+            </if>      
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.permissionKey_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.permissionKey_bw)">
+               and permission_key like CONCAT(#{filterQuery.permissionKey_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.permissionKey_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.permissionKey_cn)">
+               and permission_key like CONCAT('%',#{filterQuery.permissionKey_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.permissionName)">
+                and permission_name = #{filterQuery.permissionName}
+            </if>
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.permissionName_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.permissionName_bw)">
+               and permission_name like CONCAT(#{filterQuery.permissionName_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.permissionName_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.permissionName_cn)">
+               and permission_name like CONCAT('%',#{filterQuery.permissionName_cn},'%')  
+            </if>       
+            
+           
+            <!-- 等于 -->
+            <if test="@Ognl@isNotEmpty(filterQuery.uri)">
+                and uri = #{filterQuery.uri}
+            </if>
+           <!-- 右模糊查询，左边像XXX ;oracle: like filterQuery.uri_bw || '%' 
+            -->      
+           <if test="@Ognl@isNotEmpty(filterQuery.uri_bw)">
+               and uri like CONCAT(#{filterQuery.uri_bw} ,'%') 
+            </if> 
+            <!--   oracle: like '%' || filterQuery.uri_cn || '%'  
+            -->
+           <if test="@Ognl@isNotEmpty(filterQuery.uri_cn)">
+               and uri like CONCAT('%',#{filterQuery.uri_cn},'%')  
+            </if>       
+            
+        </where>
+    </sql>
+        
+	
+</mapper>
+

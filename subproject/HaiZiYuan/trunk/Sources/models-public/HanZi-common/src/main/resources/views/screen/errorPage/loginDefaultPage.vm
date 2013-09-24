@@ -1,0 +1,76 @@
+#set($layout = '')
+                    
+
+#set($title='后台登录loginDefaultPage登录页面')
+
+<div class="pageContent"> <!-- action="$appServer.get('loginJson.htm')" -->
+    <form action="$appServer.get('loginJson.htm')" class="pageForm loginForm" onsubmit="return validateCallback(this,loginAjaxDone);">
+        <div class="pageFormContent" >
+                    <input name="returnurl" value="#direct($!{returnurl})" type="hidden" />
+                    ##<input name="backto" value="#direct($!{returnurl})" type="hidden" />
+                    <input name="dwzId" value="$!{dwzId}" type="hidden" />
+            #if($msg)
+                $msg
+            #end
+            
+            <div class="unit">
+                <label>登录账号：</label>
+                <input name="loginName" value="$!{user.loginName}" type="text" name size="30" />
+                <label class="info">登录账号与员工号填写一个即可</label>
+            </div>
+            <div class="unit">
+                <label>员工号：</label>
+                <input name="displayName" value="$!{user.displayName}" type="text" name size="30" />
+                <label class="info">登录账号与员工号填写一个即可</label>
+            </div>
+            <div class="unit">
+                <label>登录密码：</label>
+                <input name="password" type="password" size="30" class="required" />
+            </div>
+            
+                #if("$!{loginImgCheckCode}"=="true")
+            <div class="unit">
+                <label>验证码：</label>
+                <input name="imgCheckCode" type="text" size="5" class="required"/>
+                &nbsp;
+                
+              <img id="imgCheckCode"  width="75" height="24" 
+                 style="cursor:pointer"  onClick="this.src='$appServer/imgCheckCode1.htm?t='+Math.random();"
+                  alt="请输入此图片上的内容,看不清楚?点击换一张!"
+                  title="请输入此图片上的内容,看不清楚?点击换一张!"
+                  src="$imageServer.get('style/images/imgCheckCode.jpg')" />
+                    
+                  #*
+                <a href="JavaScript:changeCheckcode();" title="请输入此图片上的内容,看不清楚?点击换一张!">
+                  <img id="imgCheckCode"  width="75" height="24" 
+                      alt="请输入此图片上的内容,看不清楚?点击换一张!"
+                      title="请输入此图片上的内容,看不清楚?点击换一张!"
+                      src="$imageServer.get('style/images/imgCheckCode.jpg')" />
+                </a>
+                *#
+                #*
+                <a href="JavaScript:changeCheckcode('',2);" title="请输入此图片上的数学运算结果,看不清楚?点击换一张!">
+                  <img id="imgCheckCode"  width="75" height="24" 
+                      alt="请输入此图片上的数学运算结果,看不清楚?点击换一张!"
+                      title="请输入此图片上的数学运算结果,看不清楚?点击换一张!"
+                      src="$imageServer.get('style/images/imgCheckCode.jpg')" />
+                </a>
+                *#
+            </div>
+            #end
+            
+            <div class="unit" style="text-align:center;">
+                <a>申请账户</a>
+                <a>找回密码</a>
+            </div>
+        </div>
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">$msgUtil.msg("function.login")</button></div></div></li>
+                <li>
+                    <div class="button"><div class="buttonContent"><button type="button" class="close">$msgUtil.msg("function.close")</button></div></div>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>

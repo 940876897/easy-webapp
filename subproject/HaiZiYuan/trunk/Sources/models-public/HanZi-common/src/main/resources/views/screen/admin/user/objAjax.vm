@@ -1,0 +1,163 @@
+#set($layout = '')
+
+#if("$!{operType}"!="edit"&&"$!{operType}"!="add") #set($readOnly="1") #else #set($readOnly="") #end
+    ## 对象的添加add,修改edit,查看view表单页面(operType)
+<div class="pageContent">
+    <form 
+        #if("$!readOnly"=="1")
+             onsubmit="return false;"
+        #else
+            method="post" action="$appServer.get('/admin/user/save/json.htm')" 
+            onsubmit="return validateCallback(this, navTabAjaxDone);"
+        #end
+        class="pageForm required-validate" >
+        
+        <div class="pageFormContent" layoutH="56">
+             #springBind("user.id")
+             <input type="hidden" name="${status.expression}" value="$!{status.value}"/>
+        
+	        #springBind("user.displayName")
+	        <dl> 
+	            <dt>#dbMsg("User.displayName")：</dt> 
+	            <dd> 
+	                <input  type="text" name="${status.expression}" value="$!{status.value}" class="required" maxlength="64" size="30" 
+	                    #if("$!{operType}"!="add") readonly="readonly" #end/>
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl> 
+	        
+	        #springBind("user.loginName")
+	        <dl> 
+	            <dt>#dbMsg("User.loginName")：</dt> 
+	            <dd> 
+	                <input  type="text" name="${status.expression}" value="$!{status.value}" class="required" maxlength="48" size="30" 
+	                    #if("$!{operType}"!="add") readonly="readonly" #end/>
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl> 
+	            
+	
+	        #springBind("user.password")
+	        <dl> 
+	            <dt>#dbMsg("User.password")：</dt> 
+	            <dd> 
+	                <input  type="text" name="${status.expression}" title="如不需要修改，请保持空白" 
+		                #if(${status.value}) value="" #else value="123456" #end 
+		                class="textInput" maxlength="64" size="30" #if("$!readOnly"=="1") readonly="readonly" #end/>
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl> 
+	            
+	        #springBind("user.nicename")
+	        <dl> 
+	            <dt>#dbMsg("User.nicename")：</dt> 
+	            <dd> 
+	                <input  type="text" name="${status.expression}" value="$!{status.value}" class="required" maxlength="48" size="30" #if("$!readOnly"=="1") readonly="readonly" #end/>
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl> 
+	
+	        #springBind("user.email")
+	        <dl> 
+	            <dt>#dbMsg("User.email")：</dt> 
+	            <dd> 
+	                <input  type="text" name="${status.expression}" value="$!{status.value}" class=" validate-email" maxlength="128" size="30" #if("$!readOnly"=="1") readonly="readonly" #end/>
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl> 
+	            
+	
+	        #springBind("user.website")
+	        <dl> 
+	            <dt>#dbMsg("User.website")：</dt> 
+	            <dd> 
+	                <input  type="text" name="${status.expression}" value="$!{status.value}" class="" maxlength="128" size="30" #if("$!readOnly"=="1") readonly="readonly" #end/>
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl> 
+	
+	        #springBind("user.gmtRegistered")
+	        <dl> 
+	            <dt>#dbMsg("User.gmtRegistered")：</dt>
+	            <dd>
+	               <input  type="text" name="${status.expression}"  yearstart="-100" yearend="20"  format="yyyy-MM-dd" value="$!dateTool.format('yyyy-MM-dd', $!{status.value})" class="  textInput" size="30"  readonly="readonly"/>
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl> 
+	            
+	
+	        #springBind("user.status")
+	        <dl> 
+	            <dt>#dbMsg("User.status")：</dt>
+	            <dd>
+	             ##枚举EnableStatusEnum:
+	             #enumSelectEl($EnableStatusEnumList ,"${status.expression}" ,"$!{status.value}" ,"" ,"$!readOnly" ,"combox required")
+	                <span class = "info"></span>
+	            </dd> 
+	        </dl>
+        
+                 
+            ## 如果是修改和查看，则显示这个用户下的角色列表，以修改修改链接。dialog mask="true"
+    #if("$!{operType}"!="add")
+            <dl class="nowrap"> 
+                <dt>#dbMsg("Role")列表：
+                #if("$!{operType}"=="edit")
+                    <a href='$appServer.get("/admin/user/userRoleAddAjax/${user.id}.htm?dwzId=$!{dwzId}&targetType=dialog")' 
+                    	target="dialog" 
+                    	##	target="navTab" 
+                        title="#dbMsg('function.add')[$!{user.loginName}]#dbMsg('Role')"
+                        class="btnAdd"  rel="dwz_tab_userRole_add_$!{user.id}" style="float:right;">
+                        #dbMsg("function.add")
+                    </a>
+                #end
+                </dt> 
+                <dd> 
+                    <div class="panel collapse fullWidth" minH="170" defH="220">
+                        <h1>此用户拥有的角色列表： </h1>
+                        <div>
+                           <table class="table" width="100%" nowrapTD="false">
+                                <thead>
+                                    <tr >
+                                       <th width="120" >#dbMsg("Role.roleKey")</th>
+                                       <th  >#dbMsg("Role.roleName")</th>
+                                       <th width="120">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   #foreach($rs in $user.roles)
+                                   <tr >  
+        								<td>
+                                            #trimHtml($!rs.roleKey,120)
+                                        </td>
+           								<td>
+                                            #trimHtml($!rs.roleName,120)
+                                        </td>
+                                        <td >
+                                        #if("$!{operType}"=="edit")
+                                             #set($tmpUrl=$appServer.get("/admin/user/userRoleDelJson/${user.id}/$!{rs.roleKey}.htm?dwzId=$!{dwzId}"))
+                                             <a href="${tmpUrl}" target="ajaxTodo" title="你确定要#dbMsg("function.del")这个#dbMsg('Role')[$!rs.roleName]吗?" class="btnDel">#dbMsg("function.del")</a>
+                                        #end
+                                        </td>
+                                    </tr>
+                                    #end
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </dd> 
+            </dl> 
+    #end
+        </div>
+        
+        <div class="formBar">
+            <ul>
+            #if("$!readOnly"!="1")
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">#dbMsg("function.save")</button></div></div></li>
+            #end
+                <li>
+                    <div class="button"><div class="buttonContent"><button type="button" class="close">#dbMsg("function.close")</button></div></div>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>

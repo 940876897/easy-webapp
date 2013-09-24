@@ -1,0 +1,123 @@
+#set($layout = '')
+<form id="pagerForm" action="$appServer.get('/admin/permission/indexAjax.htm')" method="post">
+	<input type="hidden" name="pageNum" value="#if(${query.pageNum})${query.pageNum}#{else}1#end" /><!--【必须】value=1可以写死-->
+	<input type="hidden" name="numPerPage" value="#if(${query.numPerPage})${query.numPerPage}#{else}20#end" /><!--【可选】每页显示多少条-->
+	<input type="hidden" name="orderField" value="$!{query.orderField}" /><!--【可选】查询排序-->
+    <input type="hidden" name="orderDirection" value="$!{query.orderDirection}" /><!--【可选】排序方式-->
+    <!--【可选】其它查询条件，业务有关，有什么查询条件就加什么参数-->
+	
+                
+    <input type="hidden" name="permissionKey" value="$!{query.permissionKey}"/>
+    <input type="hidden" name="permissionKey_bw" value="$!{query.permissionKey_bw}"/>
+    <input type="hidden" name="permissionKey_cn" value="$!{query.permissionKey_cn}"/>
+            
+    
+                
+    <input type="hidden" name="permissionName" value="$!{query.permissionName}"/>
+    <input type="hidden" name="permissionName_bw" value="$!{query.permissionName_bw}"/>
+    <input type="hidden" name="permissionName_cn" value="$!{query.permissionName_cn}"/>
+            
+    
+                
+    <input type="hidden" name="uri" value="$!{query.uri}"/>
+    <input type="hidden" name="uri_bw" value="$!{query.uri_bw}"/>
+    <input type="hidden" name="uri_cn" value="$!{query.uri_cn}"/>
+            
+    
+            
+</form> 
+
+
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this,'dwz_tab_permission');" action="$appServer.get('/admin/permission/indexAjax.htm')" method="post">
+        <input type="hidden" name="pageNum" value="#if(${query.pageNum})${query.pageNum}#{else}1#end" /><!--【必须】value=1可以写死-->
+        <input type="hidden" name="numPerPage" value="#if(${query.numPerPage})${query.numPerPage}#{else}20#end" /><!--【可选】每页显示多少条-->
+        <input type="hidden" name="orderField" value="$!{query.orderField}" /><!--【可选】查询排序-->
+        <input type="hidden" name="orderDirection" value="$!{query.orderDirection}" /><!--【可选】排序方式-->
+    
+    <div class="searchBar">
+        <ul class="searchContent">
+            <li>
+                <label>#dbMsg("Permission.permissionKey")：</label>
+                    <input type="text" name="permissionKey" value="$!{query.permissionKey}" size="25"/>
+            </li>
+            <li>
+                <label>#dbMsg("Permission.permissionName")：</label>
+                    <input type="text" name="permissionName" value="$!{query.permissionName}" size="25"/>
+            </li>
+            <li>
+                <label>#dbMsg("Permission.uri")：</label>
+                    <input type="text" name="uri" value="$!{query.uri}" size="25"/>
+            </li>
+        </ul>
+        <div class="subBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">#dbMsg("queryType.query")</button></div></div></li>
+            </ul>
+        </div>
+    </div>
+    </form>
+</div>
+
+
+
+<div class="pageContent">
+    <div class="panelBar">
+        <ul class="toolBar">
+            <li><a class="add" href="$appServer.get('/admin/permission/addAjax.htm')" target="navTab" title="#dbMsg('function.add')#dbMsg('Permission')" rel="dwz_tab_permission_add"><span>#dbMsg("function.add")</span></a></li>
+            <li><a href="$appServer.get('/admin/permission/editAjax/{id}.htm')" target="navTab" class="edit" title="#dbMsg('function.edit')#dbMsg('Permission')" rel="dwz_tab_permission_edit" ><span>#dbMsg("function.edit")</span></a></li>
+            <li class="line">line</li>
+#*
+            <li><a href="$appServer.get('/admin/permission/delJson.htm')" target="selectedTodo" class="delete" title="确实要#dbMsg("function.delBatch")这些#dbMsg('Permission')吗?"><span>#dbMsg("function.delBatch")</span></a></li>
+*#
+            <li><a href="$appServer.get('/admin/permission/delJson/{id}.htm')" target="ajaxTodo" class="delete" title="你确定要#dbMsg("function.del")选择这条#dbMsg('Permission')吗?"><span>#dbMsg("function.del")</span></a></li>
+            <li class="line">line</li>
+            ## <li><a class="icon" href="javascript:void(0);"><span>按钮</span></a></li>
+        </ul>
+    </div>
+    <table class="table" width="100%" layoutH="138" nowrapTD="false">
+        <thead>
+        	<tr >
+               <th width="30"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+               
+               ##<th width="80" orderField="id" #if("$!{query.orderField}"=="id")class="$!{query.orderDirection}"#end >#dbMsg("Permission.id")</th>
+               <th width="160" orderField="permissionKey" #if("$!{query.orderField}"=="permissionKey")class="$!{query.orderDirection}"#end >#dbMsg("Permission.permissionKey")</th>
+               <th width="160" orderField="permissionName" #if("$!{query.orderField}"=="permissionName")class="$!{query.orderDirection}"#end >#dbMsg("Permission.permissionName")</th>
+               <th  orderField="uri" #if("$!{query.orderField}"=="uri")class="$!{query.orderDirection}"#end >#dbMsg("Permission.uri")</th>
+               
+               <th width="120">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+	       #foreach($rs in $page.rows)
+	       <tr target="id" rel="$!rs.id"> ## target="id" rel="$!rs.id" 这两个是用在AjaxURL中的占位({target})数据(rel)来源
+                <td><input name="ids" value="$!rs.id" type="checkbox"></td>
+	            
+                ##<td> $!rs.id </td>
+                <td>
+                    #trimHtml($!rs.permissionKey,120)
+                </td>
+                <td>
+                    #trimHtml($!rs.permissionName,120)
+                </td>
+                <td>
+                    #trimHtml($!rs.uri,120)
+                </td>
+        
+	            <td >
+                    <a href='$appServer.get("/admin/permission/delJson/${rs.id}.htm")' target="ajaxTodo" title="你确定要#dbMsg("function.del")这个#dbMsg('Permission')[$!rs.id]吗?" class="btnDel">#dbMsg("function.del")</a>
+	                <a href='$appServer.get("/admin/permission/editAjax/${rs.id}.htm")' target="navTab" title="#dbMsg('function.edit')#dbMsg('Permission')[$!rs.id]" class="btnEdit"  rel="dwz_tab_permission_edit_$!rs.id" >#dbMsg("function.edit")</a>
+                ## 如果有1对多,可加上查看多方列表按钮
+                #* 
+                    <a href='$appServer.get("/admin/permissionMeta/indexAjax.htm").addQueryData("permissionId","${rs.id}")' target="navTab" 
+                        rel="dwz_tab_permissionMeta" title="#dbMsg('function.view')#dbMsg('PermissionMeta')[$!rs.id]" class="btnInfo">
+                        #dbMsg('PermissionMeta')</a>
+                *#
+                </td>
+	        </tr>
+	        #end
+        </tbody>
+    </table>
+    #dwzPageBar($page "navTab") 
+</div>
+

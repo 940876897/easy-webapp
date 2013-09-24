@@ -1,0 +1,7 @@
+#set($layout = '')
+
+<h1>操作提示信息</h1>
+<p>
+	$!{msgJson.message}
+</p>
+

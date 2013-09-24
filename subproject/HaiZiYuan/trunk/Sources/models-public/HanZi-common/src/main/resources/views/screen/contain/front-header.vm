@@ -1,0 +1,22 @@
+#set($layout = '')
+<div id="headerbg">
+  <div class="header">
+    <div class="logo">
+      <h1><a href="http://www.busfly.net/blog/">busfly的说说</a></h1>
+      <h3>busfly的说说</h3>
+    </div>
+    <div class="search">
+      <form method="post" action="http://www.busfly.net/blog/zb_system/cmd.asp?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12"><input type="submit" value="提交" name="btnPost" id="btnPost"></form>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div class="nevbarbg">
+  <div class="navbar">
+    <ul>
+      <li><a href="http://www.busfly.net/blog/">首页</a></li><li><a href="http://www.busfly.net/">主站</a></li><li><a href="http://www.busfly.net/blog/tags.asp">标签</a></li><li><a href="http://www.busfly.net/blog/guestbook.html">留言本</a></li>
+    </ul>
+  </div>
+</div>
+

@@ -1,0 +1,28 @@
+#set($layout = '')
+<div id="headerbg">
+  <div class="header">
+    <div class="logo">
+      <h1><a href="$!appServer.get('/')">$!webCacheUtils.webConfigValue("webSetting_webTitle")</a></h1>
+      <h3>$!webCacheUtils.webConfigValue("webSetting_webSubTitle")</h3>
+    </div>
+    <div class="search">
+      	<form method="post" action="$appServer.get('/front/post/search.htm')">
+	      	<input type="text" id="edtSearch" name="postTitle_cn" size="12" value="$!{query.postTitle_cn}">
+	      	<input type="submit" value="提交" name="btnPost" id="btnPost">
+  		</form>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div class="nevbarbg">
+  <div class="navbar">
+    <ul>
+      <li><a href="$!appServer.get('/')">首页</a></li>
+      <li><a href="$!appServer.get('/')">主站</a></li>
+      <li><a href="$!appServer.get('/')">标签</a></li>
+      <li><a href="$!appServer.get('/front/post/guestbook.htm')">留言本</a></li>
+    </ul>
+  </div>
+</div>
+

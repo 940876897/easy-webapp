@@ -1,0 +1,21 @@
+= [[分类相关表分析]] =
+
+== terms 术语表 ==
+#term_id : ID号 (PRIMARY KEY)
+#name : 术语名 (KEY)
+#slug : 别名URL (UNIQUE KEY)
+#term_group : 术语分组
+
+== term_taxonomy 术语分类表 ==
+#term_taxonomy_id : ID号 (PRIMARY KEY)
+#term_id : 术语ID
+#taxonomy : 分类名 (KEY)
+#description : 描述
+#parent : 父级ID
+#count : 使用者总数
+ UNIQUE KEY `term_id_taxonomy` (`term_id`,`taxonomy`)
+
+== term_relationships 术语关系表 ==
+#object_id : 对象ID，包括 >> 文章，链接，TAGS (PRIMARY KEY)
+#term_taxonomy_id : 术语分类ID (KEY)
+#term_order : 排序号

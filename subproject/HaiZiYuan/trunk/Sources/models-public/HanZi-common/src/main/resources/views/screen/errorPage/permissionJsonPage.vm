@@ -1,0 +1,9 @@
+#set($layout = '')
+
+{
+       "statusCode":"300", 
+       "message":"您无操作此功能的权限！", 
+       "navTabId":"$!{msgJson.navTabId}", 
+       "callbackType":"$!{msgJson.callbackType}",
+       "forwardUrl":"$!{msgJson.forwardUrl}"
+ }

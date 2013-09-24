@@ -1,0 +1,17 @@
+#set($layout = '')
+#set($title="您无操作此功能的权限！")
+    
+
+    
+<h2 class="contentTitle">操作结果提示：</h2>
+            
+    <div class="pageContent" layoutH="42">
+    
+        <div class="panel" defH="150">
+            <h1>您无操作此功能的权限！</h1>
+            <div class="error">
+                <p>您当前暂无操作此功能的权限！如有疑问，请与管理员联系。</p>
+            </div>
+        </div>
+    
+    </div>

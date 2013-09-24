@@ -1,0 +1,11 @@
+#set($layout = '')
+
+<div id="footer">
+  <div class="copyright">
+  	#html($!webCacheUtils.webConfigValue("webSetting_frontFootCopyRight"))
+  </div>
+  <div id="goTopBtn">
+    <a onclick="pageScroll()"><span>返回顶部</span></a>
+  </div>
+  <div class="clear"></div>
+</div>

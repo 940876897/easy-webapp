@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop    	http://www.springframework.org/schema/aop/spring-aop-3.1.xsd    
+	http://www.springframework.org/schema/beans    	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd    
+	http://www.springframework.org/schema/context    	http://www.springframework.org/schema/context/spring-context-3.1.xsd    
+	http://www.springframework.org/schema/mvc    	http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd    
+	http://www.springframework.org/schema/tx    	http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+	
+	<!--  Enables the Spring MVC @Controller programming model -->  
+	<!-- 默认的注解映射的支持 -->    
+	<mvc:annotation-driven />
+	<!-- 扫描包   component-scan自动搜索@Component , @Controller , @Service , @Repository等标注的类 
+		,多个之间用逗号分隔. <context:component-scan base-package="net.easyUI.dao" 
+		/> -->
+	<context:component-scan base-package="net.easyUI" />
+		 
+		 
+	<!-- applicationContextUtil 是为了使普通Java对象中获取Spring中的Beans方便,此对象拥有getBean()方法,可直接用于获取对应ID的Bean -->
+	<bean id="applicationContextUtil" class="net.easyUI.common.util.ApplicationContextUtil"></bean>
+	<!-- 使用数据库做i18n信息配置。FTL上使用：<#import "/spring.ftl" as s />   <@s.message "Permission.permissionKey" /> -->
+	<bean id="messageSource"		class="net.easyUI.messageResources.DbMessageSource"> </bean>
+
+	<bean id="ResourceConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:cfgs/server.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="zh_CN" />
+	</bean>
+	
+	<!-- SpringMVC结合FreeMarker ftl里调用静态方法  http://blog.sina.com.cn/s/blog_7fb056490100zvyx.html -->
+	<bean id="freemarkerStaticModelsProps" 
+        class="org.springframework.beans.factory.config.PropertiesFactoryBean"> 
+        <property name="locations">
+			<list>
+				<!--
+				<value>classpath*:confPlus/freemarkerstatic.properties</value>
+				-->
+				<value>classpath*:confPlus/freemarker*.properties</value>
+			</list>
+		</property>
+    </bean>
+    <bean id="freemarkerStaticModels" 
+        class="net.easyUI.Utils.FreemarkerStaticModels" factory-method="getInstance">
+        <property name="staticModels" ref="freemarkerStaticModelsProps"/>
+    </bean>
+
+	<!-- 针对freemarker的视图配置 -->
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/classes/views/ftl/" />
+		<property name="freemarkerSettings">
+			<props>
+				<!--classic_compatible设为true允许不存在的变量而不异常。  加上这个设置参数(classic_compatible)后，后引发一个include的问题。不能引用include相对路径，解决方法是使用绝对路径。<#include “../itoolbar.ftl"> <#include "layout/common/itoolbar.ftl"> -->
+				<!--
+					<prop key="classic_compatible">true</prop>
+					-->
+				<prop key="date_format">yyyy-MM-dd </prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="output_encoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="template_update_delay">0</prop>  <!--模板刷新的时间，如果经常调试就用0 了--> 
+				<!-- 自动加载，可用来将通用的Layout和宏加载进来
+					<prop key="auto_import">/admin/layout/dwzAdmin.ftl as layout</prop>
+					-->
+				<!--这个是关键了，就是自动加载的模板，我们为了减少手动加载，大可以在这里让程序自动加载，但是又不能在这里写太多的文件名，所以就可以使用include指令，在index.ftl中include其他的ftl文件加载-->  
+			</props>
+		</property>
+		<!-- 自定义标签加载 -->
+		<property name="freemarkerVariables">  
+			<map>   
+				<!--  value-ref引用Spring Bean，此对象要implements TemplateDirectiveModel接口，FTL上使用方式：<@tjia 参数="1" 参数2="2"/>，也可在Action里将这个对象放到Attr里，FTL里也一样使用
+					<entry key="tjia" value-ref="tjia"/>   
+					<entry key="tsub" value-ref="tsub"/>   
+					-->
+			</map>   
+		</property> 
+	</bean>
+	<bean id="viewResolver"	class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="order" value="10" />
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".ftl" />
+		<property name="contentType" value="text/html;charset=UTF-8"></property> <!--${web.contentType}-->
+		<property name="requestContextAttribute" value="request" />
+		<property name="exposeSpringMacroHelpers" value="true" /> <!-- 是否支持绑定表单域的宏<@spring.bind>和<@spring.bindEscaped> 需要在FTL上面引入<#import "/spring.ftl" as spring />-->
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="cache" value="true" />
+		<property name="attributesMap" ref="freemarkerStaticModels"/>
+	</bean>
+	
+	<!--Spring的Servlet配置改成/, 而不是.htm , 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能， 
+		需要重新设置spring-mvc-3.0.xsd order="1" 这个设置小一点,不然,可能被其它的先执行过去了. -->
+	<!-- The resource location from which to serve static content, specified 
+		at a Spring Resource pattern. Each location must point to a valid directory. 
+		Multiple locations may be specified as a comma-separated list, and the locations 
+		will be checked for a given resource in the order specified. For example, 
+		a value of "/, classpath:/META-INF/public-web-resources/" will allow resources 
+		to be served both from the web app root and from any JAR on the classpath 
+		that contains a /META-INF/public-web-resources/ directory, with resources 
+		in the web app root taking precedence. -->
+	<mvc:resources mapping="/statics/**" location="/statics/,classpath:/statics/"/>
+	<mvc:resources mapping="/favicon.ico" location="/favicon.ico,classpath:/statics/favicon.ico"/>
+	<!--  Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->  
+	<mvc:resources mapping="/resources/**" location="/resources/"  />  
+	<mvc:default-servlet-handler />
+    
+	<!-- JSP模块配置.-->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="100" />
+		<property name="prefix" value="/WEB-INF/classes/views/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+
+
+
+
+	<!-- adapters -->
+	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
+	<bean
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+	<bean
+		class="net.easyUI.common.web.adapter.ExtendableAnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+		<property name="customArgumentResolvers">
+			<list>
+				<!-- 只要在method声明Cookyjar对象,则自动注入 <bean class="com.hundsun.network.melody.common.web.cookyjar.CookyjarArgumentResolver"></bean> -->
+				<!-- 只要在method声明UserAgent对象,则自动注入 <bean class="com.hundsun.network.common.web.resolver.UserAgentArgumentResolver"></bean> -->
+				<!-- 只要在method声明AdministerAgent对象,则自动注入 <bean class="com.hundsun.network.melody.demo.web.resolver.AdministerAgentArgumentResolver"></bean> -->
+			</list>
+		</property>
+		<property name="methodInvokeInterceptors">
+			<list>
+				<!-- <bean class="com.hundsun.network.common.access.UserAuthorityHandlerInterceptor"></bean> -->
+			</list>
+		</property>
+	</bean>
+
+</beans>  

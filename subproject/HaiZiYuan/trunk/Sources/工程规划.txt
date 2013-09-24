@@ -1,0 +1,5 @@
+main：   主Pom配置
+models-admin：   模块后台功能
+models-front：   模块前台功能
+models-public：  模块公共功能，前后台都能操作的功能，如公共的Service，Ajax请求，数据库操作等
+WebApp： Web工程。

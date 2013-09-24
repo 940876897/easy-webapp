@@ -1,0 +1,151 @@
+#set($layout = '')
+    
+    ## 对象的添加add,修改edit,查看view表单页面(operType)
+<div class="pageContent">
+    <form method="post" 
+#if("$!{operType}"=="edit"||"$!{operType}"=="add")
+        action="$appServer.get('/admin/webConfig/save/json.xhtml')" 
+        onsubmit="return validateCallback(this, navTabAjaxDone);"
+#else
+        action="" onsubmit="return false;"
+#end
+        class="pageForm required-validate">
+        
+        <div class="pageFormContent" layoutH="56">
+        #springBind("webConfig.id")
+        <input type="hidden" name="${status.expression}" value="$!{status.value}" />         
+		
+		<input type="hidden" name="dwzId" value="$!{dwzId}" />
+		<input type="hidden" name="printerId" value="$!{webConfig.id}" />
+
+        #springBind("webConfig.cfgName")
+        <dl> 
+            <dt>编码：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class="required" maxlength="128" size="30"/>
+            </dd> 
+        </dl> 
+        
+        #springBind("webConfig.cfgTitle")
+        <dl> 
+            <dt>设置名称：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class="required" maxlength="32" size="30"/>
+            </dd> 
+        </dl> 
+        
+        #springBind("webConfig.cacheType")
+        <dl> 
+            <dt>缓存方式：</dt> 
+            <dd> 
+            	#enumSelectEl($EnumWebCfgCacheTypeList ,"$!{status.expression}" ,"$!{status.value}" ,"" ,"" ,"$!{status.expression}")
+            </dd> 
+        </dl> 
+
+        #springBind("webConfig.cfgGroup")
+        <dl> 
+            <dt>#dbMsg("WebConfig.cfgGroup")：</dt> 
+            <dd> 
+             ##枚举EnumWebCfgGroup:
+             #enumSelectEl($EnumWebCfgGroupList ,"${status.expression}" ,"$!{status.value}" ,"" ,"" ,"required")
+            </dd> 
+        </dl> 
+
+        #springBind("webConfig.rank")
+        <dl> 
+            <dt>#dbMsg("WebConfig.rank")：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class="validate-number  " maxlength="5" size="30"/>
+            </dd> 
+        </dl> 
+            #springBind("webConfig.cfgValue")
+            <dl class="nowrap"> 
+                <dt>#dbMsg("WebConfig.cfgValue")：</dt> 
+                <dd> 
+                    <textarea name="${status.expression}" class="" maxlength="65535" cols="100" rows="8">#html($!{status.value})</textarea>
+                </dd> 
+            </dl> 
+                
+        #springBind("webConfig.meta32")
+        <dl> 
+            <dt>#dbMsg("WebConfig.meta32")：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class=" " maxlength="32" size="30"/>
+            </dd> 
+        </dl> 
+        #springBind("webConfig.meta64")
+        <dl> 
+            <dt>#dbMsg("WebConfig.meta64")：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class=" " maxlength="64" size="30"/>
+            </dd> 
+        </dl> 
+        #springBind("webConfig.meta128")
+        <dl> 
+            <dt>#dbMsg("WebConfig.meta128")：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class=" " maxlength="128" size="30"/>
+            </dd> 
+        </dl> 
+        #springBind("webConfig.dataUnit")
+        <dl> 
+            <dt>#dbMsg("WebConfig.dataUnit")：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class=" " maxlength="32" size="30"/>
+            </dd> 
+        </dl> 
+        #springBind("webConfig.dataStatus")
+        <dl> 
+            <dt>#dbMsg("WebConfig.dataStatus")：</dt> 
+            <dd> 
+             ##枚举 EnumWebCfgStatus :
+             #enumSelectEl($EnumWebCfgStatusList ,"${status.expression}" ,"$!{status.value}" ,"" ,"" ,"required")
+            </dd> 
+        </dl> 
+        #springBind("webConfig.operator")
+        <dl> 
+            <dt>#dbMsg("WebConfig.operator")：</dt> 
+            <dd> 
+                <input type="text" name="${status.expression}" value="$!{status.value}" class=" " maxlength="32" size="30"/>
+            </dd> 
+        </dl> 
+        #springBind("webConfig.inputType")
+        <dl> 
+            <dt>#dbMsg("WebConfig.inputType")：</dt> 
+            <dd> 
+             ##枚举 EnumWebCfgInputType :
+             #enumSelectEl($EnumWebCfgInputTypeList ,"${status.expression}" ,"$!{status.value}" ,"" ,"" ,"required")
+            </dd> 
+        </dl> 
+        #springBind("webConfig.permission")
+        <dl> 
+            <dt>#dbMsg("WebConfig.permission")：</dt> 
+            <dd> 
+             ##枚举 EnumWebCfgPermission :
+             #enumSelectEl($EnumWebCfgPermissionList ,"${status.expression}" ,"$!{status.value}" ,"" ,"" ,"required")
+            </dd> 
+        </dl> 
+    
+            #springBind("webConfig.memo")
+            <dl class="nowrap"> 
+                <dt>#dbMsg("WebConfig.memo")：</dt> 
+                <dd> 
+                    <textarea name="${status.expression}" class="" maxlength="512" cols="100" rows="6">#html($!{status.value})</textarea>
+                </dd> 
+            </dl> 
+        </div>
+        
+        <div class="formBar">
+            <ul>
+            #if("$!{operType}"=="edit"||"$!{operType}"=="add")
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">#dbMsg("function.save")</button></div></div></li>
+            #end
+                <li>
+                    <div class="button"><div class="buttonContent"><button type="button" class="close">#dbMsg("function.close")</button></div></div>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>
+
+
