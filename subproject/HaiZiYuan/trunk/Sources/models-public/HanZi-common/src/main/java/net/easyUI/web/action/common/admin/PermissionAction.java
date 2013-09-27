@@ -10,6 +10,7 @@ package net.easyUI.web.action.common.admin;
 import java.util.List;
 
 import net.easyUI.access.PageType;
+import net.easyUI.common.dto.Dwz;
 import net.easyUI.common.dto.DwzJson;
 import net.easyUI.common.dto.ServiceRequest;
 import net.easyUI.common.dto.ServiceResult;
@@ -43,12 +44,14 @@ public class PermissionAction extends BaseAction {
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/indexAjax")
 	public String permissionIndexAjax(
-			@ModelAttribute("query") PermissionQuery query, ModelMap model) {
+			@ModelAttribute("query") PermissionQuery query,
+			@ModelAttribute Dwz dwz, ModelMap model) {
 		ServiceResult<DwzPage<Permission>> result = permissionService
 				.pageQuery(new ServiceRequest(query));
 		model.addAttribute("page", result.getDataObj());
 		model.addAttribute("srs", result);
 		model.addAttribute("query", query);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		return "admin/permission/indexAjax";
 	}
 
@@ -57,10 +60,11 @@ public class PermissionAction extends BaseAction {
 	 */
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/addAjax")
-	public String permissionAddAjax(ModelMap model) {
+	public String permissionAddAjax(@ModelAttribute Dwz dwz, ModelMap model) {
 		Permission permission = new Permission();
 		model.put("permission", permission);
 		model.put("operType", "add");
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		return "admin/permission/objAjax";
 	}
 
@@ -71,7 +75,8 @@ public class PermissionAction extends BaseAction {
 	@RequestMapping(value = "/save/json", method = RequestMethod.POST)
 	@ResponseBody
 	public DwzJson permissionSave(
-			@ModelAttribute("permission") Permission permission, ModelMap model) {
+			@ModelAttribute("permission") Permission permission,
+			@ModelAttribute Dwz dwz, ModelMap model) {
 		DwzJson dwzJson;
 		if (permission == null) {
 			dwzJson = new DwzJson("300", this.messageSource.getMessage(
@@ -87,10 +92,7 @@ public class PermissionAction extends BaseAction {
 						result.getErrorInfo(), result.getMsgArgs(),
 						this.getThisLocale()));
 			} else {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_permission",
-						"closeCurrent");
+				dwzJson = new DwzJson(result, dwz);
 			}
 		} else {
 			// 保存新增
@@ -101,10 +103,7 @@ public class PermissionAction extends BaseAction {
 						result.getErrorInfo(), result.getMsgArgs(),
 						this.getThisLocale()));
 			} else {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_permission",
-						"closeCurrent");
+				dwzJson = new DwzJson(result, dwz);
 			}
 
 		}
@@ -116,7 +115,8 @@ public class PermissionAction extends BaseAction {
 	 */
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/viewAjax/{id}")
-	public String permissionView(@PathVariable("id") Long id, ModelMap model) {
+	public String permissionView(@PathVariable("id") Long id,
+			@ModelAttribute Dwz dwz, ModelMap model) {
 		Permission permission = permissionService.queryOne(
 				new ServiceRequest(id)).getDataObj();
 		if (permission == null) {
@@ -128,6 +128,7 @@ public class PermissionAction extends BaseAction {
 		}
 		model.put("permission", permission);
 		model.put("operType", "view");
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		return "admin/permission/objAjax";
 	}
 
@@ -136,7 +137,8 @@ public class PermissionAction extends BaseAction {
 	 */
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/editAjax/{id}")
-	public String permissionEdit(@PathVariable("id") Long id, ModelMap model) {
+	public String permissionEdit(@PathVariable("id") Long id,
+			@ModelAttribute Dwz dwz, ModelMap model) {
 		Permission permission = permissionService.queryOne(
 				new ServiceRequest(id)).getDataObj();
 		if (permission == null) {
@@ -148,6 +150,7 @@ public class PermissionAction extends BaseAction {
 		}
 		model.put("permission", permission);
 		model.put("operType", "edit");
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		return "admin/permission/objAjax";
 	}
 
@@ -157,7 +160,8 @@ public class PermissionAction extends BaseAction {
 	@PageType("JsonPage")
 	@RequestMapping(value = "/delJson/{id}")
 	public @ResponseBody
-	DwzJson permissionDel(@PathVariable("id") Long id, ModelMap model) {
+	DwzJson permissionDel(@PathVariable("id") Long id, @ModelAttribute Dwz dwz,
+			ModelMap model) {
 		DwzJson dwzJson;
 		if (id == null || id < 0) {
 			dwzJson = new DwzJson("300", this.getMessageSource().getMessage(
@@ -175,9 +179,7 @@ public class PermissionAction extends BaseAction {
 					this.getThisLocale()));
 		} else {
 			if (result.getDataObj() > 0) {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_permission");
+				dwzJson = new DwzJson(result, dwz);
 			} else {
 				dwzJson = new DwzJson("300", this.getMessageSource()
 						.getMessage("delete.error", result.getMsgArgs(),
@@ -195,7 +197,7 @@ public class PermissionAction extends BaseAction {
 	@RequestMapping(value = "/delJson")
 	public @ResponseBody
 	DwzJson permissionDelBatch(@ModelAttribute("query") PermissionQuery query,
-			ModelMap model) {
+			@ModelAttribute Dwz dwz, ModelMap model) {
 		DwzJson dwzJson;
 		// 将query.ids的条件合并到query.id_in中
 		if (query != null && StringUtils.isNotBlank(query.getIds())) {
@@ -223,9 +225,7 @@ public class PermissionAction extends BaseAction {
 					this.getThisLocale()));
 		} else {
 			if (result.getDataObj() > 0) {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_permission");
+				dwzJson = new DwzJson(result, dwz);
 			} else {
 				dwzJson = new DwzJson("300", this.getMessageSource()
 						.getMessage("delete.error", result.getMsgArgs(),

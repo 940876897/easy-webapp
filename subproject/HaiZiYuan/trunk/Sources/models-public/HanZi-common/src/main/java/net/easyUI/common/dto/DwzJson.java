@@ -1,8 +1,8 @@
 package net.easyUI.common.dto;
 
-import org.apache.commons.logging.Log;
-
 import net.easyUI.common.dto.enums.EnumDwzJsonStatusType;
+
+import org.apache.commons.logging.Log;
 
 /**
  * <pre>
@@ -39,7 +39,7 @@ public class DwzJson extends BaseDTO {
 	 */
 	private String navTabId = "";
 	/**
-	 * EnumDwzJsonStatusType .
+	 * EnumDwzJsonCallbackType
 	 * forward在当前面板中跳转到forwardUrl,closeCurrent关闭当前面板或者dialog
 	 */
 	private String callbackType = "";
@@ -74,6 +74,74 @@ public class DwzJson extends BaseDTO {
 		this.navTabId = navTabId;
 		this.callbackType = callbackType;
 		this.forwardUrl = forwardUrl;
+	}
+
+	/**
+	 * 通过Dwz参数，可设置navTabId，callbackType，forwardUrl这几个参数
+	 * 
+	 * @param query
+	 */
+	public DwzJson(Dwz dwz) {
+		super();
+		this.setDwz(dwz);
+	}
+
+	/**
+	 * 通过Dwz参数，可设置navTabId，callbackType，forwardUrl这几个参数
+	 * 
+	 * @param query
+	 */
+	public void setDwz(Dwz dwz) {
+		this.navTabId = dwz.getNavTabId();
+		this.callbackType = dwz.getCallbackType();
+		this.forwardUrl = dwz.getForwardUrl();
+	}
+
+	/**
+	 * 通用操作结果，设置到dwzJson对象中，自动分析成功失败，失败信息，结果数据
+	 * 
+	 * @param query
+	 */
+	public DwzJson(ServiceResult result) {
+		super();
+		this.setResult(result);
+	}
+
+	/**
+	 * 通用操作结果，设置到dwzJson对象中，自动分析成功失败，失败信息，结果数据 。
+	 * 通过Dwz参数，可设置navTabId，callbackType，forwardUrl这几个参数
+	 * 
+	 * @param query
+	 */
+	public DwzJson(ServiceResult result, Dwz dwz) {
+		super();
+		this.setResult(result);
+		this.setDwz(dwz);
+	}
+
+	/**
+	 * 通用操作结果，设置到dwzJson对象中，自动分析成功失败，失败信息，结果数据
+	 * 
+	 * @param result
+	 */
+	public void setResult(ServiceResult result) {
+		if (result.getErrorNO() != null) {
+			this.setStatusCode(EnumDwzJsonStatusType.ERROR.getCode());
+			this.setMessage(result.getErrorInfo());
+		} else {
+			this.setStatusCode(EnumDwzJsonStatusType.OK.getCode());
+			this.setDataObj(result.getDataObj());
+		}
+	}
+
+	/**
+	 * 通用操作结果，设置到dwzJson对象中，自动分析成功失败，失败信息，结果数据，以及操作成功后UI端处理方式
+	 * 
+	 * @param result
+	 */
+	public void setResult(ServiceResult result, Dwz dwz) {
+		this.setResult(result);
+		this.setDwz(dwz);
 	}
 
 	/**

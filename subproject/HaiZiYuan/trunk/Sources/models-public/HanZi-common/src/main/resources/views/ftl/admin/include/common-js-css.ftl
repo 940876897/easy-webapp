@@ -46,7 +46,41 @@
 			<script type="text/javascript" src="${imageServer!""}/statics/jsLibs/dwz/chart/g.dot.js"></script>
 
 	        <!-- DWZ -->
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.core.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.util.date.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.validate.method.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.barDrag.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.drag.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.tree.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.accordion.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.ui.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.theme.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.switchEnv.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.alertMsg.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.contextmenu.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.navTab.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.tab.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.resize.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.dialog.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.dialogDrag.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.sortDrag.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.cssTable.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.stable.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.taskBar.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.ajax.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.pagination.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.database.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.datepicker.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.effects.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.panel.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.checkbox.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.history.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.combox.js" type="text/javascript"></script>
+			<script src="${imageServer!""}/statics/jsLibs/dwz/js/dwz.print.js" type="text/javascript"></script>
+			
+			<!-- 可以用dwz.min.js替换前面全部dwz.*.js (注意：替换是下面dwz.regional.zh.js还需要引入)
 	        <script src="${imageServer!""}/statics/jsLibs/dwz/dwz.min.js"></script>
+			-->
 	        <script src="${imageServer!""}/statics/jsLibs/dwz/dwz.regional.zh.js"></script>
 		
         <!-- 基础JS -->

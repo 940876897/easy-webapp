@@ -7,8 +7,8 @@
 <div class="pageContent">
     <form method="post" 
 <#if (operType!"")=="edit"|| (operType!"")=="add">
-        action="${appServer!""}/admin/user/save/json.json" 
-        onsubmit="return validateCallback(this, navTabAjaxDone);"
+        action="${appServer!""}/admin/user/save/json.json?navTabId=${dwz.navTabId}&dwzId=${dwz.dwzId!""}" 
+        onsubmit="return validateCallback(this, ${dwz.targetType}AjaxDone);"
 <#else>
         action="" onsubmit="return false;"
 </#if>
@@ -102,8 +102,8 @@
             <dl class="nowrap"> 
                 <dt><@s.message "Role" />列表：
                 <#if (operType!"")=="edit">  
-                    <a href='${appServer!""}/admin/user/userRoleAddAjax/${(user.id)!""}.htm?dwzId=${dwzId!""}&targetType=dialog' 
-                    	target="dialog"  class="btnAdd"  rel="dwz_tab_userRole_add_${user.id!""}" style="float:right;"
+                    <a href='${appServer!""}/admin/user/userRoleAddAjax/${(user.id)!""}.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_addRole&targetType=dialog' 
+                    	target="dialog"  class="btnAdd"  rel="${dwzId!""}_addRole" style="float:right;"
                         title="<@s.message "function.add" />[${user.loginName!""}]<@s.message "Role" />">
                         <@s.message "function.add" />
                     </a>
@@ -131,9 +131,9 @@
                                             ${rs.roleName!""}
                                         </td>
                                         <td >
-                                        <#if (operType!"")=="edit">  
-                                        <#assign tmpUrl=appServer!""+"/admin/user/userRoleDelJson/"+user.id!""+"/"+rs.roleKey!""+".htm?dwzId="+dwzId!"" />
-                                             <a href="${tmpUrl!""}" target="ajaxTodo" title="你确定要<@s.message "function.del" />这个<@s.message "Role" />[${rs.roleName!""}吗?" class="btnDel"><@s.message "function.del" /></a>
+                                        <#if (operType!"")=="edit"> 
+                                        <#assign tmpUrl=(appServer!"")+("/admin/user/userRoleDelJson/")+(user.id!"")+"/"+(rs.roleKey!"")+(".json?navTabId=")+(dwz.dwzId!"")+"&callbackType=forward"/>
+                                             <a href="${tmpUrl!""}" target="ajaxTodo" title="你确定要<@s.message "function.del" />这个<@s.message "Role" />[${rs.roleName!""}]吗?" class="btnDel"><@s.message "function.del" /></a>
                                         </#if>
                                         </td>
                                     </tr>
@@ -151,9 +151,8 @@
             <ul>
 	            <#if (operType!"")=="edit"|| (operType!"")=="add">
                 <li><div class="buttonActive"><div class="buttonContent"><button type="submit"><@s.message "function.save" /></button></div></div></li>
-				<#else>
-                <li><div class="button"><div class="buttonContent"><button type="button" class="close"><@s.message "function.close" /></button></div></div></li>
 				</#if>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close"><@s.message "function.close" /></button></div></div></li>
             </ul>
         </div>
     </form>

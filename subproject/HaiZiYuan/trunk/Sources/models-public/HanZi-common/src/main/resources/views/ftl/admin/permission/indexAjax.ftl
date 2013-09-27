@@ -48,13 +48,13 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a class="add" href="${appServer!""}/admin/permission/addAjax.htm" target="navTab" title="新增权限" rel="dwz_tab_permission_add"><span>新增</span></a></li>
-            <li><a href="${appServer!""}/admin/permission/editAjax/{id}.htm" target="navTab" class="edit" title="修改权限" rel="dwz_tab_permission_edit" ><span>修改</span></a></li>
+            <li><a class="add" href="${appServer!""}/admin/permission/addAjax.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_add" target="navTab" title="新增权限" rel="${dwz.dwzId!""}_add"><span>新增</span></a></li>
+            <li><a href="${appServer!""}/admin/permission/editAjax/{id}.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_edit" target="navTab" class="edit" title="修改权限" rel="${dwz.dwzId!""}_edit" ><span>修改</span></a></li>
             <li class="line">line</li>
 <!--
-            <li><a href="${appServer!""}/admin/permission/delJson.htm" target="selectedTodo" class="delete" title="确实要批量删除这些权限吗?"><span>批量删除</span></a></li>
+            <li><a href="${appServer!""}/admin/permission/delJson.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="selectedTodo" class="delete" title="确实要批量删除这些权限吗?"><span>批量删除</span></a></li>
 -->
-            <li><a href="${appServer!""}/admin/permission/delJson/{id}.json" target="ajaxTodo" class="delete" title="你确定要删除选择这条权限吗?"><span>删除</span></a></li>
+            <li><a href="${appServer!""}/admin/permission/delJson/{id}.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="ajaxTodo" class="delete" title="你确定要删除选择这条权限吗?"><span>删除</span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="138" nowrapTD="false">
@@ -86,8 +86,8 @@
                 </td>
         
 	            <td >
-	            	<a href="${appServer!""}/admin/permission/delJson/${rs.id?url}.json" target="ajaxTodo" title="你确定要删除这个权限[${rs.id!""}]吗?" class="btnDel" >删除</a>
-	                <a href="${appServer!""}/admin/permission/editAjax/${rs.id?url}.htm" target="navTab" title="修改权限[${rs.id!""}]" class="btnEdit"  rel="dwz_tab_permission_edit_${rs.id!""}" >修改</a>
+	                <a href="${appServer!""}/admin/permission/editAjax/${rs.id?url}.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_edit_${rs.id!""}" target="navTab" title="修改权限[${rs.id!""}]" class="btnEdit"  rel="${dwz.dwzId!""}_edit_${rs.id!""}" >修改</a>
+	            	<a href="${appServer!""}/admin/permission/delJson/${rs.id?url}.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="ajaxTodo" title="你确定要删除这个权限[${rs.id!""}]吗?" class="btnDel" >删除</a>
                <!--如果有1对多,可加上查看多方列表按钮
                     <a href="${appServer!""}/admin/permissionMeta/indexAjax.htm?permissionId=${rs.id?url}" target="navTab" 
                         rel="dwz_tab_permissionMeta" title="查看扩展属性[${rs.id!""}]" class="btnInfo">

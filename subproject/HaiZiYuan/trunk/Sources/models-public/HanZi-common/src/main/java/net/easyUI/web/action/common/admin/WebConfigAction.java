@@ -16,6 +16,12 @@ import java.util.Map;
 
 import net.easyUI.Utils.WebCacheUtils;
 import net.easyUI.access.PageType;
+import net.easyUI.common.dto.Dwz;
+import net.easyUI.common.dto.DwzJson;
+import net.easyUI.common.dto.ServiceRequest;
+import net.easyUI.common.dto.ServiceResult;
+import net.easyUI.common.dto.enums.EnumPageType;
+import net.easyUI.common.web.action.BaseAction;
 import net.easyUI.domain.common.WebConfig;
 import net.easyUI.domain.query.WebConfigQuery;
 import net.easyUI.dto.common.UserAgent;
@@ -26,11 +32,6 @@ import net.easyUI.dto.common.enums.EnumWebCfgPermission;
 import net.easyUI.dto.common.enums.EnumWebCfgStatus;
 import net.easyUI.dto.common.query.DwzPage;
 import net.easyUI.service.common.WebConfigService;
-import net.easyUI.common.dto.DwzJson;
-import net.easyUI.common.dto.ServiceRequest;
-import net.easyUI.common.dto.ServiceResult;
-import net.easyUI.common.dto.enums.EnumPageType;
-import net.easyUI.common.web.action.BaseAction;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -88,6 +89,7 @@ public class WebConfigAction extends BaseAction {
 	public Collection lookupWebCfgs(
 			@RequestParam(value = "cfgGroup", required = true) String cfgGroup,
 			@RequestParam(value = "outCfg", required = false) String outCfg,
+			@ModelAttribute Dwz dwz,
 			UserAgent userAgent, ModelMap model) {
 		Collection<WebConfig> webConfigs = WebCacheUtils
 				.webConfigByGroup(cfgGroup);
@@ -128,16 +130,16 @@ public class WebConfigAction extends BaseAction {
 	public String webConfigIndexAjax(
 			@ModelAttribute("query") WebConfigQuery query,
 			@RequestParam(value = "vmPre", required = false, defaultValue = "") String vmPre,
-			@RequestParam(value = "dwzId", required = false, defaultValue = "") String dwzId,
+			@ModelAttribute Dwz dwz,
 			UserAgent userAgent, ModelMap model) {
 		ServiceResult<DwzPage<WebConfig>> result = webConfigService
 				.pageQuery(new ServiceRequest(query));
 		model.addAttribute("page", result.getDataObj());
 		model.addAttribute("srs", result);
 		model.addAttribute("query", query);
-		model.addAttribute("dwzId", dwzId);
 		model.addAttribute("cfgGroup", query.getCfgGroup());
 		putEnums(model);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		// 返回页面的VM前缀
 		if (vmPre == null)
 			vmPre = "";
@@ -153,13 +155,13 @@ public class WebConfigAction extends BaseAction {
 //			@RequestParam(value = "cfgGroup", required = false) String cfgGroup,
 			@ModelAttribute("webConfig") WebConfig webConfig,
 			@RequestParam(value = "vmPre", required = false, defaultValue = "") String vmPre,
-			@RequestParam(value = "dwzId", required = false) String dwzId,
+			@ModelAttribute Dwz dwz,
 			UserAgent userAgent, ModelMap model) {
 		webConfig.setId(null);
 		model.put("webConfig", webConfig);
 		model.put("operType", "add");
 		model.put("cfgGroup", webConfig.getCfgGroup());
-		model.put("dwzId", dwzId);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		putEnums(model);
 		// 返回页面的VM前缀
 		if (vmPre == null)
@@ -176,13 +178,12 @@ public class WebConfigAction extends BaseAction {
 	DwzJson webConfigSave(
 			@ModelAttribute("webConfig") WebConfig webConfig,
 			@RequestParam(value = "vmPre", required = false, defaultValue = "") String vmPre,
-			@RequestParam(value = "dwzId", required = false) String dwzId,
+			@ModelAttribute Dwz dwz,
 			UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
 		if (webConfig == null) {
 			dwzJson = new DwzJson("300", this.messageSource.getMessage(
 					"operation.failed", null, this.getThisLocale()));
-			dwzJson.setNavTabId(dwzId);
 			return dwzJson;
 		}
 		if (webConfig.getId() != null && webConfig.getId() >= 0) {
@@ -195,9 +196,7 @@ public class WebConfigAction extends BaseAction {
 						result.getErrorInfo(), result.getMsgArgs(),
 						this.getThisLocale()));
 			} else {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), dwzId, "closeCurrent");
+				dwzJson = new DwzJson(result, dwz);
 			}
 		} else {
 			// 保存新增
@@ -209,13 +208,10 @@ public class WebConfigAction extends BaseAction {
 						result.getErrorInfo(), result.getMsgArgs(),
 						this.getThisLocale()));
 			} else {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), dwzId, "closeCurrent");
+				dwzJson = new DwzJson(result, dwz);
 			}
 
 		}
-		dwzJson.setNavTabId(dwzId);
 		return dwzJson;
 	}
 
@@ -227,6 +223,7 @@ public class WebConfigAction extends BaseAction {
 	public String webConfigView(
 			@PathVariable("id") Long id,
 			@RequestParam(value = "vmPre", required = false, defaultValue = "") String vmPre,
+			@ModelAttribute Dwz dwz,
 			UserAgent userAgent, ModelMap model) {
 		WebConfig webConfig = webConfigService.queryOne(new ServiceRequest(id))
 				.getDataObj();
@@ -240,6 +237,7 @@ public class WebConfigAction extends BaseAction {
 		model.put("webConfig", webConfig);
 		model.put("operType", "view");
 		putEnums(model);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		// 返回页面的VM前缀
 		if (vmPre == null)
 			vmPre = "";
@@ -253,7 +251,7 @@ public class WebConfigAction extends BaseAction {
 	@RequestMapping(value = "/editAjax/{id}")
 	public String webConfigEdit(
 			@PathVariable("id") Long id,
-			@RequestParam(value = "dwzId", required = false) String dwzId,
+			@ModelAttribute Dwz dwz,
 			@RequestParam(value = "vmPre", required = false, defaultValue = "") String vmPre,
 			UserAgent userAgent, ModelMap model) {
 		WebConfig webConfig = webConfigService.queryOne(new ServiceRequest(id))
@@ -268,7 +266,7 @@ public class WebConfigAction extends BaseAction {
 		model.put("webConfig", webConfig);
 		model.put("cfgGroup", webConfig.getCfgGroup());
 		model.put("operType", "edit");
-		model.put("dwzId", dwzId);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		putEnums(model);
 		// 返回页面的VM前缀
 		if (vmPre == null)
@@ -286,7 +284,7 @@ public class WebConfigAction extends BaseAction {
 			@PathVariable("id") Long id,
 			UserAgent userAgent,
 			@RequestParam(value = "vmPre", required = false, defaultValue = "") String vmPre,
-			@RequestParam(value = "dwzId", required = false) String dwzId,
+			@ModelAttribute Dwz dwz,
 			ModelMap model) {
 		DwzJson dwzJson;
 		if (id == null || id < 0) {
@@ -306,9 +304,7 @@ public class WebConfigAction extends BaseAction {
 					this.getThisLocale()));
 		} else {
 			if (result.getDataObj() > 0) {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()),dwzId);
+				dwzJson = new DwzJson(result, dwz);
 			} else {
 				dwzJson = new DwzJson("300", this.getMessageSource()
 						.getMessage("delete.error", result.getMsgArgs(),
@@ -328,7 +324,7 @@ public class WebConfigAction extends BaseAction {
 	DwzJson webConfigDelBatch(
 			@ModelAttribute("query") WebConfigQuery query,
 			@RequestParam(value = "vmPre", required = false, defaultValue = "") String vmPre,
-			@RequestParam(value = "dwzId", required = false) String dwzId,
+			@ModelAttribute Dwz dwz,
 			UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
 		// TODO 增加插件点(根据vmPre),使得个性化的功能能在这里进行.
@@ -358,9 +354,7 @@ public class WebConfigAction extends BaseAction {
 					this.getThisLocale()));
 		} else {
 			if (result.getDataObj() > 0) {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), dwzId);
+				dwzJson = new DwzJson(result, dwz);
 			} else {
 				dwzJson = new DwzJson("300", this.getMessageSource()
 						.getMessage("delete.error", result.getMsgArgs(),

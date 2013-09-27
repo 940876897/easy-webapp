@@ -10,10 +10,10 @@ package net.easyUI.web.action.common.admin;
 import java.util.List;
 
 import net.easyUI.access.PageType;
+import net.easyUI.common.dto.Dwz;
 import net.easyUI.common.dto.DwzJson;
 import net.easyUI.common.dto.ServiceRequest;
 import net.easyUI.common.dto.ServiceResult;
-import net.easyUI.common.dto.enums.EnumDwzJsonCallbackType;
 import net.easyUI.common.dto.enums.EnumPageType;
 import net.easyUI.common.web.action.BaseAction;
 import net.easyUI.domain.common.Role;
@@ -51,22 +51,23 @@ public class UserAction extends BaseAction {
 	private UserService userService;
 	@Autowired
 	private WebConfigService webConfigService;
-	
+
 	private void putEnums(ModelMap model) {
 		if (model == null)
 			return;
 		model.put("EnumEnableStatusList", EnumEnableStatus.values());
 		model.put("EnumEnableStatusMap", EnumEnableStatus.toStrMap());
 	}
+
 	/**
-	 * 删除一个权限.
+	 * 删除一个角色.
 	 */
 	@Transactional
 	@PageType("JsonPage")
 	@RequestMapping(value = "/userRoleDelJson/{userId}/{roleKey}", method = RequestMethod.POST)
 	@ResponseBody
 	public DwzJson userRoleDelJson(@PathVariable("userId") Long userId,
-			@PathVariable("roleKey") String roleKey,
+			@ModelAttribute Dwz dwz, @PathVariable("roleKey") String roleKey,
 			@RequestParam(required = false, defaultValue = "") String dwzId,
 			UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
@@ -97,13 +98,17 @@ public class UserAction extends BaseAction {
 		WebConfig webConfig = new WebConfig();
 		webConfig.setCacheType(EnumWebCfgCacheType.NONE.getCode());
 		webConfig.setCfgGroup(EnumWebCfgGroup.USERMETA.getCode());
-		webConfig.setCfgValue(RoleKeys);
+		webConfig.setCfgValue(StringUtils.isBlank(RoleKeys) ? "guest"
+				: RoleKeys);
 		ServiceRequest serviceRequest = new ServiceRequest(webConfig, user);
 		serviceRequest.getRequestMap().put("query", webConfigQuery);
-		webConfigService.updateByQuery(serviceRequest);
+		ServiceResult<Integer> result = webConfigService
+				.updateByQuery(serviceRequest);
 
-		dwzJson = new DwzJson("200", this.messageSource.getMessage(
-				"operation.success", null, this.getThisLocale()), dwzId);
+		// dwzJson = new DwzJson("200", this.messageSource.getMessage(
+		// "operation.success", null, this.getThisLocale()), dwzId,
+		// EnumDwzJsonCallbackType.FORWARD.getCode());
+		dwzJson = new DwzJson(result, dwz);
 		return dwzJson;
 	}
 
@@ -114,8 +119,7 @@ public class UserAction extends BaseAction {
 	@RequestMapping(value = "/userMetaDelJson/{metaId}")
 	@ResponseBody
 	public DwzJson userMetaDelJson(@PathVariable("metaId") Long metaId,
-			@RequestParam(required = false, defaultValue = "") String dwzId,
-			UserAgent userAgent, ModelMap model) {
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
 		if (metaId == null || metaId < 0) {
 			dwzJson = new DwzJson("300", this.getMessageSource().getMessage(
@@ -133,9 +137,11 @@ public class UserAction extends BaseAction {
 					this.getThisLocale()));
 		} else {
 			if (result.getDataObj() > 0) {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), dwzId);
+				// dwzJson = new DwzJson("200", this.messageSource.getMessage(
+				// "operation.success", result.getMsgArgs(),
+				// this.getThisLocale()), dwzId,
+				// EnumDwzJsonCallbackType.FORWARD.getCode());
+				dwzJson = new DwzJson(result, dwz);
 			} else {
 				dwzJson = new DwzJson("300", this.getMessageSource()
 						.getMessage("delete.error", result.getMsgArgs(),
@@ -151,11 +157,8 @@ public class UserAction extends BaseAction {
 	 */
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/userRoleAddAjax/{id}")
-	public String userRoleAddAjax(
-			@PathVariable("id") Long id,
-			@RequestParam(required = false, defaultValue = "") String dwzId,
-			@RequestParam(required = false, defaultValue = "") String targetType,
-			UserAgent userAgent, ModelMap model) {
+	public String userRoleAddAjax(@PathVariable("id") Long id,
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
 		User user = userService.queryOne(new ServiceRequest(id, userAgent))
 				.getDataObj();
@@ -179,8 +182,7 @@ public class UserAction extends BaseAction {
 			List<Role> rList = result.getDataObj();
 			model.put("roles", rList);
 			model.put("user", user);
-			model.put("dwzId", dwzId);
-			model.put("targetType", targetType);
+			model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		}
 		putEnums(model);
 		return "admin/user/userRoleAddAjax";
@@ -194,9 +196,7 @@ public class UserAction extends BaseAction {
 	@ResponseBody
 	public DwzJson userRoleAddJson(@PathVariable("userId") Long userId,
 			@RequestParam("roleKey_in") List<String> roleKey_in,
-			@RequestParam("targetType") String targetType,
-			@RequestParam(required = false, defaultValue = "") String dwzId,
-			UserAgent userAgent, ModelMap model) {
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
 		User user = userService.queryOne(new ServiceRequest(userId))
 				.getDataObj();
@@ -244,9 +244,7 @@ public class UserAction extends BaseAction {
 			webConfigService.updateByQuery(serviceRequest);
 		}
 
-		dwzJson = new DwzJson("200", this.messageSource.getMessage(
-				"operation.success", null, this.getThisLocale()), dwzId,
-				EnumDwzJsonCallbackType.CLOSECURRENT.getCode());
+		dwzJson = new DwzJson(dwz);
 		return dwzJson;
 	}
 
@@ -256,16 +254,15 @@ public class UserAction extends BaseAction {
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/indexAjax")
 	public String userIndexAjax(@ModelAttribute("query") UserQuery query,
-			UserAgent userAgent,
-			@RequestParam(required = false, defaultValue = "") String dwzId,
-			ModelMap model) {
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		ServiceResult<DwzPage<User>> result = userService
 				.pageQuery(new ServiceRequest(query, userAgent));
 		model.addAttribute("page", result.getDataObj());
 		model.addAttribute("srs", result);
 		model.addAttribute("query", query);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		putEnums(model);
-		if ("lookup".equals(dwzId))
+		if (dwz != null && "lookup".equals(dwz.getDwzId()))
 			return "/admin/user/lookupAjax";
 		return "admin/user/indexAjax";
 	}
@@ -275,11 +272,11 @@ public class UserAction extends BaseAction {
 	 */
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/addAjax")
-	public String userAddAjax(ModelMap model) {
+	public String userAddAjax(@ModelAttribute Dwz dwz, ModelMap model) {
 		User user = new User();
 		model.put("user", user);
 		model.put("operType", "add");
-		model.put("EnableStatusEnumList", EnumEnableStatus.values());
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		putEnums(model);
 		return "admin/user/objAjax";
 	}
@@ -290,8 +287,8 @@ public class UserAction extends BaseAction {
 	@PageType("JsonPage")
 	@RequestMapping(value = "/save/json", method = RequestMethod.POST)
 	public @ResponseBody
-	DwzJson userSave(@ModelAttribute("user") User user, UserAgent userAgent,
-			ModelMap model) {
+	DwzJson userSave(@ModelAttribute("user") User user,
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
 		if (user == null) {
 			dwzJson = new DwzJson("300", this.messageSource.getMessage(
@@ -308,9 +305,7 @@ public class UserAction extends BaseAction {
 						result.getErrorInfo(), result.getMsgArgs(),
 						this.getThisLocale()));
 			} else {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_user", "closeCurrent");
+				dwzJson = new DwzJson(dwz);
 			}
 		} else {
 			// 保存新增
@@ -320,9 +315,7 @@ public class UserAction extends BaseAction {
 						result.getErrorInfo(), result.getMsgArgs(),
 						this.getThisLocale()));
 			} else {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_user", "closeCurrent");
+				dwzJson = new DwzJson(result, dwz);
 			}
 
 		}
@@ -335,8 +328,7 @@ public class UserAction extends BaseAction {
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/viewAjax/{id}")
 	public String userView(@PathVariable("id") Long id,
-			@RequestParam(required = false, defaultValue = "") String dwzId,
-			UserAgent userAgent, ModelMap model) {
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		User user = userService.queryOne(new ServiceRequest(id, userAgent))
 				.getDataObj();
 		if (user == null) {
@@ -348,8 +340,8 @@ public class UserAction extends BaseAction {
 		}
 		model.put("user", user);
 		model.put("operType", "view");
-		model.put("EnableStatusEnumList", EnumEnableStatus.values());
 		putEnums(model);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		return "admin/user/objAjax";
 	}
 
@@ -359,8 +351,7 @@ public class UserAction extends BaseAction {
 	@PageType("AjaxPage")
 	@RequestMapping(value = "/editAjax/{id}")
 	public String userEdit(@PathVariable("id") Long id,
-			@RequestParam(required = false, defaultValue = "") String dwzId,
-			UserAgent userAgent, ModelMap model) {
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		User user = userService.queryOne(new ServiceRequest(id, userAgent))
 				.getDataObj();
 		if (user == null) {
@@ -370,11 +361,10 @@ public class UserAction extends BaseAction {
 			model.put("msgJson", dwzJson);
 			return "errorPage/msg" + EnumPageType.AJAXPAGE.getCode();
 		}
-		model.put("dwzId", dwzId);
 		model.put("user", user);
 		model.put("operType", "edit");
-		model.put("EnableStatusEnumList", EnumEnableStatus.values());
 		putEnums(model);
+		model.addAttribute("dwz", dwz == null ? new Dwz() : dwz);
 		return "admin/user/objAjax";
 	}
 
@@ -385,7 +375,7 @@ public class UserAction extends BaseAction {
 	@RequestMapping(value = "/delJson/{id}")
 	public @ResponseBody
 	DwzJson userDel(@PathVariable("id") Long id, UserAgent userAgent,
-			ModelMap model) {
+			@ModelAttribute Dwz dwz, ModelMap model) {
 		DwzJson dwzJson;
 		if (id == null || id < 0) {
 			dwzJson = new DwzJson("300", this.getMessageSource().getMessage(
@@ -403,9 +393,7 @@ public class UserAction extends BaseAction {
 					this.getThisLocale()));
 		} else {
 			if (result.getDataObj() > 0) {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_user");
+				dwzJson = new DwzJson(result, dwz);
 			} else {
 				dwzJson = new DwzJson("300", this.getMessageSource()
 						.getMessage("delete.error", result.getMsgArgs(),
@@ -423,7 +411,7 @@ public class UserAction extends BaseAction {
 	@RequestMapping(value = "/delJson", method = RequestMethod.POST)
 	public @ResponseBody
 	DwzJson userDelBatch(@ModelAttribute("query") UserQuery query,
-			UserAgent userAgent, ModelMap model) {
+			@ModelAttribute Dwz dwz, UserAgent userAgent, ModelMap model) {
 		DwzJson dwzJson;
 		// 将query.ids的条件合并到query.id_in中
 		if (query != null && StringUtils.isNotBlank(query.getIds())) {
@@ -451,9 +439,7 @@ public class UserAction extends BaseAction {
 					this.getThisLocale()));
 		} else {
 			if (result.getDataObj() > 0) {
-				dwzJson = new DwzJson("200", this.messageSource.getMessage(
-						"operation.success", result.getMsgArgs(),
-						this.getThisLocale()), "dwz_tab_user");
+				dwzJson = new DwzJson(result, dwz);
 			} else {
 				dwzJson = new DwzJson("300", this.getMessageSource()
 						.getMessage("delete.error", result.getMsgArgs(),

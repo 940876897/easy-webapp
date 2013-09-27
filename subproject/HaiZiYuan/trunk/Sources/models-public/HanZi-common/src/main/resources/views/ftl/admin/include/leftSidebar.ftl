@@ -18,7 +18,6 @@
                          			<li><a href="${appServer!""}/admin/webConfig/indexAjax.htm?dwzId=dwz_tab_webConfig_VM&vmPre=VM&cfgGroup=dbVMs" target="navTab" rel="dwz_tab_webConfig_VM">VM模板管理</a></li>
                          			<li><a href="${appServer!""}/admin/webConfig/indexAjax.htm?dwzId=dwz_tab_webConfig_i18n&vmPre=i18n&cfgGroup=i18n" target="navTab" rel="dwz_tab_webConfig_i18n">i18n管理</a></li>
                          			<li><a href="${appServer!""}/admin/webConfig/indexAjax.htm?dwzId=dwz_tab_webConfig" target="navTab" rel="dwz_tab_webConfig">字典设置</a></li>
-                         			<li><a href="${appServer!""}/cacheManager/indexAjax.htm?dwzId=dwz_tab_cacheManager" target="navTab" rel="dwz_tab_cacheManager">缓存管理</a></li>
 	                         	</ul>
 	                         </li>
 	                        </ul>

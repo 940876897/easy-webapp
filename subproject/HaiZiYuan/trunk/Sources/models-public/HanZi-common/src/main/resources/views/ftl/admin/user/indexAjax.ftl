@@ -18,7 +18,7 @@
 
 
 <div class="pageHeader">
-    <form onsubmit="return navTabSearch(this,'${dwzId!""}');" action="${appServer!""}/admin/user/indexAjax.htm" method="post">
+    <form onsubmit="return navTabSearch(this,'${dwz.dwzId!""}');" action="${appServer!""}/admin/user/indexAjax.htm" method="post">
 		<#include "/admin/include/dwzFormBaseQuery.ftl">
     <!--【可选】其它查询条件，业务有关，有什么查询条件就加什么参数-->
     
@@ -63,13 +63,13 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a href="${appServer!""}/admin/user/addAjax.htm" target="navTab" class="add" title="<@s.message "function.add" /><@s.message "User" />" rel="${dwzId!""}_add"><span><@s.message "function.add" /></span></a></li>
-            <li><a href="${appServer!""}/admin/user/editAjax/{id}.htm" target="navTab" class="edit" title="<@s.message "function.edit" /><@s.message "User" />" rel="${dwzId!""}_edit" ><span><@s.message "function.edit" /></a></li>
+            <li><a href="${appServer!""}/admin/user/addAjax.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_add" target="navTab" class="add" title="<@s.message "function.add" /><@s.message "User" />" rel="${dwz.dwzId!""}_add"><span><@s.message "function.add" /></span></a></li>
+            <li><a href="${appServer!""}/admin/user/editAjax/{id}.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_edit" target="navTab" class="edit" title="<@s.message "function.edit" /><@s.message "User" />" rel="${dwz.dwzId!""}_edit" ><span><@s.message "function.edit" /></a></li>
             <li class="line">line</li>
 <!--
-            <li><a href="${appServer!""}/admin/user/delJson.json" target="selectedTodo" class="delete" title="确实要<@s.message "function.delBatch" />这些<@s.message "User" />吗?"><span><@s.message "function.delBatch" /></span></a></li>
+            <li><a href="${appServer!""}/admin/user/delJson.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="selectedTodo" class="delete" title="确实要<@s.message "function.delBatch" />这些<@s.message "User" />吗?"><span><@s.message "function.delBatch" /></span></a></li>
 -->
-            <li><a href="${appServer!""}/admin/user/delJson/{id}.json" target="ajaxTodo" class="delete" title="你确定要<@s.message "function.del" />选择这条<@s.message "User" />吗?"><span><@s.message "function.del" /></span></a></li>
+            <li><a href="${appServer!""}/admin/user/delJson/{id}.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="ajaxTodo" class="delete" title="你确定要<@s.message "function.del" />选择这条<@s.message "User" />吗?"><span><@s.message "function.del" /></span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="138" nowrapTD="false">
@@ -122,9 +122,9 @@
                 </td>
         
 	            <td >
-                    <a href='${appServer!""}/admin/user/viewAjax/${rs.id}.htm?dwzId=${dwzId!""}_view_${rs.id!""}' target="navTab" title="<@s.message "function.view" /><@s.message "User" />[${rs.id!""}]" class="btnInfo"  rel="${dwzId!""}_view_${rs.id!""}" ><@s.message "function.view" /></a>
-                    <a href='${appServer!""}/admin/user/editAjax/${rs.id}.htm?dwzId=${dwzId!""}_edit_${rs.id!""}' target="navTab" title="<@s.message "function.edit" /><@s.message "User" />[${rs.id!""}]" class="btnEdit"  rel="${dwzId!""}_edit_${rs.id!""}" ><@s.message "function.edit" /></a>
-                    <a href='${appServer!""}/admin/user/delJson/${rs.id}.json' target="ajaxTodo" title="你确定要<@s.message "function.del" />这个<@s.message "User" />[${rs.id!""}]吗?" class="btnDel"><@s.message "function.del" /></a>
+                    <a href='${appServer!""}/admin/user/viewAjax/${rs.id}.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_view_${rs.id!""}' target="navTab" title="<@s.message "function.view" /><@s.message "User" />[${rs.id!""}]" class="btnInfo"  rel="${dwz.dwzId!""}_view_${rs.id!""}" ><@s.message "function.view" /></a>
+                    <a href='${appServer!""}/admin/user/editAjax/${rs.id}.htm?navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_edit_${rs.id!""}' target="navTab" title="<@s.message "function.edit" /><@s.message "User" />[${rs.id!""}]" class="btnEdit"  rel="${dwz.dwzId!""}_edit_${rs.id!""}" ><@s.message "function.edit" /></a>
+                    <a href='${appServer!""}/admin/user/delJson/${rs.id}.json?navTabId=${dwz.dwzId!""}&callbackType=forward' target="ajaxTodo" title="你确定要<@s.message "function.del" />这个<@s.message "User" />[${rs.id!""}]吗?" class="btnDel"><@s.message "function.del" /></a>
                 </td>
 	        </tr>
 	       	</#list>

@@ -114,6 +114,7 @@
         UPDATE user SET
             login_name = #{loginName} ,
             password = #{password} ,
+            nicename = #{nicename} ,
             email = #{email} ,
             website = #{website} ,
             status = #{status} 
@@ -135,6 +136,12 @@
         <set>
             <if test="@Ognl@isNotEmpty(entity.loginName)">
                 login_name = #{entity.loginName},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.nicename)">
+                nicename = #{entity.nicename},
+            </if>
+            <if test="@Ognl@isNotEmpty(entity.displayName)">
+                display_name = #{entity.displayName},
             </if>
             <if test="@Ognl@isNotEmpty(entity.password)">
                 password = #{entity.password},

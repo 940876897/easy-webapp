@@ -7,8 +7,8 @@
 <div class="pageContent">
     <form method="post"  
 <#if (operType!"")=="edit"|| (operType!"")=="add">
-        action="${appServer!""}/admin/permission/save/json.json" 
-        onsubmit="return validateCallback(this, navTabAjaxDone);"
+        action="${appServer!""}/admin/permission/save/json.json?navTabId=${dwz.navTabId}&dwzId=${dwz.dwzId!""}" 
+        onsubmit="return validateCallback(this, ${dwz.targetType}AjaxDone);"
 <#else>
         action="" onsubmit="return false;"
 </#if>

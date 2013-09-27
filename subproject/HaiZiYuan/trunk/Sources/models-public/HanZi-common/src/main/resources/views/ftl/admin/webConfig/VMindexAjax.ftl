@@ -2,7 +2,7 @@
 <#import "/admin/imports/macro.ftl" as m>
 <#import "/spring.ftl" as s />
 
-<form id="pagerForm" action="${appServer!""}/admin/webConfig/indexAjax.htm?dwzId=${(dwzId!"")?url}&vmPre=VM&cfgGroup=dbVMs" method="post">
+<form id="pagerForm" action="${appServer!""}/admin/webConfig/indexAjax.htm?vmPre=VM&cfgGroup=dbVMs" method="post">
 		<#include "/admin/include/dwzFormBaseQuery.ftl">
     <!--【可选】其它查询条件，业务有关，有什么查询条件就加什么参数-->
 	
@@ -14,7 +14,7 @@
 
 <div class="pageHeader">
     <form onsubmit="return navTabSearch(this,'${dwzId!"dwz_tab_webConfig"}');" 
-    		action="${appServer!""}/admin/webConfig/indexAjax.htm?dwzId=${(dwzId!"")?url}&vmPre=VM&cfgGroup=dbVMs" method="post">
+    		action="${appServer!""}/admin/webConfig/indexAjax.htm?vmPre=VM&cfgGroup=dbVMs" method="post">
 		<#include "/admin/include/dwzFormBaseQuery.ftl">
     
     <div class="searchBar">
@@ -42,13 +42,13 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a class="add" href="${appServer!""}/admin/webConfig/addAjax.htm?cfgGroup=${(cfgGroup!"")?url}&dwzId=${(dwzId!"")?url}&vmPre=VM" target="navTab" title="<@s.message "function.add" /><@s.message "vmTemplate" />" rel="${dwzId!""}_add"><span><@s.message "function.add" /></span></a></li>
-            <li><a href="${appServer!""}/admin/webConfig/editAjax/{id}.htm?cfgGroup=${(cfgGroup!"")?url}&dwzId=${(dwzId!"")?url}&vmPre=VM" target="navTab" class="edit" title="<@s.message "function.edit" /><@s.message "vmTemplate" />" rel="${dwzId!""}_edit" ><span><@s.message "function.edit" /></span></a></li>
+            <li><a class="add" href="${appServer!""}/admin/webConfig/addAjax.htm?cfgGroup=${(cfgGroup!"")?url}&navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_add&vmPre=VM" target="navTab" title="<@s.message "function.add" /><@s.message "vmTemplate" />" rel="${dwz.dwzId!""}_add"><span><@s.message "function.add" /></span></a></li>
+            <li><a href="${appServer!""}/admin/webConfig/editAjax/{id}.htm?cfgGroup=${(cfgGroup!"")?url}&navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}_edit&vmPre=VM" target="navTab" class="edit" title="<@s.message "function.edit" /><@s.message "vmTemplate" />" rel="${dwz.dwzId!""}_edit" ><span><@s.message "function.edit" /></span></a></li>
             <li class="line">line</li>
 <!--
-            <li><a href="${appServer!""}/admin/webConfig/delJson.htm?dwzId=${(dwzId!"")?url}" target="selectedTodo" class="delete" title="确实要<@s.message "function.delBatch" />这些<@s.message "vmTemplate" />吗?"><span><@s.message "function.delBatch" /></span></a></li>
+            <li><a href="${appServer!""}/admin/webConfig/delJson.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="selectedTodo" class="delete" title="确实要<@s.message "function.delBatch" />这些<@s.message "vmTemplate" />吗?"><span><@s.message "function.delBatch" /></span></a></li>
 -->
-            <li><a href="${appServer!""}/admin/webConfig/delJson/{id}.json?dwzId=${(dwzId!"")?url}" target="ajaxTodo" class="delete" title="你确定要<@s.message "function.del" />选择这条<@s.message "vmTemplate" />吗?"><span><@s.message "function.del" /></span></a></li>
+            <li><a href="${appServer!""}/admin/webConfig/delJson/{id}.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="ajaxTodo" class="delete" title="你确定要<@s.message "function.del" />选择这条<@s.message "vmTemplate" />吗?"><span><@s.message "function.del" /></span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="138" nowrapTD="false">
@@ -89,8 +89,8 @@
                 </td>
         
 	            <td >
-	            	<a href="${appServer!""}/admin/webConfig/delJson/${rs.id?url}.json?dwzId=${query.dwzId!""?url}" target="ajaxTodo" title="你确定要<@s.message "function.del" />这个<@s.message "vmTemplate" />[${rs.id!""}]吗?" class="btnDel" ><@s.message "function.del" /></a>
-	                <a href="${appServer!""}/admin/webConfig/editAjax/${rs.id?url}.htm?cfgGroup=${cfgGroup!""?url}&dwzId=${query.dwzId!""?url}&vmPre=VM" target="navTab" title="<@s.message "function.edit" /><@s.message "vmTemplate" />[${rs.id!""}]" class="btnEdit"  rel="${dwzId!""}_edit_${rs.id!""}" ><@s.message "function.edit" /></a>
+	                <a href="${appServer!""}/admin/webConfig/editAjax/${rs.id}.htm?cfgGroup=${cfgGroup!""?url}&navTabId=${dwz.dwzId!""}&dwzId=${dwz.dwzId!""}&vmPre=VM" target="navTab" title="<@s.message "function.edit" /><@s.message "vmTemplate" />[${rs.id!""}]" class="btnEdit"  rel="${dwzId!""}_edit_${rs.id!""}" ><@s.message "function.edit" /></a>
+	            	<a href="${appServer!""}/admin/webConfig/delJson/${rs.id}.json?navTabId=${dwz.dwzId!""}&callbackType=forward" target="ajaxTodo" title="你确定要<@s.message "function.del" />这个<@s.message "vmTemplate" />[${rs.id!""}]吗?" class="btnDel" ><@s.message "function.del" /></a>
                <!--如果有1对多,可加上查看多方列表按钮
                 -->
                 </td>

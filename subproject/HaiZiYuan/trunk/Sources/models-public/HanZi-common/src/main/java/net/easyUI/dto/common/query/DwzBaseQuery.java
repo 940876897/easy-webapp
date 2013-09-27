@@ -8,6 +8,27 @@ import net.easyUI.common.domain.query.BaseQuery;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * 前端UI使用DWZ的页面，使用这个BaseQuery，这里已经绑定好了对应的分页，排序支持。 其中泛型“T”对象是指要保存的对象，不是查询条件。
+ * <p>
+ * 查询条件 Map(key=>查询字段名searchField+"_"+searchOper , value==>searchString),
+ * 多条件时，采用的是and 方式组合。 <br>
+ * 过滤类型searchOper如下：
+ * 
+ * <pre>
+ * "eq"=等于    , "ne"!=不等
+ * "lt"<小于    , "le"<=小于等于
+ * "gt">大于    , "ge">=大于等于
+ * "bw" 开始于(右模糊)  , "bn" 不开始于
+ * "in" 属于    , "ni" 不属于
+ * "ew" 结束于(左模糊)  , "en" 不结束于
+ * "cn" 包含    , "nc" 不包含
+ * </pre>
+ * 
+ * @author hs-yuancong
+ * 
+ * @param <T>
+ */
 public class DwzBaseQuery<T> extends BaseQuery<T> {
 	private static final long serialVersionUID = -360860474471966721L;
 
@@ -20,8 +41,23 @@ public class DwzBaseQuery<T> extends BaseQuery<T> {
 	protected String orderField;
 	/** 排序方式desc,asc */
 	protected String orderDirection = "desc";
-	/** DWZ中打开面板的ID */
-	protected String dwzId;
+//	/**
+//	 * DWZ中打开面板的ID，主要用于UI端标记操作来源Tab或Dialog，以便后续操作完成时，通知或刷新源页面。如果是lookup，
+//	 * 表示打开的是弹出选择页面。
+//	 */
+//	protected String dwzId="";
+//	/**
+//	 * 操作成功后,要重新加载的Tab或者dialog的 ID号。
+//	 * [把指定navTab页面标记为需要“重新载入”。注意navTabId不能是当前navTab页面的. 否则Tab重新载入当前navTab页面
+//	 */
+//	private String navTabId = "";
+//	/**
+//	 * EnumDwzJsonCallbackType . “forward”在当前面板中跳转到【forwardUrl】，
+//	 * “closeCurrent”关闭当前面板Tab或者dialog
+//	 */
+//	private String callbackType = "";
+//	/** callbackType=“forward”时在当前面板中跳转到forwardUrl */
+//	private String forwardUrl = "";
 
 	protected String ids; // 主要给批量操作时,多个主键之间用英文逗号(,)分隔
 
@@ -121,7 +157,7 @@ public class DwzBaseQuery<T> extends BaseQuery<T> {
 	 */
 	public String getOrderDirection() {
 		if (StringUtils.isBlank(orderField)) {
-			this.orderField = super.getSidx();
+			this.orderField = super.getSord();
 		}
 		if (!"asc".equalsIgnoreCase(this.orderDirection))
 			this.setOrderDirection("desc");
@@ -141,13 +177,49 @@ public class DwzBaseQuery<T> extends BaseQuery<T> {
 		super.setSord(this.orderDirection);
 	}
 
-	/** DWZ中打开面板的ID */
-	public String getDwzId() {
-		return dwzId;
-	}
-
-	/** DWZ中打开面板的ID */
-	public void setDwzId(String dwzId) {
-		this.dwzId = dwzId;
-	}
+//	/** DWZ中打开面板的ID */
+//	public String getDwzId() {
+//		int index = dwzId.indexOf(",");
+//		if(index>0)
+//			dwzId= dwzId.substring(0, index);
+//		return dwzId;
+//	}
+//
+//	/** DWZ中打开面板的ID */
+//	public void setDwzId(String dwzId) {
+//		this.dwzId = dwzId;
+//	}
+//
+//	public String getNavTabId() {
+//		int index = navTabId.indexOf(",");
+//		if(index>0)
+//			navTabId= navTabId.substring(0, index);
+//		return navTabId;
+//	}
+//
+//	public void setNavTabId(String navTabId) {
+//		this.navTabId = navTabId;
+//	}
+//
+//	public String getCallbackType() {
+//		int index = callbackType.indexOf(",");
+//		if(index>0)
+//			callbackType= callbackType.substring(0, index);
+//		return callbackType;
+//	}
+//
+//	public void setCallbackType(String callbackType) {
+//		this.callbackType = callbackType;
+//	}
+//
+//	public String getForwardUrl() {
+//		int index = forwardUrl.indexOf(",");
+//		if(index>0)
+//			forwardUrl= forwardUrl.substring(0, index);
+//		return forwardUrl;
+//	}
+//
+//	public void setForwardUrl(String forwardUrl) {
+//		this.forwardUrl = forwardUrl;
+//	}
 }
